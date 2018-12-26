@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<PreferenceScreen
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:title="Configure SDCard Storage">
+
+	<CheckBoxPreference
+		android:key="cam_storepictures"
+		android:title="Store pictures"
+		android:summary="Store all pictures on external memory (sdcard) if enabled."
+		android:defaultValue="false"/>
+
+	<EditTextPreference
+		android:key="sdcard_every"
+		android:title="Skip Pictures"
+		android:summary="Save to sdcard only every n pictures taken by the app. 1 = save every picture"
+		android:defaultValue="1"
+		android:inputType="number"
+		android:singleLine="true"/>
+  
+	<PreferenceCategory
+		android:title="SDCard">
+		
+		<EditTextPreference
+			android:key="sdcard_dir"
+			android:title="Directory"
+			android:summary="Folder to store your webcam pictures in."
+			android:defaultValue="/MobileWebCam/"
+			android:inputType="textUri"
+			android:scrollHorizontally="true"
+			android:singleLine="true"/>
+		
+	    <CheckBoxPreference
+			android:key="secondary_sd"
+			android:title="Other SD"
+			android:summary="For devices with the removable sdcard as a secondary sd enable this and specify the full storage path. Example: extSdCard/MobileWebCam/ for Galaxy Camera"
+			android:defaultValue="false"
+			/>		
+		
+		<EditTextPreference
+            android:key="sdcard_keepoldpics"
+			android:title="Limit Pictures"
+            android:summary="Specify the number of old pictures to keep (0 = all). Attention if you have other pictures in the sdcard directory specified! They will be deleted!"
+            android:defaultValue="0"
+            android:inputType="number"
+            android:scrollHorizontally="true"
+            android:singleLine="true"/>
+
+	</PreferenceCategory>
+
+</PreferenceScreen>
