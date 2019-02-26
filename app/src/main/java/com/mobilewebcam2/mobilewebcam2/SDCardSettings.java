@@ -14,24 +14,10 @@
 */
 package com.mobilewebcam2.mobilewebcam2;
 
-import java.io.File;
-
-import android.app.ProgressDialog;
-import android.content.ContextWrapper;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
-import android.os.Handler;
-import android.os.Message;
-import android.preference.Preference;
 import android.preference.PreferenceActivity;
-import android.preference.PreferenceScreen;
-import android.util.Log;
-import android.view.Window;
-import android.view.WindowManager;
 
 public class SDCardSettings extends PreferenceActivity implements OnSharedPreferenceChangeListener
 {
@@ -45,7 +31,7 @@ public class SDCardSettings extends PreferenceActivity implements OnSharedPrefer
 
         super.onCreate(savedInstanceState);
 		 		 
-        getPreferenceManager().setSharedPreferencesName(MobileWebCam.SHARED_PREFS_NAME);
+        getPreferenceManager().setSharedPreferencesName(MobileWebCam2.SHARED_PREFS_NAME);
 		this.addPreferencesFromResource(R.layout.sdcardsettings);
         getPreferenceManager().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
 	 }

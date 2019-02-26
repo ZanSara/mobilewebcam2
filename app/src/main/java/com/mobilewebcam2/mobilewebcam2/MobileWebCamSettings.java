@@ -30,7 +30,7 @@ public class MobileWebCamSettings extends PreferenceActivity
 
         super.onCreate(savedInstanceState);
 		 		 
-        getPreferenceManager().setSharedPreferencesName(MobileWebCam.SHARED_PREFS_NAME);
+        getPreferenceManager().setSharedPreferencesName(MobileWebCam2.SHARED_PREFS_NAME);
 		this.addPreferencesFromResource(R.layout.settings);
 		
 /*        getPreferenceManager().findPreference("info_imagemagick").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {

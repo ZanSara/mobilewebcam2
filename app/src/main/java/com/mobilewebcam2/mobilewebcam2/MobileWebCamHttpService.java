@@ -3,15 +3,12 @@ package com.mobilewebcam2.mobilewebcam2;
 import java.io.IOException;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import android.app.IntentService;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
-import android.graphics.Bitmap;
 import android.os.IBinder;
-import android.util.Log;
 
 public class MobileWebCamHttpService extends Service implements OnSharedPreferenceChangeListener
 {
@@ -27,7 +24,7 @@ public class MobileWebCamHttpService extends Service implements OnSharedPreferen
 	
 	public static void start(Context context)
 	{
-	    SharedPreferences prefs = context.getSharedPreferences(MobileWebCam.SHARED_PREFS_NAME, 0);
+	    SharedPreferences prefs = context.getSharedPreferences(MobileWebCam2.SHARED_PREFS_NAME, 0);
 	    if(prefs.getBoolean("server_enabled", true))
 	    {
 			Intent i = new Intent(context, MobileWebCamHttpService.class);  
@@ -55,7 +52,7 @@ public class MobileWebCamHttpService extends Service implements OnSharedPreferen
 	{
 		super.onStart(intent, startId);
 
-		SharedPreferences prefs = MobileWebCamHttpService.this.getSharedPreferences(MobileWebCam.SHARED_PREFS_NAME, 0);
+		SharedPreferences prefs = MobileWebCamHttpService.this.getSharedPreferences(MobileWebCam2.SHARED_PREFS_NAME, 0);
 	    if(prefs.getBoolean("server_enabled", true))
 	    {
 			if(mServer == null)

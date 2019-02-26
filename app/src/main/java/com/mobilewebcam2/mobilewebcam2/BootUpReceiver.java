@@ -25,7 +25,7 @@ public class BootUpReceiver extends BroadcastReceiver
     @Override
     public void onReceive(Context context, Intent intent)
     {
-	    SharedPreferences prefs = context.getSharedPreferences(MobileWebCam.SHARED_PREFS_NAME, 0);
+	    SharedPreferences prefs = context.getSharedPreferences(MobileWebCam2.SHARED_PREFS_NAME, 0);
 	    if(prefs.getBoolean("autostart", false))
 	    {
 			Intent i = new Intent(context, StartMobileWebCamAction.class);  

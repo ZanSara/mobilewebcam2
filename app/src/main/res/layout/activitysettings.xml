@@ -22,13 +22,13 @@
 			android:entryValues="@array/entryvalues_list_camera_mode"
 			android:dialogTitle="Camera Mode"/>
 	
-		<com.dngames.mobilewebcam.TimePickerPreference
+		<com.mobilewebcam2.mobilewebcam2.TimePickerPreference
 			android:key="activity_starttime"
 		    android:summary="Allow activity (upload) only from this time every day."
 			android:title="Daily Activity Start"
 			android:defaultValue="00:00"/>
 	
-		<com.dngames.mobilewebcam.TimePickerPreference
+		<com.mobilewebcam2.mobilewebcam2.TimePickerPreference
 			android:key="activity_endtime"
 		    android:summary="End activity (upload) at this time every day. Set same as start for always."
 			android:title="Daily Activity End"
@@ -53,13 +53,13 @@
 			    android:enabled="false"
 				android:summary="Configure night camera parameters in camera screen menu. Define when they are used here."/>			
 
-   			<com.dngames.mobilewebcam.TimePickerPreference
+   			<com.mobilewebcam2.mobilewebcam2.TimePickerPreference
 				android:key="night_starttime"
 			    android:summary="Instead of auto detection force night settings beginning at this time. Set to same as end to disable. Less power consumption than auto."
 				android:title="Night Start"
 				android:defaultValue="00:00"/>
 		
-			<com.dngames.mobilewebcam.TimePickerPreference
+			<com.mobilewebcam2.mobilewebcam2.TimePickerPreference
 				android:key="night_endtime"
 			    android:summary="Instead of auto detection end night settings at this time of day. Overrides auto detection and is much faster!"
 				android:title="Night End"
@@ -102,7 +102,7 @@
 					android:summary="Take pictures only when motion has been detected. Refresh duration is min time between two motions."
 					android:defaultValue="false"/>
 				    
-				<com.dngames.mobilewebcam.SeekBarPreference
+				<com.mobilewebcam2.mobilewebcam2.SeekBarPreference
 					android:key="motion_change"
 					android:title="Color Change"
 					android:summary="Color change required to detect"
@@ -110,7 +110,7 @@
 					android:text=""
 					android:max="255"/>	
 				    
-				<com.dngames.mobilewebcam.SeekBarPreference
+				<com.mobilewebcam2.mobilewebcam2.SeekBarPreference
 					android:key="motion_value"
 					android:title="Motion Trigger"
 					android:summary="Detect only large image changes or even small ones."
@@ -167,7 +167,7 @@
 				<PreferenceScreen
 					android:key="cam_intents"
 					android:title="Intents"
-					android:summary="MobileWebCam can receive 'com.dngames.mobilewebcam.START' to start taking pictures and '.STOP' to stop again. '.PHOTO' for just one trigger (extra 'count' for burst)."
+					android:summary="MobileWebCam can receive 'com.mobilewebcam2.mobilewebcam2.START' to start taking pictures and '.STOP' to stop again. '.PHOTO' for just one trigger (extra 'count' for burst)."
 					android:enabled="false"/>				
 		
 			</PreferenceCategory>

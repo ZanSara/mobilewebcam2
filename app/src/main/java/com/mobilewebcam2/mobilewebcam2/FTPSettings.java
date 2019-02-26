@@ -21,7 +21,6 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
-import android.util.Log;
 
 public class FTPSettings extends PreferenceActivity implements OnSharedPreferenceChangeListener
 {
@@ -35,7 +34,7 @@ public class FTPSettings extends PreferenceActivity implements OnSharedPreferenc
 
         super.onCreate(savedInstanceState);
 		 		 
-        getPreferenceManager().setSharedPreferencesName(MobileWebCam.SHARED_PREFS_NAME);
+        getPreferenceManager().setSharedPreferencesName(MobileWebCam2.SHARED_PREFS_NAME);
 		this.addPreferencesFromResource(R.layout.ftpserversettings);
         getPreferenceManager().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
 	 }
@@ -73,13 +72,13 @@ public class FTPSettings extends PreferenceActivity implements OnSharedPreferenc
 	{
 		super.onResume();
 
-		MobileWebCam.gInSettings = true;
+		MobileWebCam2.gInSettings = true;
 	}    
     
     public void onPause()
     {
     	super.onPause();
     	
-		MobileWebCam.gInSettings = false;
+		MobileWebCam2.gInSettings = false;
     }    
 };

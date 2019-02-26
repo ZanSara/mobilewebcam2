@@ -10,10 +10,8 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.widget.Toast;
 
 public class ControlReceiver extends BroadcastReceiver
 {
@@ -32,7 +30,7 @@ public class ControlReceiver extends BroadcastReceiver
     @Override
     public void onReceive(Context context, Intent intent)
     {
-		SharedPreferences prefs = context.getSharedPreferences(MobileWebCam.SHARED_PREFS_NAME, 0);
+		SharedPreferences prefs = context.getSharedPreferences(MobileWebCam2.SHARED_PREFS_NAME, 0);
 		if(intent.getAction().equals("com.mobilewebcam2.mobilewebcam2.START"))
 		{
 			Start(context, prefs, intent.getStringExtra("event"));
@@ -58,7 +56,7 @@ public class ControlReceiver extends BroadcastReceiver
 		int triggerpause = PhotoSettings.getEditInt(context, prefs, "eventtrigger_pausetime", 0) * 1000;
 		if(triggerpause > 0 && (curtime - LastEventTime < triggerpause))
 		{
-			MobileWebCam.LogI("Skipped trigger event because only " + triggerpause + " ms gone!");
+			MobileWebCam2.LogI("Skipped trigger event because only " + triggerpause + " ms gone!");
 			return;
 		}
 		
@@ -84,7 +82,7 @@ public class ControlReceiver extends BroadcastReceiver
 		}
 		else
 		{
-			Intent i = new Intent(context, MobileWebCam.class);
+			Intent i = new Intent(context, MobileWebCam2.class);
 			i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 			i.putExtra("command", "photo");
 			i.putExtra("event", event);
@@ -117,7 +115,7 @@ public class ControlReceiver extends BroadcastReceiver
 		case MANUAL:
 		case NORMAL:
 		default:
-			Intent i = new Intent(context, MobileWebCam.class);
+			Intent i = new Intent(context, MobileWebCam2.class);
 			i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 			i.putExtra("command", "start");
 			i.putExtra("event", event);
@@ -125,7 +123,7 @@ public class ControlReceiver extends BroadcastReceiver
 			break;
 		}
 		
-		if(!MobileWebCam.gCustomReceiverActive)
+		if(!MobileWebCam2.gCustomReceiverActive)
 			CustomReceiverService.start(context);
 	}
 
@@ -150,7 +148,7 @@ public class ControlReceiver extends BroadcastReceiver
 		case MANUAL:
 		case NORMAL:
 		default:
-			Intent i = new Intent(context, MobileWebCam.class);
+			Intent i = new Intent(context, MobileWebCam2.class);
 			i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 			i.putExtra("command", "stop");
 			context.startActivity(i);

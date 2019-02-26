@@ -76,9 +76,9 @@ public class Preview extends SurfaceView implements SurfaceHolder.Callback, ITex
 	{
 		public void run()
 		{
-			Log.i("MobileWebCam", "mPostPicture.run");
+			Log.i("MobileWebCam2", "mPostPicture.run");
 			
-			if(mSettings.mReboot > 0 && MobileWebCam.gPictureCounter >= mSettings.mReboot)
+			if(mSettings.mReboot > 0 && MobileWebCam2.gPictureCounter >= mSettings.mReboot)
 			{
 				try {
 				    Runtime.getRuntime().exec("su");
@@ -106,31 +106,31 @@ public class Preview extends SurfaceView implements SurfaceHolder.Callback, ITex
 				if(!mPhotoLock.getAndSet(true))
 				{
 					mPhotoLockTime = System.currentTimeMillis();
-					if((mSettings.mMode == Mode.MANUAL && MobileWebCam.gUploadingCount < 3) || (mSettings.mMode != Mode.MANUAL && MobileWebCam.gUploadingCount <= 6)) // wait if too slow
+					if((mSettings.mMode == Mode.MANUAL && MobileWebCam2.gUploadingCount < 3) || (mSettings.mMode != Mode.MANUAL && MobileWebCam2.gUploadingCount <= 6)) // wait if too slow
 					{
-						Log.i("MobileWebCam", "mPostPicture.run.tryOpenCam");
+						Log.i("MobileWebCam2", "mPostPicture.run.tryOpenCam");
 						
 						tryOpenCam();
 						
 						if(mCamera != null)
 						{
-							Log.i("MobileWebCam", "mPostPicture.run mCamera");
+							Log.i("MobileWebCam2", "mPostPicture.run mCamera");
 							
 							if (mSettings.mFTPPictures && !mSettings.mFTP.equals(mSettings.mDefaultFTPurl) || mSettings.mStorePictures)
 							{
 								boolean ignoreinactivity = false; 
-								long sincelastalive = System.currentTimeMillis() - MobileWebCam.gLastMotionKeepAliveTime;
+								long sincelastalive = System.currentTimeMillis() - MobileWebCam2.gLastMotionKeepAliveTime;
 								if(mSettings.mMotionDetectKeepAliveRefresh > 0 && sincelastalive >= mSettings.mMotionDetectKeepAliveRefresh)
 								{
-									MobileWebCam.gLastMotionKeepAliveTime = System.currentTimeMillis();
-									MobileWebCam.LogI("Taking keep alive picture!");
+									MobileWebCam2.gLastMotionKeepAliveTime = System.currentTimeMillis();
+									MobileWebCam2.LogI("Taking keep alive picture!");
 									ignoreinactivity = true;
 								}
 								
 								Date date = new Date();
 								if(CheckInTime(date, mSettings.mStartTime, mSettings.mEndTime, false) || ignoreinactivity)
 								{
-									Log.i("MobileWebCam", "mPostPicture.try");
+									Log.i("MobileWebCam2", "mPostPicture.try");
 									if(!mSettings.mShutterSound)
 									{
 										AudioManager mgr = (AudioManager)mActivity.getSystemService(Context.AUDIO_SERVICE);
@@ -138,7 +138,7 @@ public class Preview extends SurfaceView implements SurfaceHolder.Callback, ITex
 									}
 									try
 									{
-										Log.i("MobileWebCam", "mPostPicture.ok");
+										Log.i("MobileWebCam2", "mPostPicture.ok");
 										mCamera.setPreviewCallback(null);
 										
 										Camera.Parameters params = mCamera.getParameters();
@@ -172,14 +172,14 @@ public class Preview extends SurfaceView implements SurfaceHolder.Callback, ITex
 											}
 											catch(RuntimeException e)
 											{
-												MobileWebCam.LogE("Camera parameter set failed! Invalid settings?");
+												MobileWebCam2.LogE("Camera parameter set failed! Invalid settings?");
 												e.printStackTrace();
 											}
 										}
 										
-										MobileWebCam.gLastMotionKeepAliveTime = System.currentTimeMillis();
+										MobileWebCam2.gLastMotionKeepAliveTime = System.currentTimeMillis();
 										
-										if(!MobileWebCam.gIsRunning && mSettings.mDelayAfterCameraOpened > 0)
+										if(!MobileWebCam2.gIsRunning && mSettings.mDelayAfterCameraOpened > 0)
 										{
 											// in semi background mode some devices may need to wait for camera to be ready
 											// but to keep the ui thread running take the picture in another thread
@@ -228,9 +228,9 @@ public class Preview extends SurfaceView implements SurfaceHolder.Callback, ITex
 									catch(RuntimeException e)
 									{
 										if(e.getMessage() != null)
-											MobileWebCam.LogE(e.getMessage());
+											MobileWebCam2.LogE(e.getMessage());
 										e.printStackTrace();
-										Log.v("MobileWebCam", "PhotoLock released!");
+										Log.v("MobileWebCam2", "PhotoLock released!");
 										mPhotoLock.set(false);
 										JobFinished();
 									}
@@ -239,9 +239,9 @@ public class Preview extends SurfaceView implements SurfaceHolder.Callback, ITex
 								{
 									// no time
 									mPhotoLock.set(false);
-									Log.v("MobileWebCam", "No active time! PhotoLock released!");
+									Log.v("MobileWebCam2", "No active time! PhotoLock released!");
 									if(mSettings.mMode == Mode.MANUAL)
-										MobileWebCam.LogI("No active time!");
+										MobileWebCam2.LogI("No active time!");
 	
 									JobFinished();
 								}
@@ -253,16 +253,16 @@ public class Preview extends SurfaceView implements SurfaceHolder.Callback, ITex
 									Toast.makeText(mActivity, "Setup your server or email or local store!\n\nSettings: MENU", Toast.LENGTH_LONG).show();
 									mSetupServerMessage_lasttime = System.currentTimeMillis();
 								}
-								MobileWebCam.LogE("Setup your server or email or local store!");
+								MobileWebCam2.LogE("Setup your server or email or local store!");
 								JobFinished();
 							}
 	
 							if(mSettings.mMode != Mode.MANUAL)
 							{
 								// set time for next picture
-								int slowdown = Math.max(0, MobileWebCam.gUploadingCount * MobileWebCam.gUploadingCount - 1) * 1000;
+								int slowdown = Math.max(0, MobileWebCam2.gUploadingCount * MobileWebCam2.gUploadingCount - 1) * 1000;
 								int time = mSettings.mRefreshDuration + slowdown;
-								if(!mSettings.mMotionDetect || (System.currentTimeMillis() - MobileWebCam.gLastMotionTime < time))
+								if(!mSettings.mMotionDetect || (System.currentTimeMillis() - MobileWebCam2.gLastMotionTime < time))
 								{
 									mHandler.removeCallbacks(mPostPicture);
 									mHandler.postDelayed(mPostPicture, time);
@@ -278,17 +278,17 @@ public class Preview extends SurfaceView implements SurfaceHolder.Callback, ITex
 						{
 							// no camera
 							mPhotoLock.set(false);
-							MobileWebCam.LogE("No cam! PhotoLock released!");
+							MobileWebCam2.LogE("No cam! PhotoLock released!");
 	
 			    			JobFinished();						
 						}
 					}
 					else// if(mSettings.mMode != Mode.MANUAL)
 					{
-						Log.i("MobileWebCam", "mPostPicture try soon");
+						Log.i("MobileWebCam2", "mPostPicture try soon");
 						
 						mPhotoLock.set(false);
-						Log.v("MobileWebCam", "PhotoLock released!");
+						Log.v("MobileWebCam2", "PhotoLock released!");
 	
 						// try again soon
 						mHandler.removeCallbacks(mPostPicture);
@@ -297,10 +297,10 @@ public class Preview extends SurfaceView implements SurfaceHolder.Callback, ITex
 				}
 				else
 				{
-					Log.w("MobileWebCam", "Photo locked!");
+					Log.w("MobileWebCam2", "Photo locked!");
 					
 					mPhotoLock.set(false);
-					Log.v("MobileWebCam", "PhotoLock released!");
+					Log.v("MobileWebCam2", "PhotoLock released!");
 	
 					// try again soon
 					mHandler.removeCallbacks(mPostPicture);
@@ -310,7 +310,7 @@ public class Preview extends SurfaceView implements SurfaceHolder.Callback, ITex
 			else
 			{
 				// no battery power
-				MobileWebCam.LogI("Battery low ... pause");
+				MobileWebCam2.LogI("Battery low ... pause");
 				// try again next picture time
 				mHandler.removeCallbacks(mPostPicture);
 				mHandler.postDelayed(mPostPicture, mSettings.mRefreshDuration);
@@ -333,7 +333,7 @@ public class Preview extends SurfaceView implements SurfaceHolder.Callback, ITex
 		}
 		catch(NumberFormatException e)
 		{
-			MobileWebCam.LogE("Invalid activity " + use + " time format!");
+			MobileWebCam2.LogE("Invalid activity " + use + " time format!");
 		}
 		
 		return h * 60 + m;
@@ -393,7 +393,7 @@ public class Preview extends SurfaceView implements SurfaceHolder.Callback, ITex
 		mHolder.addCallback(this);
 		mHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
 		
-		Log.i("MobileWebCam", "Preview(...)");				
+		Log.i("MobileWebCam2", "Preview(...)");
 	}
 	
 	public void SetSettings(PhotoSettings s)
@@ -433,7 +433,7 @@ public class Preview extends SurfaceView implements SurfaceHolder.Callback, ITex
 
 		UpdateText();
 
-		Log.i("MobileWebCam", "Preview.onResume()");				
+		Log.i("MobileWebCam2", "Preview.onResume()");
 	}
 	
 	public void onPause()
@@ -451,7 +451,7 @@ public class Preview extends SurfaceView implements SurfaceHolder.Callback, ITex
 		mPreviewBitmap = null;
 		gPreview = null;	
 
-		Log.i("MobileWebCam", "Preview.onPause()");				
+		Log.i("MobileWebCam2", "Preview.onPause()");
 	}
 
 	public void onDestroy()
@@ -466,7 +466,7 @@ public class Preview extends SurfaceView implements SurfaceHolder.Callback, ITex
 		
 		gPreview = null;	
 
-		Log.i("MobileWebCam", "Preview.onDestroy()");				
+		Log.i("MobileWebCam2", "Preview.onDestroy()");
 	}
 	
 	// wait until cam can close
@@ -485,7 +485,7 @@ public class Preview extends SurfaceView implements SurfaceHolder.Callback, ITex
 						// close cam when no longer required
 						while(mPhotoLock.get() && count > 0)
 						{
-							MobileWebCam.LogI("Shutting down camera but waiting for lock!");
+							MobileWebCam2.LogI("Shutting down camera but waiting for lock!");
 							try {
 								Thread.sleep(500);
 							} catch (InterruptedException e) {
@@ -518,7 +518,7 @@ public class Preview extends SurfaceView implements SurfaceHolder.Callback, ITex
 	
 	private void tryOpenCam()
 	{
-		Log.i("MobileWebCam", "Preview.tryOpenCam()");
+		Log.i("MobileWebCam2", "Preview.tryOpenCam()");
 		
 		if(mCamera == null)
 		{
@@ -526,18 +526,18 @@ public class Preview extends SurfaceView implements SurfaceHolder.Callback, ITex
 			{
 				if(mSettings.mFrontCamera || NewCameraFunctions.getNumberOfCameras() == 1 && NewCameraFunctions.isFrontCamera(0))
 				{
-					Log.v("MobileWebCam", "Trying to open CAMERA 1!");
+					Log.v("MobileWebCam2", "Trying to open CAMERA 1!");
 					mCamera = NewCameraFunctions.openFrontCamera();
 				}
 				
 				if(mCamera == null)
 				{
-					Log.i("MobileWebCam", "Camera.open()");
+					Log.i("MobileWebCam2", "Camera.open()");
 					mCamera = Camera.open();
 				}
 				if(mCamera != null)
 				{
-					Log.i("MobileWebCam", "mCamera.setErrorCallback()");
+					Log.i("MobileWebCam2", "mCamera.setErrorCallback()");
 					mCamera.setErrorCallback(new Camera.ErrorCallback()
 					{
 						@Override
@@ -545,7 +545,7 @@ public class Preview extends SurfaceView implements SurfaceHolder.Callback, ITex
 						{
 							if(error != 0) // Samsung Galaxy S returns 0? https://groups.google.com/forum/?fromgroups=#!topic/android-developers/ZePJqveaExk
 							{
-								MobileWebCam.LogE("Camera error: " + error);
+								MobileWebCam2.LogE("Camera error: " + error);
 								if(mCamera != null)
 								{
 									mCamera = null;
@@ -557,7 +557,7 @@ public class Preview extends SurfaceView implements SurfaceHolder.Callback, ITex
 								}
 								
 								mPhotoLock.set(false);
-								Log.v("MobileWebCam", "PhotoLock released!");
+								Log.v("MobileWebCam2", "PhotoLock released!");
 								JobFinished();
 							}
 						}
@@ -570,22 +570,22 @@ public class Preview extends SurfaceView implements SurfaceHolder.Callback, ITex
 				if(e.getMessage() != null)
 				{
 					Toast.makeText(mActivity, e.getMessage(), Toast.LENGTH_SHORT).show();
-					MobileWebCam.LogE(e.getMessage());
+					MobileWebCam2.LogE(e.getMessage());
 				}
 				else
 				{
 					Toast.makeText(mActivity, "No access to camera!", Toast.LENGTH_SHORT).show();
-					MobileWebCam.LogE("No access to camera!");
+					MobileWebCam2.LogE("No access to camera!");
 				}
 				mCamera = null;
 				mPhotoLock.set(false);
-				Log.v("MobileWebCam", "PhotoLock released!");
+				Log.v("MobileWebCam2", "PhotoLock released!");
 				JobFinished();
 			}
 			
 			if(mCamera != null)
 			{
-				Log.i("MobileWebCam", "mCamera.setPreviewDisplay()");
+				Log.i("MobileWebCam2", "mCamera.setPreviewDisplay()");
 				try {
 				   mCamera.setPreviewDisplay(mHolder);
 				} catch (IOException exception) {
@@ -594,15 +594,15 @@ public class Preview extends SurfaceView implements SurfaceHolder.Callback, ITex
 					if(exception.getMessage() != null)
 					{
 						Toast.makeText(mActivity, exception.getMessage(), Toast.LENGTH_SHORT).show();            
-						MobileWebCam.LogE(exception.getMessage());
+						MobileWebCam2.LogE(exception.getMessage());
 					}
 					else
 					{
 						Toast.makeText(mActivity, "No camera preview!", Toast.LENGTH_SHORT).show();            
-						MobileWebCam.LogE("No camera preview!");
+						MobileWebCam2.LogE("No camera preview!");
 					}
 					mPhotoLock.set(false);
-					Log.v("MobileWebCam", "PhotoLock released!");
+					Log.v("MobileWebCam2", "PhotoLock released!");
 					JobFinished();
 				}
 				
@@ -639,7 +639,7 @@ public class Preview extends SurfaceView implements SurfaceHolder.Callback, ITex
 						}
 					}
 
-		//***			setCameraDisplayOrientation(MobileWebCam.this, 0, mCamera);
+		//***			setCameraDisplayOrientation(MobileWebCam2.this, 0, mCamera);
 					
 					if(mSettings.mMode != Mode.HIDDEN)
 					{
@@ -651,7 +651,7 @@ public class Preview extends SurfaceView implements SurfaceHolder.Callback, ITex
 						catch(RuntimeException e)
 						{
 							if(e.getMessage() != null)
-								MobileWebCam.LogE(e.getMessage());
+								MobileWebCam2.LogE(e.getMessage());
 							else
 								e.printStackTrace();
 						}
@@ -659,7 +659,7 @@ public class Preview extends SurfaceView implements SurfaceHolder.Callback, ITex
 					
 					if(mSettings.mMotionDetect)
 					{
-						Log.i("MobileWebCam", "mCamera.setPreviewCallback()");
+						Log.i("MobileWebCam2", "mCamera.setPreviewCallback()");
 						mCamera.setPreviewCallback(new PreviewCallback() {
 							@Override
 							public void onPreviewFrame(byte[] data, Camera camera)
@@ -670,7 +670,7 @@ public class Preview extends SurfaceView implements SurfaceHolder.Callback, ITex
 									if(mPreviewChecker.mData[d] == null)
 										mPreviewChecker.mData[d] = new byte[data.length];
 									System.arraycopy(data, 0, mPreviewChecker.mData[d], 0, data.length);
-									if(MobileWebCam.DEBUG_MOTIONDETECT && mActivity.mDrawOnTop != null)
+									if(MobileWebCam2.DEBUG_MOTIONDETECT && mActivity.mDrawOnTop != null)
 										mActivity.mDrawOnTop.invalidate();
 								}
 							}
@@ -686,7 +686,7 @@ public class Preview extends SurfaceView implements SurfaceHolder.Callback, ITex
 
 	public void surfaceCreated(SurfaceHolder holder)
 	{
-		Log.i("MobileWebCam", "surfaceCreated");
+		Log.i("MobileWebCam2", "surfaceCreated");
 		
 		tryOpenCam();
 
@@ -793,14 +793,14 @@ public class Preview extends SurfaceView implements SurfaceHolder.Callback, ITex
 						if(mPreviewBitmap != null)
 							next = mPreviewBitmap.copy(mPreviewBitmap.getConfig(), false);*/
 					
-							MobileWebCam.decodeYUV420SPGrayscale(pixels, mData[mDataLockIdx], w, h);
+							MobileWebCam2.decodeYUV420SPGrayscale(pixels, mData[mDataLockIdx], w, h);
 						}
 			    		mDataLockIdx = (mDataLockIdx + 1) % DATACOUNT;
 	
-			    		if(MobileWebCam.DEBUG_MOTIONDETECT)
+			    		if(MobileWebCam2.DEBUG_MOTIONDETECT)
 			    			mPreviewBitmapLock.set(true);
 						{
-				    		if(MobileWebCam.DEBUG_MOTIONDETECT)
+				    		if(MobileWebCam2.DEBUG_MOTIONDETECT)
 				    		{
 								if(mPreviewBitmap == null)
 									mPreviewBitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
@@ -836,7 +836,7 @@ public class Preview extends SurfaceView implements SurfaceHolder.Callback, ITex
 									int diff = Math.abs((int)erode[x + y * samplesize] - (int)last[x + y * samplesize]);
 									if(diff > mSettings.mMotionColorChange)
 									{
-							    		if(MobileWebCam.DEBUG_MOTIONDETECT)
+							    		if(MobileWebCam2.DEBUG_MOTIONDETECT)
 							    			mPreviewBitmap.setPixel((int)(x * sx), (int)(y * sy), Color.argb(255, 255, 0, 0));
 										diffcnt++;
 									}
@@ -845,14 +845,14 @@ public class Preview extends SurfaceView implements SurfaceHolder.Callback, ITex
 							if(diffcnt > mSettings.mMotionPixels) // attention depends on samplesize of 50
 							{
 	
-								long lasttime = MobileWebCam.gLastMotionTime; 
-								MobileWebCam.gLastMotionKeepAliveTime = MobileWebCam.gLastMotionTime = System.currentTimeMillis();
-								if(MobileWebCam.gLastMotionTime - lasttime >= mSettings.mRefreshDuration * 2)
+								long lasttime = MobileWebCam2.gLastMotionTime;
+								MobileWebCam2.gLastMotionKeepAliveTime = MobileWebCam2.gLastMotionTime = System.currentTimeMillis();
+								if(MobileWebCam2.gLastMotionTime - lasttime >= mSettings.mRefreshDuration * 2)
 								{
 									mHandler.removeCallbacks(mPostPicture);
 									mHandler.post(mPostPicture);
 									
-									MobileWebCam.LogI("Motion detected! Taking picture ...");
+									MobileWebCam2.LogI("Motion detected! Taking picture ...");
 	
 									mHandler.post(new Runnable() {
 										@Override
@@ -880,11 +880,11 @@ public class Preview extends SurfaceView implements SurfaceHolder.Callback, ITex
 							}
 							else
 							{
-								final long sincelastmotion = System.currentTimeMillis() - MobileWebCam.gLastMotionKeepAliveTime;
+								final long sincelastmotion = System.currentTimeMillis() - MobileWebCam2.gLastMotionKeepAliveTime;
 								if(mSettings.mMotionDetectKeepAliveRefresh > 0 && sincelastmotion >= mSettings.mMotionDetectKeepAliveRefresh)
 								{
-									MobileWebCam.gLastMotionKeepAliveTime = System.currentTimeMillis();
-									MobileWebCam.LogI("Taking keep alive picture!");
+									MobileWebCam2.gLastMotionKeepAliveTime = System.currentTimeMillis();
+									MobileWebCam2.LogI("Taking keep alive picture!");
 
 									// keep alive picture
 									mHandler.removeCallbacks(mPostPicture);
@@ -901,7 +901,7 @@ public class Preview extends SurfaceView implements SurfaceHolder.Callback, ITex
 								});
 							}
 						}
-			    		if(MobileWebCam.DEBUG_MOTIONDETECT)
+			    		if(MobileWebCam2.DEBUG_MOTIONDETECT)
 			    			mPreviewBitmapLock.set(false);
 						
 						System.arraycopy(erode, 0, last, 0, samplesize * samplesize);
@@ -917,7 +917,7 @@ public class Preview extends SurfaceView implements SurfaceHolder.Callback, ITex
 				}
 		    	
 		    	// finish
-	    		if(MobileWebCam.DEBUG_MOTIONDETECT)
+	    		if(MobileWebCam2.DEBUG_MOTIONDETECT)
 	    		{
 					mPreviewBitmapLock.set(true);
 					{
@@ -930,7 +930,7 @@ public class Preview extends SurfaceView implements SurfaceHolder.Callback, ITex
 			}
 			catch(OutOfMemoryError e)
 			{
-				MobileWebCam.LogE("Out of memory for preview image checker!");
+				MobileWebCam2.LogE("Out of memory for preview image checker!");
 			}
 		}
 	}
@@ -947,7 +947,7 @@ public class Preview extends SurfaceView implements SurfaceHolder.Callback, ITex
 		@Override
 		public void onAutoFocus(boolean success, Camera camera)
 		{
-			Log.i("MobileWebCam", "mPostPicture.autofocus");
+			Log.i("MobileWebCam2", "mPostPicture.autofocus");
 			// take picture now
 			mHandler.post(new Runnable()
 			{
@@ -956,7 +956,7 @@ public class Preview extends SurfaceView implements SurfaceHolder.Callback, ITex
 				{
 					if(mCamera != null)
 					{
-						Log.i("MobileWebCam", "mPostPicture.autofocus.run");
+						Log.i("MobileWebCam2", "mPostPicture.autofocus.run");
 						try
 						{
 							photoCallback.mPhotoEvent = mPhotoEvent;
@@ -964,13 +964,13 @@ public class Preview extends SurfaceView implements SurfaceHolder.Callback, ITex
 						}
 						catch(RuntimeException e)
 						{
-							MobileWebCam.LogE("Error: mCamera.takePicture crashed!");
+							MobileWebCam2.LogE("Error: mCamera.takePicture crashed!");
 							e.printStackTrace();
 						}
 					}
 					else
 					{
-						Log.w("MobileWebCam", "mPostPicture.autofocus.run no cam");
+						Log.w("MobileWebCam2", "mPostPicture.autofocus.run no cam");
 					}
 				}
 				
@@ -992,7 +992,7 @@ public class Preview extends SurfaceView implements SurfaceHolder.Callback, ITex
 		{
 			Date date = new Date(); // first store current time!
 
-			Log.i("MobileWebCam", "mPostPicture.photoCallback");
+			Log.i("MobileWebCam2", "mPostPicture.photoCallback");
 			
 			WorkImage work = null;
 			Camera.Size size = null;
@@ -1004,7 +1004,7 @@ public class Preview extends SurfaceView implements SurfaceHolder.Callback, ITex
 			if(size != null)
 			{
 				work = new WorkImage(mActivity, Preview.this, data, size, date, mPhotoEvent);
-				MobileWebCam.gPictureCounter++;
+				MobileWebCam2.gPictureCounter++;
 				
 				UpdateText();
 				
@@ -1013,7 +1013,7 @@ public class Preview extends SurfaceView implements SurfaceHolder.Callback, ITex
 			else
 			{
 				mPhotoLock.set(false);				
-				Log.v("MobileWebCam", "PhotoLock released!");
+				Log.v("MobileWebCam2", "PhotoLock released!");
 			}
 			
 			if(mSettings.mMode != Mode.HIDDEN)
@@ -1030,7 +1030,7 @@ public class Preview extends SurfaceView implements SurfaceHolder.Callback, ITex
 						if(e.getMessage() != null)
 						{
 							Toast.makeText(mActivity, e.getMessage(), Toast.LENGTH_SHORT).show();
-							MobileWebCam.LogE(e.getMessage());
+							MobileWebCam2.LogE(e.getMessage());
 						}
 					}
 				
@@ -1047,7 +1047,7 @@ public class Preview extends SurfaceView implements SurfaceHolder.Callback, ITex
 										mPreviewChecker.mData[d] = new byte[data.length];
 									System.arraycopy(data, 0, mPreviewChecker.mData[d], 0, data.length);
 								}
-								if(MobileWebCam.DEBUG_MOTIONDETECT && mActivity.mDrawOnTop != null)
+								if(MobileWebCam2.DEBUG_MOTIONDETECT && mActivity.mDrawOnTop != null)
 									mActivity.mDrawOnTop.invalidate();
 							}
 						});
@@ -1059,7 +1059,7 @@ public class Preview extends SurfaceView implements SurfaceHolder.Callback, ITex
 			{
 				// PHOTO intent requested several pictures!
 				mCamera.takePicture(shutterCallback, null, photoCallback);
-				Log.i("MobileWebCam", "another takePicture done");
+				Log.i("MobileWebCam2", "another takePicture done");
 				return; // do not yet shut camera down!
 			}
 
@@ -1077,7 +1077,7 @@ public class Preview extends SurfaceView implements SurfaceHolder.Callback, ITex
 			// Background Mode: work will be done in different threads, activity can go now the picture is taken!
 			if(mSettings.mMode == Mode.BACKGROUND)
 			{
-				if(!MobileWebCam.gIsRunning)
+				if(!MobileWebCam2.gIsRunning)
 					mActivity.finish(); // theoretically the process could be killed now - hoping it continues until job finished!
 			}
 		}
@@ -1101,7 +1101,7 @@ public class Preview extends SurfaceView implements SurfaceHolder.Callback, ITex
 	{
 		if(mCamera != null)
 		{
-			MobileWebCam.gInSettings = true; // block alarms!
+			MobileWebCam2.gInSettings = true; // block alarms!
 			sharePictureNow = true;
 			mHandler.removeCallbacks(mPostPicture);
 			mHandler.postDelayed(mPostPicture, 100);
@@ -1112,7 +1112,7 @@ public class Preview extends SurfaceView implements SurfaceHolder.Callback, ITex
 	{
 		if(c == null)
 		{
-			MobileWebCam.LogE("Unable to share picture: Context is null!");
+			MobileWebCam2.LogE("Unable to share picture: Context is null!");
 			return;
 		}
 		
@@ -1141,7 +1141,7 @@ public class Preview extends SurfaceView implements SurfaceHolder.Callback, ITex
 			e.printStackTrace();
 		}
 
-		MobileWebCam.gInSettings = false;
+		MobileWebCam2.gInSettings = false;
 	}
 	
 	// set camera back online - start to take pictures now
@@ -1266,16 +1266,16 @@ public class Preview extends SurfaceView implements SurfaceHolder.Callback, ITex
 		    {
 		    	if(mActivity.mTextView != null)
 		    	{
-			    	if(MobileWebCam.gUploadingCount > 3)
+			    	if(MobileWebCam2.gUploadingCount > 3)
 						mActivity.mTextView.setTextColor(Color.argb(0xff, 0xff, 0x80, 0x80));
 					else
 						mActivity.mTextView.setTextColor(Color.WHITE);
-					int slowdown = Math.max(0, MobileWebCam.gUploadingCount * MobileWebCam.gUploadingCount - 1) * 1000;
+					int slowdown = Math.max(0, MobileWebCam2.gUploadingCount * MobileWebCam2.gUploadingCount - 1) * 1000;
 					String nightsettings = mSettings.IsNight() ? "    Night" : "";					
 					if(mSettings.mMode == Mode.MANUAL)
-						mActivity.mTextView.setText("Pictures: " + MobileWebCam.gPictureCounter + "    Uploading: " + MobileWebCam.gUploadingCount + "   Manual Mode active" + nightsettings);
+						mActivity.mTextView.setText("Pictures: " + MobileWebCam2.gPictureCounter + "    Uploading: " + MobileWebCam2.gUploadingCount + "   Manual Mode active" + nightsettings);
 					else
-						mActivity.mTextView.setText("Pictures: " + MobileWebCam.gPictureCounter + "    Uploading: " + MobileWebCam.gUploadingCount + "   Refresh: " + (mSettings.mRefreshDuration + slowdown) / 1000 + " s" + nightsettings);
+						mActivity.mTextView.setText("Pictures: " + MobileWebCam2.gPictureCounter + "    Uploading: " + MobileWebCam2.gUploadingCount + "   Refresh: " + (mSettings.mRefreshDuration + slowdown) / 1000 + " s" + nightsettings);
 		    	}
 				
 		    	if(mActivity.mCamNameViewFrame != null)
@@ -1314,7 +1314,7 @@ public class Preview extends SurfaceView implements SurfaceHolder.Callback, ITex
 	@Override
 	public void SetPreview(Bitmap image)
 	{
-		if(!MobileWebCam.gIsRunning)
+		if(!MobileWebCam2.gIsRunning)
 			return;
 		
 		if(mActivity.mDrawOnTop != null && mSettings.mMode == Mode.HIDDEN)
@@ -1341,7 +1341,7 @@ public class Preview extends SurfaceView implements SurfaceHolder.Callback, ITex
 			}
 			catch(OutOfMemoryError e)
 			{
-				MobileWebCam.LogI("Not enough memory for fullsize preview!");
+				MobileWebCam2.LogI("Not enough memory for fullsize preview!");
 				try
 				{
 					mPreviewBitmap = Bitmap.createScaledBitmap(image, image.getWidth() / 20, image.getHeight() / 20, true);
@@ -1371,28 +1371,28 @@ public class Preview extends SurfaceView implements SurfaceHolder.Callback, ITex
 	@Override
 	public synchronized int JobStarted()
 	{
-		Log.i("MobileWebCam", "JobStarted " + JobRefCount.get());
+		Log.i("MobileWebCam2", "JobStarted " + JobRefCount.get());
 		return JobRefCount.getAndIncrement();
 	}
 	
 	@Override
 	public synchronized int JobFinished()
 	{
-		Log.i("MobileWebCam", "JobFinished " + JobRefCount.get());
+		Log.i("MobileWebCam2", "JobFinished " + JobRefCount.get());
 
 		if(ControlReceiver.PhotoCount.get() <= 0)
 		{
 			// all pictures taken - camera is free
 			if(Preview.mPhotoLock.getAndSet(false))
-				Log.w("MobileWebCam", "PhotoLock released because a job is finished and all pics taken!");
+				Log.w("MobileWebCam2", "PhotoLock released because a job is finished and all pics taken!");
 		}
 		
 		int cnt = JobRefCount.decrementAndGet();
 		if(cnt <= 0)
 		{
-			if(!MobileWebCam.gIsRunning && !MobileWebCam.gInSettings && mSettings.mMode == Mode.BACKGROUND)
+			if(!MobileWebCam2.gIsRunning && !MobileWebCam2.gInSettings && mSettings.mMode == Mode.BACKGROUND)
 			{
-				MobileWebCam.LogI("Background done!");
+				MobileWebCam2.LogI("Background done!");
 				
 		        mActivity.releaseLocks();
 				BackgroundPhoto.releaseWakeLocks();

@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 
 <PreferenceScreen
 	xmlns:android="http://schemas.android.com/apk/res/android">
@@ -44,7 +44,7 @@
 	 		
 		</PreferenceScreen>
 	
-		<com.dngames.mobilewebcam.SeekBarPreference
+		<com.mobilewebcam2.mobilewebcam2.SeekBarPreference
 			android:key="picture_compression"
 	        android:title="Image Quality"
 	        android:summary="Modify image quality vs. data size (compression)."
@@ -96,19 +96,19 @@
 				android:scrollHorizontally="true"
 				android:singleLine="true"/>
 			
-			<com.dngames.mobilewebcam.ColorDialogPreference
+			<com.mobilewebcam2.mobilewebcam2.ColorDialogPreference
 				android:key="text_color"
 				android:title="Color"
 				android:summary="Print text in this color if enabled." 
 	            android:defaultValue="#FFFFFFFF"/> 
 
-			<com.dngames.mobilewebcam.ColorDialogPreference
+			<com.mobilewebcam2.mobilewebcam2.ColorDialogPreference
 				android:key="text_shadowcolor"
 				android:title="Shadow Color"
 				android:summary="Print a shadow for the text in this color to make better readable." 
 	            android:defaultValue="#FF000000"/>
 
-      		<com.dngames.mobilewebcam.ColorDialogPreference
+      		<com.mobilewebcam2.mobilewebcam2.ColorDialogPreference
 				android:key="text_backcolor"
 				android:title="Background Color"
 				android:summary="Draw a colored background under the text to improve readability."
@@ -120,7 +120,7 @@
 			    android:summary="Draw a full filled line of background instead of the area under the text."
 			    android:defaultValue="true"/>
       
-      		<com.dngames.mobilewebcam.SeekBarPreference
+      		<com.mobilewebcam2.mobilewebcam2.SeekBarPreference
 				android:key="text_x"
 		        android:title="Horizontal position"
 		        android:summary="Move text position horizontally."
@@ -128,7 +128,7 @@
 		        android:text=" %"
 		        android:max="100"/>
 
-			<com.dngames.mobilewebcam.SeekBarPreference
+			<com.mobilewebcam2.mobilewebcam2.SeekBarPreference
 				android:key="text_y"
 		        android:title="Vertical position"
 		        android:summary="Move text position vertically."
@@ -145,7 +145,7 @@
 	           	android:defaultValue="LEFT"
 	           	android:dialogTitle="@string/dialog_title_imprintalign"/>			
 			
-	      	<com.dngames.mobilewebcam.SeekBarPreference
+	      	<com.mobilewebcam2.mobilewebcam2.SeekBarPreference
 			   	android:key="infotext_fontsize"
 		       	android:title="Font size"
 		       	android:summary="Scale font here."
@@ -178,19 +178,19 @@
 		        android:scrollHorizontally="true"
 		        android:singleLine="true"/>
 			
-			<com.dngames.mobilewebcam.ColorDialogPreference
+			<com.mobilewebcam2.mobilewebcam2.ColorDialogPreference
 				android:key="datetime_color"
 				android:title="Color"
 				android:summary="Print text in this color if enabled."
 	            android:defaultValue="#FFFFFFFF"/> 
 
-			<com.dngames.mobilewebcam.ColorDialogPreference
+			<com.mobilewebcam2.mobilewebcam2.ColorDialogPreference
 				android:key="datetime_shadowcolor"
 				android:title="Shadow Color"
 				android:summary="Print a shadow for date time text in this color to improve readability."
 	            android:defaultValue="#FF000000"/>
 
-      		<com.dngames.mobilewebcam.ColorDialogPreference
+      		<com.mobilewebcam2.mobilewebcam2.ColorDialogPreference
 				android:key="datetime_backcolor"
 				android:title="Background Color"
 				android:summary="Draw a colored background under the text to improve readability."
@@ -202,7 +202,7 @@
 				android:summary="Draw a full filled line of background instead of the area under the info texts."
 				android:defaultValue="true"/>
 				
-      		<com.dngames.mobilewebcam.SeekBarPreference
+      		<com.mobilewebcam2.mobilewebcam2.SeekBarPreference
 				android:key="datetime_x"
 		        android:title="Horizontal position"
 		        android:summary="Move text position horizontally."
@@ -210,7 +210,7 @@
 		        android:text=" %"
 		        android:max="100"/>
 
-			<com.dngames.mobilewebcam.SeekBarPreference
+			<com.mobilewebcam2.mobilewebcam2.SeekBarPreference
 				android:key="datetime_y"
 		        android:title="Vertical position"
 		        android:summary="Move text position vertically."
@@ -218,7 +218,7 @@
 		        android:text=" %"
 		        android:max="100"/>
 			
-	      <com.dngames.mobilewebcam.SeekBarPreference
+	      <com.mobilewebcam2.mobilewebcam2.SeekBarPreference
 				android:key="datetime_fontsize"
 		        android:title="Font size"
 		        android:summary="Scale font here."
@@ -250,25 +250,25 @@
 		        android:scrollHorizontally="true"
 		        android:singleLine="true"/>
 
-			<com.dngames.mobilewebcam.ColorDialogPreference
+			<com.mobilewebcam2.mobilewebcam2.ColorDialogPreference
 				android:key="statusinfo_color"
 				android:title="Color"
 				android:summary="Print status text in this color if enabled."
 	            android:defaultValue="#FFFFFFFF"/> 
 
-			<com.dngames.mobilewebcam.ColorDialogPreference
+			<com.mobilewebcam2.mobilewebcam2.ColorDialogPreference
 				android:key="statusinfo_shadowcolor"
 				android:title="Shadow Color"
 				android:summary="Print a shadow for the status text in this color to improve readability."
 	            android:defaultValue="#FF000000"/>			
 			
-      		<com.dngames.mobilewebcam.ColorDialogPreference
+      		<com.mobilewebcam2.mobilewebcam2.ColorDialogPreference
 				android:key="statusinfo_backcolor"
 				android:title="Background Color"
 				android:summary="Draw a colored background under the info text to improve readability."
 	            android:defaultValue="#00000000"/>			
 			
-			<com.dngames.mobilewebcam.SeekBarPreference
+			<com.mobilewebcam2.mobilewebcam2.SeekBarPreference
 				android:key="statusinfo_x"
 		        android:title="Horizontal position"
 		        android:summary="Move text position horizontally."
@@ -276,7 +276,7 @@
 		        android:text=" %"
 		        android:max="100"/>
 
-			<com.dngames.mobilewebcam.SeekBarPreference
+			<com.mobilewebcam2.mobilewebcam2.SeekBarPreference
 				android:key="statusinfo_y"
 		        android:title="Vertical position"
 		        android:summary="Move text position vertically."
@@ -290,7 +290,7 @@
 		      	android:summary="Draw a full filled line of background instead of the area under the info texts."
 		      	android:defaultValue="true"/>
 		
-	      <com.dngames.mobilewebcam.SeekBarPreference
+	      <com.mobilewebcam2.mobilewebcam2.SeekBarPreference
 				android:key="statusinfo_fontsize"
 		        android:title="Font size"
 		        android:summary="Scale font here."
@@ -324,25 +324,25 @@
 				android:summary="Print current gps location as address instead of coordinates!"
 			    android:defaultValue="false"/>
 	 
-			<com.dngames.mobilewebcam.ColorDialogPreference
+			<com.mobilewebcam2.mobilewebcam2.ColorDialogPreference
 				android:key="gps_color"
 				android:title="Color"
 				android:summary="Print gps text in this color if enabled."
 	            android:defaultValue="#FFFFFFFF"/> 
 
-			<com.dngames.mobilewebcam.ColorDialogPreference
+			<com.mobilewebcam2.mobilewebcam2.ColorDialogPreference
 				android:key="gps_shadowcolor"
 				android:title="Shadow Color"
 				android:summary="Print a shadow for gps text in this color to improve readability."
 	            android:defaultValue="#FF000000"/>
 
-      		<com.dngames.mobilewebcam.ColorDialogPreference
+      		<com.mobilewebcam2.mobilewebcam2.ColorDialogPreference
 				android:key="gps_backcolor"
 				android:title="Background Color"
 				android:summary="Draw a colored background under the text to improve readability."
 	            android:defaultValue="#00000000"/>
 			 
-      		<com.dngames.mobilewebcam.SeekBarPreference
+      		<com.mobilewebcam2.mobilewebcam2.SeekBarPreference
 				android:key="gps_x"
 		        android:title="Horizontal position"
 		        android:summary="Move text position horizontally."
@@ -350,7 +350,7 @@
 		        android:text=" %"
 		        android:max="100"/>
 
-			<com.dngames.mobilewebcam.SeekBarPreference
+			<com.mobilewebcam2.mobilewebcam2.SeekBarPreference
 				android:key="gps_y"
 		        android:title="Vertical position"
 		        android:summary="Move text position vertically."
@@ -364,7 +364,7 @@
 		      	android:summary="Draw a full filled line of background instead of the area under the info texts."
 		      	android:defaultValue="true"/>
 		
-	      <com.dngames.mobilewebcam.SeekBarPreference
+	      <com.mobilewebcam2.mobilewebcam2.SeekBarPreference
 				android:key="gps_fontsize"
 		        android:title="Font size"
 		        android:summary="Scale font here."
@@ -392,7 +392,7 @@
 				android:summary="Print your custom image sdcard/MobileWebCam/imprint.png or from the web onto the cam pic."
 				android:defaultValue="false"/>
 			
-			<com.dngames.mobilewebcam.SeekBarPreference
+			<com.mobilewebcam2.mobilewebcam2.SeekBarPreference
 				android:key="imprint_picture_x"
 		        android:title="Horizontal position"
 		        android:summary="Move picture position horizontally."
@@ -400,7 +400,7 @@
 		        android:text=" %"
 		        android:max="100"/>
 
-			<com.dngames.mobilewebcam.SeekBarPreference
+			<com.mobilewebcam2.mobilewebcam2.SeekBarPreference
 				android:key="imprint_picture_y"
 		        android:title="Vertical position"
 		        android:summary="Move picture position vertically."

@@ -44,13 +44,13 @@ abstract class Upload extends Thread
 
 	protected void doInBackgroundBegin()
 	{
-		MobileWebCam.gUploadingCount++;
+		MobileWebCam2.gUploadingCount++;
 		mTextUpdater.UpdateText();
 	}
 	
 	protected void doInBackgroundEnd(boolean getsettings)
 	{
-		MobileWebCam.gUploadingCount--;
+		MobileWebCam2.gUploadingCount--;
 		
 		mTextUpdater.UpdateText();
 

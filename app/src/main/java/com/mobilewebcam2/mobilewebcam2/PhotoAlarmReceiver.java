@@ -35,12 +35,12 @@ public class PhotoAlarmReceiver extends PhotoReceiver
 	@Override
 	public void onReceive(Context context, Intent intent)
 	{
-		Log.i("MobileWebCam", "Alarm went off");
+		Log.i("MobileWebCam2", "Alarm went off");
 		
 		Calendar time = Calendar.getInstance();
 		time.setTimeInMillis(System.currentTimeMillis());
 		
-		SharedPreferences prefs = context.getSharedPreferences(MobileWebCam.SHARED_PREFS_NAME, 0);
+		SharedPreferences prefs = context.getSharedPreferences(MobileWebCam2.SHARED_PREFS_NAME, 0);
 
 		if(!prefs.getBoolean("mobilewebcam_enabled", true))
 			return;
@@ -61,7 +61,7 @@ public class PhotoAlarmReceiver extends PhotoReceiver
 			time.add(Calendar.SECOND, refresh);
 			alarmMgr.set(AlarmManager.RTC_WAKEUP, time.getTimeInMillis(), pendingIntent);
 		
-			Log.i("MobileWebCam", "Alarm is set to: " + time.getTimeInMillis() + "(" + refresh + ")");
+			Log.i("MobileWebCam2", "Alarm is set to: " + time.getTimeInMillis() + "(" + refresh + ")");
 		}
 		
 		super.onReceive(context, intent);

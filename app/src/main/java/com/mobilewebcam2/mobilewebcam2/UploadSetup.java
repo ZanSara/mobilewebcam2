@@ -15,7 +15,6 @@
 
 package com.mobilewebcam2.mobilewebcam2;
 
-import android.content.ContextWrapper;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
@@ -23,8 +22,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
-import android.view.Window;
-import android.view.WindowManager;
 
 public class UploadSetup extends PreferenceActivity implements OnSharedPreferenceChangeListener
 {
@@ -38,7 +35,7 @@ public class UploadSetup extends PreferenceActivity implements OnSharedPreferenc
 
         super.onCreate(savedInstanceState);
 		 		 
-        getPreferenceManager().setSharedPreferencesName(MobileWebCam.SHARED_PREFS_NAME);
+        getPreferenceManager().setSharedPreferencesName(MobileWebCam2.SHARED_PREFS_NAME);
 		this.addPreferencesFromResource(R.layout.uploadsetup);
         getPreferenceManager().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
 

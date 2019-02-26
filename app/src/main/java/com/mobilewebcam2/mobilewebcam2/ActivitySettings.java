@@ -39,7 +39,7 @@ public class ActivitySettings extends PreferenceActivity implements OnSharedPref
 
         super.onCreate(savedInstanceState);
 		 		 
-        getPreferenceManager().setSharedPreferencesName(MobileWebCam.SHARED_PREFS_NAME);
+        getPreferenceManager().setSharedPreferencesName(MobileWebCam2.SHARED_PREFS_NAME);
 		this.addPreferencesFromResource(R.layout.activitysettings);
         getPreferenceManager().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
 
@@ -70,7 +70,7 @@ public class ActivitySettings extends PreferenceActivity implements OnSharedPref
 	         @Override
 	         public boolean onPreferenceClick(Preference preference)
 	         {
-	        	 SharedPreferences prefs = getSharedPreferences(MobileWebCam.SHARED_PREFS_NAME, 0);
+	        	 SharedPreferences prefs = getSharedPreferences(MobileWebCam2.SHARED_PREFS_NAME, 0);
 	        	 Editor edit = prefs.edit();
 	        	 edit.putString("cam_broadcast_activation", "android.intent.action.ACTION_POWER_CONNECTED");
 	        	 edit.putString("cam_intents_repeat", "5");

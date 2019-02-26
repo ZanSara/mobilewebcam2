@@ -1,32 +1,20 @@
 package com.mobilewebcam2.mobilewebcam2;
 
-import java.io.File;
-
-import android.app.ProgressDialog;
-import android.content.ContextWrapper;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
-import android.os.Handler;
-import android.os.Message;
-import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
-import android.preference.PreferenceScreen;
 import android.util.Log;
-import android.view.Window;
-import android.view.WindowManager;
-import android.widget.BaseAdapter;
 import android.content.Context;
 
 import android.net.NetworkInfo;
 import android.net.ConnectivityManager;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
-import java.net.SocketException;
+
 import org.apache.http.conn.util.InetAddressUtils;
 import java.util.Enumeration;
 
@@ -42,11 +30,11 @@ public class RemoteControlSettings extends PreferenceActivity implements OnShare
 
         super.onCreate(savedInstanceState);
 		 		 
-        getPreferenceManager().setSharedPreferencesName(MobileWebCam.SHARED_PREFS_NAME);
+        getPreferenceManager().setSharedPreferencesName(MobileWebCam2.SHARED_PREFS_NAME);
 		this.addPreferencesFromResource(R.layout.remotecontrol);
         getPreferenceManager().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
 
-		final SharedPreferences prefs = getSharedPreferences(MobileWebCam.SHARED_PREFS_NAME, 0);
+		final SharedPreferences prefs = getSharedPreferences(MobileWebCam2.SHARED_PREFS_NAME, 0);
         getPreferenceManager().findPreference("dump_config").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
 	        @Override
 	        public boolean onPreferenceClick(Preference preference)
@@ -56,7 +44,7 @@ public class RemoteControlSettings extends PreferenceActivity implements OnShare
 		       	 Intent intent = new Intent(Intent.ACTION_SEND);
 		       	 intent.addCategory(Intent.CATEGORY_DEFAULT);
 		       	 intent.setType("text/plain");
-		       	 intent.putExtra(Intent.EXTRA_SUBJECT, "MobileWebCam Config");
+		       	 intent.putExtra(Intent.EXTRA_SUBJECT, "MobileWebCam2 Config");
 		       	 intent.putExtra(Intent.EXTRA_TEXT, settings);
 		         startActivity(intent);
 		         return true;
@@ -125,7 +113,7 @@ public class RemoteControlSettings extends PreferenceActivity implements OnShare
 			}
 			catch (Exception ex)
 			{
-				Log.e("MobileWebCam", ex.toString());
+				Log.e("MobileWebCam2", ex.toString());
 			}
 		}
         return null;
@@ -136,7 +124,7 @@ public class RemoteControlSettings extends PreferenceActivity implements OnShare
 		final String myIP = getIpAddress(RemoteControlSettings.this, false);
 		if(myIP != null)
 		{
-			final SharedPreferences prefs = getSharedPreferences(MobileWebCam.SHARED_PREFS_NAME, 0);
+			final SharedPreferences prefs = getSharedPreferences(MobileWebCam2.SHARED_PREFS_NAME, 0);
 			getPreferenceManager().findPreference("info_ip").setTitle("http://" + myIP + ":" + MobileWebCamHttpService.getPort(prefs));
 	
 	        getPreferenceManager().findPreference("info_ip").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
@@ -144,7 +132,7 @@ public class RemoteControlSettings extends PreferenceActivity implements OnShare
 		         public boolean onPreferenceClick(Preference preference) {
 		             final Intent emailIntent = new Intent(android.content.Intent.ACTION_SEND);
 		             emailIntent.setType("text/html");
-		             emailIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Your MobileWebCam URL");
+		             emailIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Your MobileWebCam2 URL");
 		             emailIntent.putExtra(android.content.Intent.EXTRA_TEXT, "http://" + myIP + ":" + MobileWebCamHttpService.getPort(prefs));
 		             startActivity(Intent.createChooser(emailIntent, "Send URL via email:"));
 		             return true;

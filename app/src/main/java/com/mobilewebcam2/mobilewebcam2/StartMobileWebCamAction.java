@@ -33,7 +33,7 @@ public class StartMobileWebCamAction extends Activity
         super.onCreate(icicle);
         
         KeyguardManager mKeyguardManager = (KeyguardManager)getSystemService(KEYGUARD_SERVICE);
-        KeyguardLock mLock = mKeyguardManager.newKeyguardLock("MobileWebCam");
+        KeyguardLock mLock = mKeyguardManager.newKeyguardLock("MobileWebCam2");
         mLock.disableKeyguard();
 
 		try
@@ -45,7 +45,7 @@ public class StartMobileWebCamAction extends Activity
 			e.printStackTrace();
 		}
         
-		SharedPreferences prefs = getSharedPreferences(MobileWebCam.SHARED_PREFS_NAME, 0);
+		SharedPreferences prefs = getSharedPreferences(MobileWebCam2.SHARED_PREFS_NAME, 0);
 
 		String v = prefs.getString("camera_mode", "1");
 		if(v.length() < 1 || v.length() > 9)
@@ -68,7 +68,7 @@ public class StartMobileWebCamAction extends Activity
 		case 0:
 		case 1:
 		default:
-			Intent i = new Intent(StartMobileWebCamAction.this, MobileWebCam.class);
+			Intent i = new Intent(StartMobileWebCamAction.this, MobileWebCam2.class);
 			i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 			startActivity(i);
 			break;

@@ -15,15 +15,9 @@ package com.mobilewebcam2.mobilewebcam2;
 
 import android.app.TabActivity;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.Window;
-import android.view.WindowManager;
-import android.view.ViewGroup.LayoutParams;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TabHost;
 
 public class SettingsTabActivity extends TabActivity
@@ -75,15 +69,15 @@ public class SettingsTabActivity extends TabActivity
 		// TODO Auto-generated method stub
 		super.onResume();
 
-		MobileWebCam.gInSettings = true;
+		MobileWebCam2.gInSettings = true;
 	}    
     
     public void onPause()
     {
     	super.onPause();
     	
-		MobileWebCam.gInSettings = false;
+		MobileWebCam2.gInSettings = false;
 
-		Log.i("MobileWebCam", "Settings onPause");
+		Log.i("MobileWebCam2", "Settings onPause");
     }
 }

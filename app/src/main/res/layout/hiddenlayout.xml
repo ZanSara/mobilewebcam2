@@ -8,7 +8,7 @@
 	android:layout_gravity="top"
 	android:gravity="top">
 
-	<com.dngames.mobilewebcam.Preview
+	<com.mobilewebcam2.mobilewebcam2.Preview
 	     android:id="@+id/preview"
 	     android:visibility="invisible"
 	     android:layout_gravity="top|right"

@@ -41,7 +41,7 @@ public class SystemSettings extends PreferenceActivity
 
         super.onCreate(savedInstanceState);
 		 		 
-        getPreferenceManager().setSharedPreferencesName(MobileWebCam.SHARED_PREFS_NAME);
+        getPreferenceManager().setSharedPreferencesName(MobileWebCam2.SHARED_PREFS_NAME);
 		this.addPreferencesFromResource(R.layout.systemsettings);
 
         getPreferenceManager().findPreference("info_open").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
@@ -74,14 +74,14 @@ public class SystemSettings extends PreferenceActivity
         	getPreferenceManager().findPreference("market_open").setEnabled(false);
 		}*/
 		        
-		final SharedPreferences prefs = SystemSettings.this.getSharedPreferences(MobileWebCam.SHARED_PREFS_NAME, 0);		        
+		final SharedPreferences prefs = SystemSettings.this.getSharedPreferences(MobileWebCam2.SHARED_PREFS_NAME, 0);
 		        
         getPreferenceManager().findPreference("backup_settings").setOnPreferenceClickListener(new Preference.OnPreferenceClickListener()
         {
 	         @Override
 	         public boolean onPreferenceClick(Preference preference)
 	         {
-		    	File path = new File(Environment.getExternalStorageDirectory() + "/MobileWebCam/");
+		    	File path = new File(Environment.getExternalStorageDirectory() + "/MobileWebCam2/");
     	    	boolean exists = path.exists();
     	    	if(!exists)
     	    	    exists = path.mkdirs();
@@ -108,7 +108,7 @@ public class SystemSettings extends PreferenceActivity
 	         @Override
 	         public boolean onPreferenceClick(Preference preference)
 	         {
-	        	File path = new File(Environment.getExternalStorageDirectory() + "/MobileWebCam/config.txt");
+	        	File path = new File(Environment.getExternalStorageDirectory() + "/MobileWebCam2/config.txt");
     	    	if(path.exists())
     	    	{
 					StringBuilder cfg = new StringBuilder();

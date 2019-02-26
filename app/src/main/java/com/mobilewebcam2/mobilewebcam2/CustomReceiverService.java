@@ -1,9 +1,5 @@
 package com.mobilewebcam2.mobilewebcam2;
 
-import java.lang.ref.WeakReference;
-
-import com.mobilewebcam2.mobilewebcam2.PhotoSettings.Mode;
-
 import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -11,7 +7,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
-import android.os.Debug;
 import android.os.IBinder;
 import android.util.Log;
 import android.widget.Toast;
@@ -26,8 +21,8 @@ public class CustomReceiverService extends Service implements OnSharedPreference
 	
 	static public void stop(Context c)
 	{
-    	SharedPreferences prefs = c.getSharedPreferences(MobileWebCam.SHARED_PREFS_NAME, 0);
-		MobileWebCam.LogI("Stop custom broadcast receiver service: " + prefs.getString("cam_broadcast_activation", ""));
+    	SharedPreferences prefs = c.getSharedPreferences(MobileWebCam2.SHARED_PREFS_NAME, 0);
+		MobileWebCam2.LogI("Stop custom broadcast receiver service: " + prefs.getString("cam_broadcast_activation", ""));
    	 	Intent i = new Intent(c, CustomReceiverService.class);  
 		c.stopService(i);
 	}
@@ -37,33 +32,33 @@ public class CustomReceiverService extends Service implements OnSharedPreference
 	{
 		super.onStart(intent, startId);
 		
-    	SharedPreferences prefs = CustomReceiverService.this.getSharedPreferences(MobileWebCam.SHARED_PREFS_NAME, 0);
+    	SharedPreferences prefs = CustomReceiverService.this.getSharedPreferences(MobileWebCam2.SHARED_PREFS_NAME, 0);
 		mBroadcastReceiver = prefs.getString("cam_broadcast_activation", "");
 
-    	if(MobileWebCam.gCustomReceiverActive)
+    	if(MobileWebCam2.gCustomReceiverActive)
     	{
 	        try
 	        {
 	        	unregisterReceiver(gCustomReceiver);
-		        MobileWebCam.gCustomReceiverActive = false;
+		        MobileWebCam2.gCustomReceiverActive = false;
 	        }
 	        catch(IllegalArgumentException e)
 	        {
 	        	if(e.getMessage() != null)
-	        		MobileWebCam.LogE(e.getMessage());
+	        		MobileWebCam2.LogE(e.getMessage());
 	        	else
-	        		MobileWebCam.LogE(e.toString());
+	        		MobileWebCam2.LogE(e.toString());
 	        }
     	}
 
-        if(!MobileWebCam.gCustomReceiverActive && mBroadcastReceiver.length() > 0)
+        if(!MobileWebCam2.gCustomReceiverActive && mBroadcastReceiver.length() > 0)
 		{
         	IntentFilter filter = new IntentFilter(mBroadcastReceiver);
 	        registerReceiver(gCustomReceiver, filter);
 	        if(!prefs.getBoolean("no_messages", false))
 	        	Toast.makeText(CustomReceiverService.this, "Registered broadcast receiver: " + mBroadcastReceiver, Toast.LENGTH_LONG).show();
-	        MobileWebCam.LogI("Registered broadcast receiver: " + mBroadcastReceiver);
-	        MobileWebCam.gCustomReceiverActive = true;
+	        MobileWebCam2.LogI("Registered broadcast receiver: " + mBroadcastReceiver);
+	        MobileWebCam2.gCustomReceiverActive = true;
 		}
 	}
 	
@@ -72,20 +67,20 @@ public class CustomReceiverService extends Service implements OnSharedPreference
 	{
 		super.onDestroy();
 
-        if(MobileWebCam.gCustomReceiverActive)
+        if(MobileWebCam2.gCustomReceiverActive)
         {
-	        MobileWebCam.LogI("Destroyed broadcast receiver: " + mBroadcastReceiver);
+	        MobileWebCam2.LogI("Destroyed broadcast receiver: " + mBroadcastReceiver);
 	        try
 	        {
 				unregisterReceiver(gCustomReceiver);
-		        MobileWebCam.gCustomReceiverActive = false;
+		        MobileWebCam2.gCustomReceiverActive = false;
 	        }
 	        catch(IllegalArgumentException e)
 	        {
 	        	if(e.getMessage() != null)
-	        		MobileWebCam.LogE(e.getMessage());
+	        		MobileWebCam2.LogE(e.getMessage());
 	        	else
-	        		MobileWebCam.LogE(e.toString());
+	        		MobileWebCam2.LogE(e.toString());
 	        }
         }
 	}
@@ -116,9 +111,9 @@ public class CustomReceiverService extends Service implements OnSharedPreference
         @Override
         public void onReceive(Context context, Intent intent)
         {
-        	Log.i("MobileWebCam", "Broadcast received: " + intent.getAction());
+        	Log.i("MobileWebCam2", "Broadcast received: " + intent.getAction());
         	
-	        SharedPreferences prefs = context.getSharedPreferences(MobileWebCam.SHARED_PREFS_NAME, 0);
+	        SharedPreferences prefs = context.getSharedPreferences(MobileWebCam2.SHARED_PREFS_NAME, 0);
         	String action = prefs.getString("cam_broadcast_activation", "");
     		if(intent.getAction().equals(action))
     		{

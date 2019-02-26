@@ -132,8 +132,8 @@ public class SavePhoto extends Thread
 					{
     					try
     					{
-    						PrintStream ps = new PrintStream(new File(Environment.getExternalStorageDirectory() + "/MobileWebCam/log.txt"));
-    						ps.print(MobileWebCam.GetLog(mContext, mContext.getSharedPreferences(MobileWebCam.SHARED_PREFS_NAME, 0), mSettings));
+    						PrintStream ps = new PrintStream(new File(Environment.getExternalStorageDirectory() + "/MobileWebCam2/log.txt"));
+    						ps.print(MobileWebCam2.GetLog(mContext, mContext.getSharedPreferences(MobileWebCam2.SHARED_PREFS_NAME, 0), mSettings));
     						ps.close();
     					}
     					catch (FileNotFoundException e)

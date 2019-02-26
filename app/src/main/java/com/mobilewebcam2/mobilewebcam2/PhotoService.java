@@ -68,11 +68,11 @@ public class PhotoService
 	
 	public void TakePicture(String event)
 	{
-		Log.i("MobileWebCam", "TakePicture");
+		Log.i("MobileWebCam2", "TakePicture");
 		mCamera = null;
 		if(Preview.mPhotoLock.getAndSet(true))
 		{
-			Log.w("MobileWebCam", "Photo locked!");
+			Log.w("MobileWebCam2", "Photo locked!");
 			return;
 		}
 		Preview.mPhotoLockTime = System.currentTimeMillis();
@@ -81,7 +81,7 @@ public class PhotoService
 		{
 			if(mSettings.mFrontCamera || NewCameraFunctions.getNumberOfCameras() == 1 && NewCameraFunctions.isFrontCamera(0))
 			{
-				Log.v("MobileWebCam", "Trying to open CAMERA 1!");
+				Log.v("MobileWebCam2", "Trying to open CAMERA 1!");
 				mCamera = NewCameraFunctions.openFrontCamera();
 			}
 			
@@ -96,7 +96,7 @@ public class PhotoService
 					e.printStackTrace();
 					if(e.getMessage() != null)
 					{
-						MobileWebCam.LogE(e.getMessage());						
+						MobileWebCam2.LogE(e.getMessage());
 						mTextUpdater.Toast(e.getMessage(), Toast.LENGTH_SHORT);
 					}
 				}
@@ -110,7 +110,7 @@ public class PhotoService
 					{
 						if(error != 0) // Samsung Galaxy S returns 0? https://groups.google.com/forum/?fromgroups=#!topic/android-developers/ZePJqveaExk
 						{
-							MobileWebCam.LogE("Camera TakePicture error: " + error);
+							MobileWebCam2.LogE("Camera TakePicture error: " + error);
 							mCamera = null;
 							camera.setPreviewCallback(null);
 							camera.stopPreview();
@@ -128,7 +128,7 @@ public class PhotoService
 			if(e.getMessage() != null)
 			{
 				mTextUpdater.Toast(e.getMessage(), Toast.LENGTH_SHORT);
-				MobileWebCam.LogE(e.getMessage());
+				MobileWebCam2.LogE(e.getMessage());
 			}
 		}
 		if(mCamera != null)
@@ -169,9 +169,9 @@ public class PhotoService
         		mCamera.setParameters(params);
 			}
 			
-			MobileWebCam.gLastMotionKeepAliveTime = System.currentTimeMillis();			
+			MobileWebCam2.gLastMotionKeepAliveTime = System.currentTimeMillis();
 			
-			Log.i("MobileWebCam", "takePicture");
+			Log.i("MobileWebCam2", "takePicture");
 /*			if(mSettings.mAutoFocus)
 				mCamera.autoFocus(autofocusCallback);
 			else*/
@@ -179,11 +179,11 @@ public class PhotoService
 			{
 				photoCallback.mPhotoEvent = event;
 				mCamera.takePicture(shutterCallback, null, photoCallback);
-				Log.i("MobileWebCam", "takePicture done");
+				Log.i("MobileWebCam2", "takePicture done");
 			}
 			catch(RuntimeException e)
 			{
-				MobileWebCam.LogE("takePicture failed!");
+				MobileWebCam2.LogE("takePicture failed!");
 				e.printStackTrace();
 				Preview.mPhotoLock.set(false);
 			}
@@ -200,7 +200,7 @@ public class PhotoService
 		@Override
 		public void onAutoFocus(boolean success, Camera camera)
 		{
-			Log.i("MobileWebCam", "takePicture onAutoFocus");
+			Log.i("MobileWebCam2", "takePicture onAutoFocus");
 			
 			// take picture now
 			mHandler.post(new Runnable()
@@ -208,12 +208,12 @@ public class PhotoService
 				@Override
 				public void run()
 				{
-					Log.i("MobileWebCam", "takePicture onAutoFocus.run");
+					Log.i("MobileWebCam2", "takePicture onAutoFocus.run");
 					
 					if(mCamera != null)
 						mCamera.takePicture(shutterCallback, null, photoCallback);
 
-					Log.i("MobileWebCam", "takePicture onAutoFocus.run takePicture done");
+					Log.i("MobileWebCam2", "takePicture onAutoFocus.run takePicture done");
 				}
 			});
 		}
@@ -240,18 +240,18 @@ public class PhotoService
 			
 			WorkImage work = null;
 
-			Log.i("MobileWebCam", "onPictureTaken");
+			Log.i("MobileWebCam2", "onPictureTaken");
 			Camera.Parameters parameters = camera.getParameters();
 			Camera.Size s = parameters.getPictureSize();
 			if(s != null)
 			{
 				work = new WorkImage(mContext, mTextUpdater, data, s, date, mPhotoEvent);
-				MobileWebCam.gPictureCounter++;
+				MobileWebCam2.gPictureCounter++;
 				
 				mTextUpdater.UpdateText();
 				
 //				mHandler.post(work);
-				Log.i("MobileWebCam", "work to do " + MobileWebCam.gPictureCounter);
+				Log.i("MobileWebCam2", "work to do " + MobileWebCam2.gPictureCounter);
 
 				
 				// now start to work on the data
@@ -267,12 +267,12 @@ public class PhotoService
 				{
 					// PHOTO intent requested several pictures!
 					mCamera.takePicture(shutterCallback, null, photoCallback);
-					Log.i("MobileWebCam", "another takePicture done");
+					Log.i("MobileWebCam2", "another takePicture done");
 					return; // do not yet shut camera down!
 				}
 			}
 			
-			Log.i("MobileWebCam", "onPictureTaken end");			
+			Log.i("MobileWebCam2", "onPictureTaken end");
 			
 			AudioManager mgr = (AudioManager)mContext.getSystemService(Context.AUDIO_SERVICE);
 			mgr.setStreamMute(AudioManager.STREAM_SYSTEM, false);			
@@ -292,7 +292,7 @@ public class PhotoService
 							System.gc();
 						}
 						
-						Log.i("MobileWebCam", "takePicture finished");
+						Log.i("MobileWebCam2", "takePicture finished");
 					}
 				});
 		}

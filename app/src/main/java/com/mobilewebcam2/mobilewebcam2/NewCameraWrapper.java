@@ -15,11 +15,8 @@
 
 package com.mobilewebcam2.mobilewebcam2;
 
-import java.util.List;
-
 import android.annotation.TargetApi;
 import android.hardware.Camera;
-import android.hardware.Camera.Size;
 import android.util.Log;
 
 
@@ -55,11 +52,11 @@ public class NewCameraWrapper
 		}
 		catch(NoSuchMethodError e)
 		{
-			Log.e("MobileWebCam", "Unable to get CameraInfo: " + e.getMessage());
+			Log.e("MobileWebCam2", "Unable to get CameraInfo: " + e.getMessage());
 		}
 		catch(NoClassDefFoundError e)
 		{
-			Log.e("MobileWebCam", "Unable to get CameraInfo: " + e.getMessage());
+			Log.e("MobileWebCam2", "Unable to get CameraInfo: " + e.getMessage());
 		}
 	    
 	    return false;
@@ -83,18 +80,18 @@ public class NewCameraWrapper
 		            }
 		            catch (RuntimeException e)
 		            {
-		            	MobileWebCam.LogE("Front camera failed to open: " + e.getMessage());
+		            	MobileWebCam2.LogE("Front camera failed to open: " + e.getMessage());
 		            }
 		        }
 		    }
 		}
 		catch(NoSuchMethodError e)
 		{
-			MobileWebCam.LogE("Front camera failed to open: " + e.getMessage());
+			MobileWebCam2.LogE("Front camera failed to open: " + e.getMessage());
 		}
 		catch(NoClassDefFoundError e)
 		{
-			Log.e("MobileWebCam", "Unable to get CameraInfo: " + e.getMessage());
+			Log.e("MobileWebCam2", "Unable to get CameraInfo: " + e.getMessage());
 		}
 	    
 	    return null;

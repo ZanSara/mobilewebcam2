@@ -15,24 +15,15 @@
 
 package com.mobilewebcam2.mobilewebcam2;
 
-import java.io.PrintWriter;
-import java.io.StringWriter;
-import java.util.Date;
-
 import android.os.Bundle;
-import android.os.PowerManager;
 
 import android.app.KeyguardManager;
 import android.app.KeyguardManager.KeyguardLock;
-import android.content.Context;
-import 	android.content.Intent;
 
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.TextView;
-import android.widget.Toast;
 import android.view.KeyEvent;
 
 // ----------------------------------------------------------------------
@@ -79,7 +70,7 @@ public class TakeHiddenPicture extends CamActivity
     @Override
     public void onResume()
     {
-    	Log.v("MobileWebCam", "TakeHiddenPicture.onResume");
+    	Log.v("MobileWebCam2", "TakeHiddenPicture.onResume");
 
 /*        WindowManager.LayoutParams lp = getWindow().getAttributes();
         lp.screenBrightness = 0.0f;
@@ -88,9 +79,9 @@ public class TakeHiddenPicture extends CamActivity
         KeyguardManager mgr = (KeyguardManager)getSystemService(KEYGUARD_SERVICE);
     	if(mgr.inKeyguardRestrictedInputMode())
     	{
-        	Log.v("MobileWebCam", "Disable keyguard.");
+        	Log.v("MobileWebCam2", "Disable keyguard.");
 
-        	mLock = mgr.newKeyguardLock("MobileWebCam");
+        	mLock = mgr.newKeyguardLock("MobileWebCam2");
 	        mLock.disableKeyguard();
 
 			try
@@ -101,12 +92,12 @@ public class TakeHiddenPicture extends CamActivity
 			{
 			}
 
-        	Log.v("MobileWebCam", "Keyguard unlocked!");
+        	Log.v("MobileWebCam2", "Keyguard unlocked!");
     	}
 
 		super.onResume();
 
-		if(!MobileWebCam.gIsRunning && !MobileWebCam.gInSettings)
+		if(!MobileWebCam2.gIsRunning && !MobileWebCam2.gInSettings)
     	{
 			mPreview.setVisibility(View.VISIBLE);
     		
@@ -128,9 +119,9 @@ public class TakeHiddenPicture extends CamActivity
 		public void run()
 		{
 			long curtime = System.currentTimeMillis();
-			MobileWebCam.LogE("TakeHiddenPicture timeout - finish after " + ((curtime - mStartTime) / 1000) + " s!");
+			MobileWebCam2.LogE("TakeHiddenPicture timeout - finish after " + ((curtime - mStartTime) / 1000) + " s!");
 			if(Preview.mPhotoLock.getAndSet(false))
-				MobileWebCam.LogE("PhotoLock released!");
+				MobileWebCam2.LogE("PhotoLock released!");
 			finish();
 		}
 	};
@@ -140,7 +131,7 @@ public class TakeHiddenPicture extends CamActivity
     {
     	super.onPause();
 
-    	Log.v("MobileWebCam", "TakeHiddenPicture.onPause");
+    	Log.v("MobileWebCam2", "TakeHiddenPicture.onPause");
 		
 		closeDown();		
     	
@@ -154,7 +145,7 @@ public class TakeHiddenPicture extends CamActivity
     @Override
     public void onDestroy()
     {
-    	Log.v("MobileWebCam", "TakeHiddenPicture.onDestroy");
+    	Log.v("MobileWebCam2", "TakeHiddenPicture.onDestroy");
 		
 		closeDown();
     	
@@ -163,7 +154,7 @@ public class TakeHiddenPicture extends CamActivity
 	    	mLock.reenableKeyguard();
 	    	mLock = null;
 	    	
-        	Log.v("MobileWebCam", "Keyguard locked again!");	    	
+        	Log.v("MobileWebCam2", "Keyguard locked again!");
     	}
 
     	super.onDestroy();
@@ -174,13 +165,13 @@ public class TakeHiddenPicture extends CamActivity
 		mHandler.removeCallbacks(mTimeOut);
 
 		if(Preview.mPhotoLock.getAndSet(false))
-			Log.w("MobileWebCam", "PhotoLock released because activity is going down!");
+			Log.w("MobileWebCam2", "PhotoLock released because activity is going down!");
     }
     
 /*	@Override
 	protected void onNewIntent(Intent intent)
 	 {
-    	if(!MobileWebCam.gIsRunning)
+    	if(!MobileWebCam2.gIsRunning)
     	{
 			setIntent(intent); //must store the new intent unless getIntent() will return the old one
 	

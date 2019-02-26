@@ -8,7 +8,6 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.os.Bundle;
-import android.telephony.gsm.SmsManager;
 import android.widget.Toast;
 import android.content.BroadcastReceiver;
 import android.content.SharedPreferences;
@@ -21,7 +20,7 @@ public class SMSReceiver extends BroadcastReceiver
 	@Override
 	public void onReceive(Context context, Intent intent)
 	{
-		SharedPreferences prefs = context.getSharedPreferences(MobileWebCam.SHARED_PREFS_NAME, 0);
+		SharedPreferences prefs = context.getSharedPreferences(MobileWebCam2.SHARED_PREFS_NAME, 0);
 		if(prefs.getBoolean("sms_commands", false) && (Integer.parseInt(android.os.Build.VERSION.SDK) >= 4))
 		{
 			Bundle bundle = intent.getExtras();
@@ -40,7 +39,7 @@ public class SMSReceiver extends BroadcastReceiver
 					str += msgs[i].getMessageBody().toString();
 				}
 				
-				MobileWebCam.LogI("SMS: " + str);
+				MobileWebCam2.LogI("SMS: " + str);
 				
 	    		if(str.startsWith("start") || str.startsWith("stop"))
 	    		{
@@ -103,7 +102,7 @@ public class SMSReceiver extends BroadcastReceiver
 					}
 					else
 					{
-						Intent i = new Intent(context, MobileWebCam.class);
+						Intent i = new Intent(context, MobileWebCam2.class);
 						i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 						i.putExtra("command", "photo");
 						context.startActivity(i);

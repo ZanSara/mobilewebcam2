@@ -177,8 +177,8 @@ public class PhotoSettings implements SharedPreferences.OnSharedPreferenceChange
 	public boolean mFTPPassive = true;
 	@BooleanPref(key = "ftp_keep_open", val = false)
 	public boolean mFTPKeepConnected = false;
-    @StringPref(key = "sdcard_dir", val = "/MobileWebCam/")
-    public String mSDCardDir = "/MobileWebCam/";
+    @StringPref(key = "sdcard_dir", val = "/MobileWebCam2/")
+    public String mSDCardDir = "/MobileWebCam2/";
     @BooleanPref(key = "secondary_sd", val = false)
     public boolean mSecondarySD = false;
     @EditIntPref(key = "sdcard_keepoldpics", val = 0)
@@ -365,7 +365,7 @@ public class PhotoSettings implements SharedPreferences.OnSharedPreferenceChange
     		String msg = e.toString();
     		if(e.getMessage() != null)
     			msg = e.getMessage();
-    		if(MobileWebCam.gIsRunning)
+    		if(MobileWebCam2.gIsRunning)
     		{
     			try
     			{
@@ -377,7 +377,7 @@ public class PhotoSettings implements SharedPreferences.OnSharedPreferenceChange
     			}
     		}
     		else
-    			MobileWebCam.LogE(msg);
+    			MobileWebCam2.LogE(msg);
     	}
     	return i;
 	}
@@ -402,7 +402,7 @@ public class PhotoSettings implements SharedPreferences.OnSharedPreferenceChange
     		String msg = e.toString();
     		if(e.getMessage() != null)
     			msg = e.getMessage();
-    		if(MobileWebCam.gIsRunning)
+    		if(MobileWebCam2.gIsRunning)
     		{
     			try
     			{
@@ -414,7 +414,7 @@ public class PhotoSettings implements SharedPreferences.OnSharedPreferenceChange
     			}
     		}
     		else
-    			MobileWebCam.LogE(msg);
+    			MobileWebCam2.LogE(msg);
     	}
     	return f;
 	}
@@ -444,7 +444,7 @@ public class PhotoSettings implements SharedPreferences.OnSharedPreferenceChange
     public PhotoSettings(Context c)
 	{
     	mContext = c;
-        mPrefs = c.getSharedPreferences(MobileWebCam.SHARED_PREFS_NAME, 0);
+        mPrefs = c.getSharedPreferences(MobileWebCam2.SHARED_PREFS_NAME, 0);
 
 		mPrefs.registerOnSharedPreferenceChangeListener(this);  
 
@@ -467,7 +467,7 @@ public class PhotoSettings implements SharedPreferences.OnSharedPreferenceChange
 			}
 			catch(IllegalArgumentException e)
 			{
-				MobileWebCam.LogE("Wrong color string: '" + v + "'");
+				MobileWebCam2.LogE("Wrong color string: '" + v + "'");
 				e.printStackTrace();
 			}
 		}
@@ -482,7 +482,7 @@ public class PhotoSettings implements SharedPreferences.OnSharedPreferenceChange
     	{
     		int new_refresh = getEditInt(mContext, prefs, "cam_refresh", 60);
     		String msg = "Camera refresh set to " + new_refresh + " seconds!";
-    		if(MobileWebCam.gIsRunning)
+    		if(MobileWebCam2.gIsRunning)
     		{
 	    		if(!mNoToasts && new_refresh != mRefreshDuration)
 	    		{
@@ -498,7 +498,7 @@ public class PhotoSettings implements SharedPreferences.OnSharedPreferenceChange
     		}
     		else if(new_refresh != mRefreshDuration)
     		{
-    			MobileWebCam.LogI(msg);
+    			MobileWebCam2.LogI(msg);
     		}
     	}
     	
@@ -513,7 +513,7 @@ public class PhotoSettings implements SharedPreferences.OnSharedPreferenceChange
 						f.setBoolean(this, prefs.getBoolean(bp.key(), bp.val()));
 					} catch (Exception e)
 					{
-						Log.e("MobileWebCam", "Exception: " + bp.key() + " <- " + bp.val());
+						Log.e("MobileWebCam2", "Exception: " + bp.key() + " <- " + bp.val());
 						e.printStackTrace();
 					}
 				}
@@ -660,7 +660,7 @@ public class PhotoSettings implements SharedPreferences.OnSharedPreferenceChange
 			if(mImprintPictureURL.length() == 0)
 			{
 				// sdcard image
-				File path = new File(Environment.getExternalStorageDirectory() + "/MobileWebCam/");
+				File path = new File(Environment.getExternalStorageDirectory() + "/MobileWebCam2/");
 		    	if(path.exists())
 		    	{
 		    		synchronized(gImprintBitmapLock)
@@ -772,15 +772,15 @@ public class PhotoSettings implements SharedPreferences.OnSharedPreferenceChange
 							catch (MalformedURLException e)
 							{
 								if(e.getMessage() != null)
-									MobileWebCam.LogE("Imprint picture URL error: " + e.getMessage());
+									MobileWebCam2.LogE("Imprint picture URL error: " + e.getMessage());
 								else
-									MobileWebCam.LogE("Imprint picture URL invalid!");								
+									MobileWebCam2.LogE("Imprint picture URL invalid!");
 								e.printStackTrace();
 							}
 							catch (IOException e)
 							{
 								if(e.getMessage() != null)
-									MobileWebCam.LogE(e.getMessage());
+									MobileWebCam2.LogE(e.getMessage());
 								e.printStackTrace();
 							}
 							
@@ -803,7 +803,7 @@ public class PhotoSettings implements SharedPreferences.OnSharedPreferenceChange
 	    		catch (Exception e)
 	    		{
 	    			if(e.getMessage() != null)
-	    				MobileWebCam.LogE(e.getMessage());
+	    				MobileWebCam2.LogE(e.getMessage());
 	    			e.printStackTrace();
 	    		}				
 	        }
@@ -987,15 +987,15 @@ public class PhotoSettings implements SharedPreferences.OnSharedPreferenceChange
 	public static void GETSettings(final Context context)
 	{
 		// check for new settings when done
-		final SharedPreferences prefs = context.getSharedPreferences(MobileWebCam.SHARED_PREFS_NAME, 0);
+		final SharedPreferences prefs = context.getSharedPreferences(MobileWebCam2.SHARED_PREFS_NAME, 0);
 		final String settingsurl = prefs.getString("remote_config_url", "");
 		final int settingsfreq = Math.max(1, PhotoSettings.getEditInt(context, prefs, "remote_config_every", 1));
 		final String login = prefs.getString("remote_config_login", "");
 		final String password = prefs.getString("remote_config_password", "");
 		final boolean noToasts = prefs.getBoolean("no_messages", false);
-		if(settingsurl.length() > 0 && gLastGETSettingsPictureCnt < MobileWebCam.gPictureCounter && (MobileWebCam.gPictureCounter % settingsfreq) == 0)
+		if(settingsurl.length() > 0 && gLastGETSettingsPictureCnt < MobileWebCam2.gPictureCounter && (MobileWebCam2.gPictureCounter % settingsfreq) == 0)
 		{
-			gLastGETSettingsPictureCnt = MobileWebCam.gPictureCounter;
+			gLastGETSettingsPictureCnt = MobileWebCam2.gPictureCounter;
 
 			Handler h = new Handler(context.getMainLooper());
 		    h.post(new Runnable()
@@ -1023,9 +1023,9 @@ public class PhotoSettings implements SharedPreferences.OnSharedPreferenceChange
 									{
 										e.printStackTrace();
 										if(e.getMessage() != null)
-											MobileWebCam.LogE("http login " + e.getMessage());
+											MobileWebCam2.LogE("http login " + e.getMessage());
 										else
-											MobileWebCam.LogE("http: unable to log in");
+											MobileWebCam2.LogE("http: unable to log in");
 										
 										return null;
 									}
@@ -1051,7 +1051,7 @@ public class PhotoSettings implements SharedPreferences.OnSharedPreferenceChange
 								e.printStackTrace();
 								if(e.getMessage() != null)
 								{
-									MobileWebCam.LogE(e.getMessage());
+									MobileWebCam2.LogE(e.getMessage());
 									return "GET Config Error!\n" + e.getMessage(); 
 								}						
 							}
@@ -1164,14 +1164,14 @@ public class PhotoSettings implements SharedPreferences.OnSharedPreferenceChange
 					}
 					else
 					{
-						MobileWebCam.LogE("Warning: config.txt entry '" + param + "' value is empty!");
+						MobileWebCam2.LogE("Warning: config.txt entry '" + param + "' value is empty!");
 					}
 				}
 			}
 			catch(Exception e)
 			{
 				if(e.getMessage() != null)
-					MobileWebCam.LogE(e.getMessage());
+					MobileWebCam2.LogE(e.getMessage());
 				e.printStackTrace();
 			}
 		}
@@ -1195,7 +1195,7 @@ public class PhotoSettings implements SharedPreferences.OnSharedPreferenceChange
         		}
         	}
         	if(!mWhiteBalance.equals(mNightAutoBrightnessWhitebalance))
-        		Log.e("MobileWebCam", "Auto night brightness white balance mode " + mNightAutoBrightnessWhitebalance + " not found!");
+        		Log.e("MobileWebCam2", "Auto night brightness white balance mode " + mNightAutoBrightnessWhitebalance + " not found!");
         	modes = NewCameraFunctions.getSupportedSceneModes(params);
         	if(modes != null)
         	{
@@ -1206,7 +1206,7 @@ public class PhotoSettings implements SharedPreferences.OnSharedPreferenceChange
         		}
         	}
         	if(!mSceneMode.equals(mNightAutoBrightnessScenemode))
-        		Log.e("MobileWebCam", "Auto night brightness scene mode " + mNightAutoBrightnessScenemode + " not found!");
+        		Log.e("MobileWebCam2", "Auto night brightness scene mode " + mNightAutoBrightnessScenemode + " not found!");
 		}
 		else
 		{

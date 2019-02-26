@@ -35,13 +35,13 @@ public class PhotoReceiver extends BroadcastReceiver
 	@Override
 	public void onReceive(Context context, Intent intent)
 	{
-		SharedPreferences prefs = context.getSharedPreferences(MobileWebCam.SHARED_PREFS_NAME, 0);
+		SharedPreferences prefs = context.getSharedPreferences(MobileWebCam2.SHARED_PREFS_NAME, 0);
 		if(!prefs.getBoolean("mobilewebcam_enabled", true))
 			return;
 		
 		if(prefs.getBoolean("lowbattery_pause", false) && WorkImage.getBatteryLevel(context) < PhotoSettings.gLowBatteryPower)
 		{
-			MobileWebCam.LogI("Battery low ... pause");
+			MobileWebCam2.LogI("Battery low ... pause");
 			return;
 		}
 		
@@ -54,9 +54,9 @@ public class PhotoReceiver extends BroadcastReceiver
 		
         MobileWebCamHttpService.start(context);
         String broadcast = prefs.getString("cam_broadcast_activation", "");
-		if(broadcast.length() > 0 && !MobileWebCam.gCustomReceiverActive)
+		if(broadcast.length() > 0 && !MobileWebCam2.gCustomReceiverActive)
 		{
-			MobileWebCam.LogE("Error: " + broadcast + " receiver not active but it should ... Restarting now!");
+			MobileWebCam2.LogE("Error: " + broadcast + " receiver not active but it should ... Restarting now!");
 			CustomReceiverService.start(context);
 		}
 		
@@ -68,7 +68,7 @@ public class PhotoReceiver extends BroadcastReceiver
 
 	public static void StartNotification(Context c)
 	{
-	    SharedPreferences prefs = c.getSharedPreferences(MobileWebCam.SHARED_PREFS_NAME, 0);
+	    SharedPreferences prefs = c.getSharedPreferences(MobileWebCam2.SHARED_PREFS_NAME, 0);
         PhotoSettings.Mode mode = PhotoSettings.getCamMode(prefs);
 
 	    String ns = Context.NOTIFICATION_SERVICE;
@@ -76,7 +76,7 @@ public class PhotoReceiver extends BroadcastReceiver
 
 		int icon = R.drawable.notification_icon;
 		String broadcast_action = prefs.getString("cam_broadcast_activation", "");
-		CharSequence tickerText[] = { "MobileWebCam background mode active", "MobileWebCam semi background mode active", "MobileWebCam broadcastreceiver '" + broadcast_action + "' active" };
+		CharSequence tickerText[] = { "MobileWebCam2 background mode active", "MobileWebCam2 semi background mode active", "MobileWebCam2 broadcastreceiver '" + broadcast_action + "' active" };
 		long when = System.currentTimeMillis();
 
 		CharSequence txt = tickerText[0];
@@ -87,7 +87,7 @@ public class PhotoReceiver extends BroadcastReceiver
 		Notification notification = new Notification(icon, txt, when);
 		notification.flags |= Notification.FLAG_ONGOING_EVENT | Notification.FLAG_NO_CLEAR;
 
-		CharSequence contentTitle = "MobileWebCam Active";
+		CharSequence contentTitle = "MobileWebCam2 Active";
 		CharSequence contentText[] =  { "Hidden Mode", "Semi Background Mode" };
 		txt =  contentText[0];
 		if(mode == Mode.BACKGROUND)
@@ -98,11 +98,10 @@ public class PhotoReceiver extends BroadcastReceiver
 			if(myIP != null)
 				txt = txt.subSequence(0, txt.length() - 5) + " http://" + myIP + ":" + MobileWebCamHttpService.getPort(prefs);
 	    }
-		Intent notificationIntent = new Intent(c, MobileWebCam.class);
+		Intent notificationIntent = new Intent(c, MobileWebCam2.class);
 		PendingIntent contentIntent = PendingIntent.getActivity(c, 0, notificationIntent, 0);
 
-		// FIXME zansara: commented out just to compile, please fix
-		// notification.setLatestEventInfo(c, contentTitle, txt, contentIntent);
+		notification.setLatestEventInfo(c, contentTitle, txt, contentIntent);
 
 		mNotificationManager.notify(ACTIVE_ID, notification);
 	}

@@ -17,21 +17,17 @@ package com.mobilewebcam2.mobilewebcam2;
 
 import java.io.*;
 import java.util.*;
-import java.util.Map.Entry;
 
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.os.Debug;
 import android.util.Log;
-import android.widget.TextView;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
+
 import java.io.ByteArrayInputStream;
 import java.lang.reflect.Field;
-import java.net.URLEncoder;
 
 import com.mobilewebcam2.mobilewebcam2.PhotoSettings.BooleanPref;
 import com.mobilewebcam2.mobilewebcam2.PhotoSettings.EditFloatPref;
@@ -115,7 +111,7 @@ public class MobileWebCamHttpServer extends NanoHTTPD
 		}
 		else if(uri.contentEquals("/set"))
 		{
-			SharedPreferences prefs = mContext.getSharedPreferences(MobileWebCam.SHARED_PREFS_NAME, 0);
+			SharedPreferences prefs = mContext.getSharedPreferences(MobileWebCam2.SHARED_PREFS_NAME, 0);
 			SharedPreferences.Editor edit = prefs.edit();
 			try
 			{
@@ -179,7 +175,7 @@ public class MobileWebCamHttpServer extends NanoHTTPD
 		}
 		else if(uri.contentEquals("/configure"))
 		{
-			boolean active = mSettings.mMobileWebCamEnabled && (MobileWebCam.gIsRunning || MobileWebCam.gInSettings || mSettings.mMode == Mode.BACKGROUND || mSettings.mMode == Mode.HIDDEN);		
+			boolean active = mSettings.mMobileWebCamEnabled && (MobileWebCam2.gIsRunning || MobileWebCam2.gInSettings || mSettings.mMode == Mode.BACKGROUND || mSettings.mMode == Mode.HIDDEN);
 			
 			String msg = GetInfoHead(active);
 			
@@ -222,11 +218,11 @@ public class MobileWebCamHttpServer extends NanoHTTPD
 		}
 		
 		if(mSettings == null)
-			return new NanoHTTPD.Response(HTTP_OK, MIME_HTML + "; charset=utf-8", "Error: mSettings is null! Please write to <a href=\"mailto:dngames@gmail.com\">dngames@gmail.com</a> what you tried to do!");
+			return new NanoHTTPD.Response(HTTP_OK, MIME_HTML + "; charset=utf-8", "Error: mSettings is null! Please describe to the app developers what you tried to do!");
 		
-		SharedPreferences prefs = mContext.getSharedPreferences(MobileWebCam.SHARED_PREFS_NAME, 0);
+		SharedPreferences prefs = mContext.getSharedPreferences(MobileWebCam2.SHARED_PREFS_NAME, 0);
 		
-		boolean active = mSettings.mMobileWebCamEnabled && (MobileWebCam.gIsRunning || MobileWebCam.gInSettings || mSettings.mMode == Mode.BACKGROUND || mSettings.mMode == Mode.HIDDEN);		
+		boolean active = mSettings.mMobileWebCamEnabled && (MobileWebCam2.gIsRunning || MobileWebCam2.gInSettings || mSettings.mMode == Mode.BACKGROUND || mSettings.mMode == Mode.HIDDEN);
 
 		String msg = GetInfoHead(active); 
 		
@@ -235,9 +231,9 @@ public class MobileWebCamHttpServer extends NanoHTTPD
 		msg += "<table style='background-color: #000000; color: #FFFFFF; font-family: arial;' border='0' cellpadding='20'><tr><td width='50%'>";
 		
 		if(mSettings.mMode == Mode.MANUAL)
-			msg += "Pictures: " + MobileWebCam.gPictureCounter + "    Uploading: " + MobileWebCam.gUploadingCount + "   Manual Mode active" + "<br>";
+			msg += "Pictures: " + MobileWebCam2.gPictureCounter + "    Uploading: " + MobileWebCam2.gUploadingCount + "   Manual Mode active" + "<br>";
 		else
-			msg += "Pictures: " + MobileWebCam.gPictureCounter + "    Uploading: " + MobileWebCam.gUploadingCount + "<br>";
+			msg += "Pictures: " + MobileWebCam2.gPictureCounter + "    Uploading: " + MobileWebCam2.gUploadingCount + "<br>";
 		msg += WorkImage.getBatteryInfo(mContext, "Battery %d%% %.1f&deg;C") + "<br>";
 		msg += "Orientation: " + Preview.gOrientation + "<br>";;
 		if(mSettings.mMode == Mode.MANUAL)
@@ -264,7 +260,7 @@ public class MobileWebCamHttpServer extends NanoHTTPD
 		{
 			String lat = String.format(Locale.US, "%f", WorkImage.gLatitude);
 			String lon = String.format(Locale.US, "%f", WorkImage.gLongitude);
-			msg += "<br>Position: <a href='http://maps.google.com/maps?q=" + lat + "," + lon + "+(MobileWebCam+Location)&z=18&ll=" + lat + "," + lon + "'>" + lat + ", " + lon+ "</a>";
+			msg += "<br>Position: <a href='http://maps.google.com/maps?q=" + lat + "," + lon + "+(MobileWebCam2+Location)&z=18&ll=" + lat + "," + lon + "'>" + lat + ", " + lon+ "</a>";
 		}
 		float usedMegs = (float)Debug.getNativeHeapAllocatedSize() / (float)1048576L;
 		msg += String.format("<br>Memory used: %.2f MB", usedMegs);
@@ -305,13 +301,13 @@ public class MobileWebCamHttpServer extends NanoHTTPD
 		msg += "<table style='background-color: #000000; color: #FFFFFF; font-family: arial; font-size: 12px;' border='0' cellpadding='20'><tr><td width='50%'>";				
 		
 		int cnt = 0;
-		int i = MobileWebCam.gCurLogInfos;
-		while(cnt < MobileWebCam.gLogInfos.length)
+		int i = MobileWebCam2.gCurLogInfos;
+		while(cnt < MobileWebCam2.gLogInfos.length)
 		{
-			if(MobileWebCam.gLogInfos[i] != null)
-				msg += "<font color=#00FF00>Info:</font> " + MobileWebCam.gLogInfos[i] + "<br>";
+			if(MobileWebCam2.gLogInfos[i] != null)
+				msg += "<font color=#00FF00>Info:</font> " + MobileWebCam2.gLogInfos[i] + "<br>";
 			i++;
-			if(i >= MobileWebCam.gLogInfos.length)
+			if(i >= MobileWebCam2.gLogInfos.length)
 				i = 0;
 			cnt++;
 		}
@@ -319,13 +315,13 @@ public class MobileWebCamHttpServer extends NanoHTTPD
 		msg += "</td><td>";
 		
 		cnt = 0;
-		i = MobileWebCam.gCurLogMessage;
-		while(cnt < MobileWebCam.gLogMessages.length)
+		i = MobileWebCam2.gCurLogMessage;
+		while(cnt < MobileWebCam2.gLogMessages.length)
 		{
-			if(MobileWebCam.gLogMessages[i] != null)
-				msg += "<font color=#FF0000>Error:</font> " + MobileWebCam.gLogMessages[i] + "<br>";
+			if(MobileWebCam2.gLogMessages[i] != null)
+				msg += "<font color=#FF0000>Error:</font> " + MobileWebCam2.gLogMessages[i] + "<br>";
 			i++;
-			if(i >= MobileWebCam.gLogMessages.length)
+			if(i >= MobileWebCam2.gLogMessages.length)
 				i = 0;
 			cnt++;
 		}
@@ -374,13 +370,13 @@ public class MobileWebCamHttpServer extends NanoHTTPD
 			mState = State.TYPE;
 			mPos = 0;
 
-			Log.i("MobileWebCam", "HTTP - MJPEG: new input stream");
+			Log.i("MobileWebCam2", "HTTP - MJPEG: new input stream");
 		}
 
 		@Override
 		public int available() throws IOException
 		{
-			boolean active = mSettings.mMobileWebCamEnabled && (MobileWebCam.gIsRunning || mSettings.mMode == Mode.BACKGROUND || mSettings.mMode == Mode.HIDDEN);
+			boolean active = mSettings.mMobileWebCamEnabled && (MobileWebCam2.gIsRunning || mSettings.mMode == Mode.BACKGROUND || mSettings.mMode == Mode.HIDDEN);
 			if(!active)
 				return -1;
 			
@@ -421,7 +417,7 @@ public class MobileWebCamHttpServer extends NanoHTTPD
 				res = mContentType.charAt(mPos++);
 				if(mPos >= mContentType.length())
 				{
-					Log.i("MobileWebCam", "HTTP - MJPEG: next image (" + MobileWebCamHttpService.gImageIndex + ")");
+					Log.i("MobileWebCam2", "HTTP - MJPEG: next image (" + MobileWebCamHttpService.gImageIndex + ")");
 					
 // TODO: lock image buffer from now on					
 					synchronized(MobileWebCamHttpService.gImageDataLock)
@@ -447,7 +443,7 @@ public class MobileWebCamHttpServer extends NanoHTTPD
 			case JPEG:
 				synchronized(MobileWebCamHttpService.gImageDataLock)
 				{
-					Log.i("MobileWebCam", "HTTP - MJPEG: gImageData " + mPos + " of " + MobileWebCamHttpService.gImageData.length);
+					Log.i("MobileWebCam2", "HTTP - MJPEG: gImageData " + mPos + " of " + MobileWebCamHttpService.gImageData.length);
 					res = MobileWebCamHttpService.gImageData[mPos++];
 					if(mPos >= MobileWebCamHttpService.gImageData.length)
 					{
@@ -469,7 +465,7 @@ public class MobileWebCamHttpServer extends NanoHTTPD
 			switch(mState)
 			{
 			case BOUND:
-				Log.i("MobileWebCam", "HTTP - MJPEG: next image");
+				Log.i("MobileWebCam2", "HTTP - MJPEG: next image");
 
 				copy = Math.min(length, mNext.length() - mPos);
 				System.arraycopy(mNext.getBytes(), mPos, buffer, 0, copy);
@@ -515,7 +511,7 @@ public class MobileWebCamHttpServer extends NanoHTTPD
 				{
 					copy = Math.min(length, MobileWebCamHttpService.gImageData.length - mPos);
 					
-					Log.i("MobileWebCam", "HTTP - MJPEG: gImageData " + mPos + " of " + MobileWebCamHttpService.gImageData.length);
+					Log.i("MobileWebCam2", "HTTP - MJPEG: gImageData " + mPos + " of " + MobileWebCamHttpService.gImageData.length);
 					
 					if(copy <= 0)
 					{
@@ -634,10 +630,10 @@ public class MobileWebCamHttpServer extends NanoHTTPD
 		String msg = "<html><head><link rel='icon' href='favicon.png' type='image/png'>";
 		if(active)
 			msg += "<meta http-equiv='refresh' content='" + mSettings.mRefreshDuration / 1000 + "'>";
-		msg += "<title>MobileWebCam " + info_app + " " + info_device + "</title>";
+		msg += "<title>MobileWebCam2 " + info_app + " " + info_device + "</title>";
 		msg += "</head><body bgcolor='#000000'><font color='#ffffff' face='arial'>";
 				
-		msg += "<h1>MobileWebCam " + info_app + " " + info_device + "</h1>";
+		msg += "<h1>MobileWebCam2 " + info_app + " " + info_device + "</h1>";
 		
 		return msg;
 	}

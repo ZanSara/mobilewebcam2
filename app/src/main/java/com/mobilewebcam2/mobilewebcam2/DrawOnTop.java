@@ -30,19 +30,19 @@ public class DrawOnTop extends View
 				else
 				{
 					canvas.drawARGB(255, 255, 255, 0);
-					Log.w("MobileWebCam", "setPreview: bitmap recycled");
+					Log.w("MobileWebCam2", "setPreview: bitmap recycled");
 				}
 			}
 			else
 			{
 				canvas.drawARGB(255, 255, 0, 255);
-				Log.w("MobileWebCam", "setPreview: no bitmap");
+				Log.w("MobileWebCam2", "setPreview: no bitmap");
 			}
 		}
 		else
 		{
 			canvas.drawARGB(255, 128 + (int)(Math.random() * 128.0f), 0, 0);
-			Log.w("MobileWebCam", "setPreview: no preview");
+			Log.w("MobileWebCam2", "setPreview: no preview");
 		}
         
         super.onDraw(canvas);

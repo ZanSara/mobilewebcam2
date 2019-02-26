@@ -9,7 +9,6 @@ import android.app.AlertDialog.Builder;
 import android.content.Context;
 import android.content.res.TypedArray;
 
-import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.BitmapShader;
 import android.graphics.Canvas;
@@ -21,20 +20,15 @@ import android.graphics.Shader;
 
 import android.preference.DialogPreference;
 
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
-import android.util.Log;
 
 import android.view.Display;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.View.OnFocusChangeListener;
 import android.view.View.OnKeyListener;
-import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -377,7 +371,7 @@ public class ColorDialogPreference extends DialogPreference {
 		}
 		catch(IllegalArgumentException e)
 		{
-			MobileWebCam.LogE("Wrong color: '" + colstr + "'");
+			MobileWebCam2.LogE("Wrong color: '" + colstr + "'");
 		}
 		
 		LayoutInflater inflater = LayoutInflater.from(mContext);
@@ -441,7 +435,7 @@ public class ColorDialogPreference extends DialogPreference {
 					}
 					catch(NumberFormatException e)
 					{
-						MobileWebCam.LogE("Wrong color: '" + code + "'");
+						MobileWebCam2.LogE("Wrong color: '" + code + "'");
 					}
 				}
 				return false;
@@ -459,7 +453,7 @@ public class ColorDialogPreference extends DialogPreference {
 					}
 					catch(IllegalArgumentException e)
 					{
-						MobileWebCam.LogE("Wrong color: '" + mColorCode.getText() + "'");
+						MobileWebCam2.LogE("Wrong color: '" + mColorCode.getText() + "'");
 						e.printStackTrace();
 					}
 				}

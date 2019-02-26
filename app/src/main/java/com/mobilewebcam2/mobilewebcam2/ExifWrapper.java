@@ -70,7 +70,7 @@ public class ExifWrapper
 			exif.saveAttributes();
 		} catch (IOException e) {
 			e.printStackTrace();
-			MobileWebCam.LogE("No EXIF gps tag written!");
+			MobileWebCam2.LogE("No EXIF gps tag written!");
 		}
 	}	
 

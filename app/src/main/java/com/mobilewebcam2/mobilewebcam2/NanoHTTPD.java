@@ -593,7 +593,7 @@ public class NanoHTTPD
 		{
 			int matchcount = 0;
 			int matchbyte = -1;
-			Vector<Integer> matchbytes = new Vector<>();
+			Vector matchbytes = new Vector();
 			for (int i=0; i<b.length; i++)
 			{
 				if (b[i] == boundary[matchcount])
@@ -809,7 +809,7 @@ public class NanoHTTPD
 									out.write( buff, 0, read );
 									out.flush();
 							
-									Log.v("MobileWebCam", "mjpeg ... " + read);
+									Log.v("MobileWebCam2", "mjpeg ... " + read);
 								}
 							}
 						}
@@ -1071,7 +1071,7 @@ public class NanoHTTPD
 	/**
 	 * Hashtable mapping (String)FILENAME_EXTENSION -> (String)MIME_TYPE
 	 */
-	private static Hashtable<String, String> theMimeTypes = new Hashtable<>();
+	private static Hashtable theMimeTypes = new Hashtable();
 	static
 	{
 		StringTokenizer st = new StringTokenizer(
