@@ -10,6 +10,14 @@ android {
         targetSdkVersion 19
     }
 
+    sourceSets {
+        main {
+            java {
+                exclude '**/legacycode/*.java'
+            }
+        }
+    }
+
     buildTypes {
         release {
             minifyEnabled false
@@ -23,8 +31,15 @@ android {
         // but continue the build even when errors are found:
         abortOnError false
     }
+    sourceSets { main { java.srcDirs = ['src/main/java', 'src/test', 'src/main/test'] } }
 }
 
 dependencies {
     implementation files('libs/commons-net-ftp-2.0.jar')
+    // FIXME review this dep, comes from the old project
+    implementation 'com.google.code.gson:gson:2.8.5'
+    api 'com.google.guava:guava:27.0.1-android'
+
+    testImplementation 'junit:junit:4.12'
+
 }
