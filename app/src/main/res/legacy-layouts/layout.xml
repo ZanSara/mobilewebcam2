@@ -14,7 +14,7 @@
 		android:orientation="vertical"
 		android:gravity="center">
 		
-		<!--com.mobilewebcam2.mobilewebcam2.legacycode.Preview
+		<!--com.mobilewebcam2.legacycode.Preview
 		    android:id="@+id/preview"
 		    android:visibility="invisible"
 		    android:layout_gravity="center"
@@ -31,7 +31,7 @@
 		android:orientation="vertical"
 		android:gravity="center">
 		
-		<!--com.mobilewebcam2.mobilewebcam2.legacycode.DrawOnTop
+		<!--com.mobilewebcam2.legacycode.DrawOnTop
 		    android:id="@+id/drawontop"
 		    android:visibility="invisible"
 		    android:layout_gravity="center"

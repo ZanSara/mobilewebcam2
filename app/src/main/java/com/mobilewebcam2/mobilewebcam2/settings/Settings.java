@@ -1,5 +1,6 @@
 package com.mobilewebcam2.mobilewebcam2.settings;
 
+import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 /**
@@ -9,36 +10,60 @@ import com.google.gson.annotations.SerializedName;
  * return copies. If you want the app to be able to modify those values, change them into the
  * settings.json and then re-load it
  */
-final public class Settings {
+public class Settings {
+
+    /**
+     * Tag for the logger. Every class should have one.
+     */
+    @Expose(serialize = false, deserialize = false)
+    private static final String LOG_TAG = "Settings";
 
     @SerializedName("Settings File Path")
     private final String settingsFilePath;
 
-    @SerializedName("Picture Settings")
-    private final PictureSettings picSettings;
+    @SerializedName("Image Settings")
+    private final ImageSettings imgSettings;
+
+    @SerializedName("Camera Settings")
+    private final CameraSettings camSettings;
+
+    @SerializedName("Preview Settings")
+    private final PreviewSettings previewSettings;
 
     /**
      * If SettingsManager fails to read the settings file,
      * the constructor provides some default values.
      */
-    public Settings(){
+    protected Settings(){
         settingsFilePath = "/";
-        picSettings = new PictureSettings();
+        imgSettings = new ImageSettings();
+        camSettings = new CameraSettings();
+        previewSettings = new PreviewSettings();
     }
 
     public String getSettingsFilePath() {
         return new String(settingsFilePath);
     }
 
-    public PictureSettings getPicSettings(){
-        return picSettings;
+    public ImageSettings getImageSettings(){
+        return imgSettings;
+    }
+
+    public CameraSettings getCameraSettings(){
+        return camSettings;
+    }
+
+    public PreviewSettings getPreviewSettings(){
+        return previewSettings;
     }
 
     @Override
     public String toString(){
         String repr =  "\n******\nSettings Class:\n";
-        repr += "\tSettings File Path: " + this.settingsFilePath;
-        repr += picSettings.toString();
+        repr += "\tSettings File Path: " + this.settingsFilePath + "\n";
+        repr += imgSettings.toString();
+        repr += camSettings.toString();
+        repr += previewSettings.toString();
 
         repr += "******\n";
         return repr;

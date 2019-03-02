@@ -16,6 +16,24 @@ public class LogManager {
      */
     private static final String LOG_TAG = "LogManager";
 
+    private LogManager(){
+        // TODO instantiate the LogManager according to default settings
+    }
+
+    // https://www.journaldev.com/1377/java-singleton-design-pattern-best-practices-examples
+    private static class SingletonHelper{
+        private static final LogManager INSTANCE = new LogManager();
+    }
+
+    /**
+     * Returns the singleton instance of the manager. It is lazily created.
+     * @return the SettingsManager instance.
+     */
+    public static LogManager getInstance(){
+        return LogManager.SingletonHelper.INSTANCE;
+    }
+
+
     /* TODO
      * Understand what does this method do.
      * Seems to be an utility to format the log in a more readable way.

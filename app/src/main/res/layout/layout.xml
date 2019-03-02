@@ -1,45 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-	xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:myapp="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
 	android:layout_width="wrap_content"
 	android:layout_height="wrap_content"
-	android:orientation="vertical"
 	android:layout_gravity="center"
-	android:gravity="center"> 
+	android:background="@android:color/black"
+	android:gravity="center"
+	android:orientation="vertical">
 
 	<LinearLayout
 		android:layout_width="fill_parent"
 		android:layout_height="fill_parent"
-		android:orientation="vertical"
-		android:gravity="center">
-		
-		<com.mobilewebcam2.mobilewebcam2.Preview
+		android:gravity="center"
+		android:orientation="vertical">
+
+		<!--com.mobilewebcam2.mobilewebcam2.app_ui.CameraPreviewSurface
 		    android:id="@+id/preview"
 		    android:visibility="invisible"
 		    android:layout_gravity="center"
 		    android:layout_height="240px"
 		    android:layout_marginTop="10dip"
 		    android:layout_width="320px"
-		    android:layout_margin="10dip">
-		
-    </LinearLayout>
+		    android:layout_margin="10dip" /-->
+		<com.mobilewebcam2.mobilewebcam2.app_ui.CameraPreviewSurface
+            android:layout_gravity="center"
+			android:layout_height="wrap_content"
+			android:layout_width="wrap_content" />
 
-	<LinearLayout
+	</LinearLayout>
+
+	<!-- LinearLayout
 		android:layout_width="fill_parent"
 		android:layout_height="fill_parent"
 		android:orientation="vertical"
 		android:gravity="center">
 		
-		<!--com.mobilewebcam2.mobilewebcam2.legacycode.DrawOnTop
+		<com.mobilewebcam2.legacycode.DrawOnTop
 		    android:id="@+id/drawontop"
 		    android:visibility="invisible"
 		    android:layout_gravity="center"
 		    android:layout_height="240px"
 		    android:layout_marginTop="10dip"
 		    android:layout_width="320px"
-		    android:layout_margin="10dip"/-->
+		    android:layout_margin="10dip"/>
 		
-    </LinearLayout>
+    </LinearLayout -->
 
 </RelativeLayout>

@@ -1,8 +1,5 @@
 package com.mobilewebcam2.mobilewebcam2.settings;
 
-import android.content.Context;
-import android.content.SharedPreferences;
-
 import com.google.common.base.Charsets;
 import com.google.common.io.CharSource;
 import com.google.common.io.Files;
@@ -10,19 +7,22 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
-import com.mobilewebcam2.mobilewebcam2.R;
 
 import java.io.File;
 
 /**
- * This class is the main configuration manager.
- *
- * It takes care of managing the configurations file:
+ * Main configuration manager. It takes care of managing the configurations file:
  *  - Pulls from server according to its own settings
  *  - Marshals and unmarshals with GSON
  *  - Gives access to inner config classes at request (keep references and provides getters)
+ *  It is a singleton.
  */
 public final class SettingsManager {
+
+    /**
+     * Tag for the logger. Every class should have one.
+     */
+    private static final String LOG_TAG = "SettingsManager";
 
     private Settings settings;
 
@@ -33,9 +33,51 @@ public final class SettingsManager {
         // this.settings = this.readSettingsFile();
     }
 
+    // https://www.journaldev.com/1377/java-singleton-design-pattern-best-practices-examples
+    private static class SingletonHelper{
+        private static final SettingsManager INSTANCE = new SettingsManager();
+    }
+
+    /**
+     * Returns the singleton instance of SettingsManager. It is lazily created.
+     * @return the SettingsManager instance.
+     */
+    public static SettingsManager getInstance(){
+        return SingletonHelper.INSTANCE;
+    }
+
+
+    /**
+     * Returns the private Settings objects, with the values loaded from settings.json.
+     * REMEMBER: Do not save this instance. It may be replaced any time by a new one.
+     * @return the latest Settings object.
+     */
     public Settings getSettings() {
         return this.settings;
     }
+
+    /**
+     * Shortcut to access Camera's settings
+     */
+    public CameraSettings getCaS(){
+        return this.settings.getCameraSettings();
+    }
+
+    /**
+     * Shortcut to access Images's settings
+     */
+    public ImageSettings geImS(){
+        return this.settings.getImageSettings();
+    }
+
+    /**
+     * Shortcut to access Preview's settings
+     */
+    public PreviewSettings getPrS(){
+        return this.settings.getPreviewSettings();
+    }
+
+
 
     /**
      * Reads settings file into a string and instantiates the hierarchy of Settings objects.
@@ -69,10 +111,10 @@ public final class SettingsManager {
     public static String writeConfigFile() {
 
         Settings config = new Settings();
-        PictureSettings picConfig = config.getPicSettings();
+        ImageSettings picConfig = config.getPicSettings();
         picConfig.height = 1;
         picConfig.width = 2;
-        picConfig.fileType = PictureExtension.GIF;
+        picConfig.fileType = ImageExtension.GIF;
 
         GsonBuilder builder = new GsonBuilder();
         builder.setPrettyPrinting();
@@ -111,9 +153,7 @@ public final class SettingsManager {
     }
 
     public static void main(String[] args){
-        String jf = writeConfigFile();
         SettingsManager s = new SettingsManager();
-
         System.out.println(s.getSettings());
     }
 }

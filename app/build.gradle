@@ -1,13 +1,15 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 19
+    compileSdkVersion 26
     buildToolsVersion "28.0.3"
 
     defaultConfig {
         applicationId "com.mobilewebcam2.mobilewebcam2"
-        minSdkVersion 3
-        targetSdkVersion 19
+        minSdkVersion 5
+        targetSdkVersion 26
+        versionCode 1
+        versionName "1.0"
     }
 
     sourceSets {
@@ -32,6 +34,10 @@ android {
         abortOnError false
     }
     sourceSets { main { java.srcDirs = ['src/main/java', 'src/test', 'src/main/test'] } }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
 }
 
 dependencies {
@@ -39,7 +45,5 @@ dependencies {
     // FIXME review this dep, comes from the old project
     implementation 'com.google.code.gson:gson:2.8.5'
     api 'com.google.guava:guava:27.0.1-android'
-
     testImplementation 'junit:junit:4.12'
-
 }

@@ -11,6 +11,23 @@ public class ImageManager {
      */
     private static final String LOG_TAG = "ImageManager";
 
+    private ImageManager() {
+        // TODO
+    }
+
+    // https://www.journaldev.com/1377/java-singleton-design-pattern-best-practices-examples
+    private static class SingletonHelper{
+        private static final ImageManager INSTANCE = new ImageManager();
+    }
+
+    /**
+     * Returns the singleton instance of the manager. It is lazily created.
+     * @return the CameraManager instance.
+     */
+    public static ImageManager getInstance(){
+        return ImageManager.SingletonHelper.INSTANCE;
+    }
+
 
     /**
      * FIXME Copypasted from MobileWebCam2. No idea if it is useful or what does it do really.
