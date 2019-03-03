@@ -79,6 +79,18 @@ public final class SettingsManager {
 
 
 
+    private Settings readSettingsFile(){
+        try {
+            File file = new File(settings.getSettingsFilePath()); // FIXME decide how to make the path to settings.json configurable
+            CharSource source = Files.asCharSource(file, Charsets.UTF_8);
+            return readSettingsJSON(source.read());
+
+        } catch (Exception e) {
+            // FIXME Log this issue and notify the user
+            e.printStackTrace();
+            return new Settings();
+        }
+    }
     /**
      * Reads settings file into a string and instantiates the hierarchy of Settings objects.
      *
@@ -87,22 +99,11 @@ public final class SettingsManager {
      *
      * @return reference to the root Settings object
      */
-    private Settings readSettingsFile() {
-        try {
-            File file = new File(settings.getSettingsFilePath()); // FIXME decide how to make the path to settings.json configurable
-            CharSource source = Files.asCharSource(file, Charsets.UTF_8);
-            String jsonString = source.read();
-
-            JsonParser parser = new JsonParser();
-            JsonElement jsonElement = parser.parse(jsonString);
-            Gson gson = new Gson();
-            return gson.fromJson(jsonElement, Settings.class);
-
-        } catch (Exception e) {
-            // FIXME Log this issue and notify the user
-            e.printStackTrace();
-            return new Settings();
-        }
+    private Settings readSettingsJSON(String settings) {
+        JsonParser parser = new JsonParser();
+        JsonElement jsonElement = parser.parse(settings);
+        Gson gson = new Gson();
+        return gson.fromJson(jsonElement, Settings.class);
     }
 
     /*
@@ -140,7 +141,7 @@ public final class SettingsManager {
 
      */
 
-    public static String writeConfigFile() {
+    public String writeConfigFile() {
 
         Settings config = new Settings();
 
@@ -154,6 +155,7 @@ public final class SettingsManager {
 
     public static void main(String[] args){
         SettingsManager s = new SettingsManager();
-        System.out.println(s.getSettings());
+        String sf = s.writeConfigFile();
+        System.out.println(s.readSettingsJSON(sf));
     }
 }

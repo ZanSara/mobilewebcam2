@@ -33,7 +33,6 @@ public class ImageSettings {
         this.fileType = ImageExtension.JPG;
     }
 
-
     public int getHeight(){
         return height;
     }
@@ -49,10 +48,36 @@ public class ImageSettings {
     @Override
     public String toString(){
         String repr =  "\n\tImage Settings:\n";
-        repr += "\t\theight = " + this.height + "\n";
-        repr += "\t\twidth = " + this.width + "\n";
-        repr += "\t\tfiletype = " + this.fileType + "\n";
+        repr += "\t\tHeight = " + this.height + "\n";
+        repr += "\t\tWidth = " + this.width + "\n";
+        repr += "\t\tFile Type = " + this.fileType + "\n";
         return repr;
+    }
+
+
+
+
+    public enum ImageExtension {
+
+        JPG(".jpg"),
+        PNG(".png"),
+        GIF(".gif");
+
+        private String extensionString;
+
+        ImageExtension(String ext){
+            extensionString = ext;
+        }
+
+        public String getExtension(){
+            return extensionString;
+        }
+
+        @Override
+        public String toString(){
+            return extensionString;
+        }
+
     }
 
 }

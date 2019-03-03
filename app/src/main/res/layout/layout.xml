@@ -14,15 +14,6 @@
 		android:layout_height="fill_parent"
 		android:gravity="center"
 		android:orientation="vertical">
-
-		<!--com.mobilewebcam2.mobilewebcam2.app_ui.CameraPreviewSurface
-		    android:id="@+id/preview"
-		    android:visibility="invisible"
-		    android:layout_gravity="center"
-		    android:layout_height="240px"
-		    android:layout_marginTop="10dip"
-		    android:layout_width="320px"
-		    android:layout_margin="10dip" /-->
 		<com.mobilewebcam2.mobilewebcam2.app_ui.CameraPreviewSurface
             android:layout_gravity="center"
 			android:layout_height="wrap_content"

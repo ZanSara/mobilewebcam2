@@ -1,7 +1,5 @@
 package com.mobilewebcam2.mobilewebcam2.managers;
 
-import android.view.WindowManager;
-
 /**
  * Applies the setting relative to Android itself, like: prevent sleeping, keep screen on/off, etc
  */
@@ -41,12 +39,4 @@ public class SystemManager {
 
        */
     }
-
-    /**
-     * FIXME May be completely unnecessary
-     */
-    public void setLastMotionKeepAliveTime(long time){
-        // FIXME trivially adapted from the original legacy code in MobileWebCam2, onResume()
-    }
-
 }

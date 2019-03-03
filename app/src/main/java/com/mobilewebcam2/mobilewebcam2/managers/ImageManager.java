@@ -1,5 +1,7 @@
 package com.mobilewebcam2.mobilewebcam2.managers;
 
+import android.graphics.Bitmap;
+
 /**
  * Applies image-specific settings, like scaling & cropping, post-processing, color alteration,
  * imprints. NOT RESPONSIBLE FOR STORING THE PICTURE IN THE FILESYSTEM.
@@ -22,10 +24,28 @@ public class ImageManager {
 
     /**
      * Returns the singleton instance of the manager. It is lazily created.
-     * @return the CameraManager instance.
+     * @return the ImageManager instance.
      */
     public static ImageManager getInstance(){
         return ImageManager.SingletonHelper.INSTANCE;
+    }
+
+    /**
+     * Called on every picture taken. Applies all required editing before saving the image on disk.
+     */
+    public void postProcessImage(Bitmap bitmap) {
+
+
+        StorageManager.getInstance().storePicture();
+    }
+
+    /**
+     * Call this each time the camera fails, but you still want to store a default "NO CAM" picture
+     */
+    public void postProcessNOCAMImage() {
+        // TODO load the stock picture
+
+        postProcessImage(null);
     }
 
 

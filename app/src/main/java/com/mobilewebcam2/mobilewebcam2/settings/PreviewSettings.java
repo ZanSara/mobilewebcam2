@@ -22,7 +22,7 @@ public class PreviewSettings {
      * The class is protected: should be not instantiated by something else than SettingsManager.
      */
     protected PreviewSettings(){
-        this.minimumPreviewMargin = 0;
+        this.minimumPreviewMargin = 0.1;
     }
 
     /**
