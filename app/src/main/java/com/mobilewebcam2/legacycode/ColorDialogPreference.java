@@ -5,24 +5,19 @@
 package com.mobilewebcam2.legacycode;
 
 import android.app.AlertDialog.Builder;
-
 import android.content.Context;
 import android.content.res.TypedArray;
-
 import android.graphics.BitmapFactory;
 import android.graphics.BitmapShader;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
-import android.graphics.SweepGradient;
 import android.graphics.Shader;
-
+import android.graphics.SweepGradient;
 import android.preference.DialogPreference;
-
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
-
 import android.view.Display;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;

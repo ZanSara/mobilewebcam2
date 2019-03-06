@@ -15,19 +15,18 @@
 
 package com.mobilewebcam2.legacycode;
 
-import android.content.Context;
-import android.content.BroadcastReceiver;
-import android.content.SharedPreferences;
-
-import java.lang.ref.WeakReference;
-
-import com.mobilewebcam2.mobilewebcam2.R;
-import com.mobilewebcam2.legacycode.PhotoSettings.Mode;
-
-import android.app.PendingIntent;
-import android.content.Intent;
 import android.app.Notification;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
+
+import com.mobilewebcam2.legacycode.PhotoSettings.Mode;
+import com.mobilewebcam2.mobilewebcam2.R;
+
+import java.lang.ref.WeakReference;
 
 public class PhotoReceiver extends BroadcastReceiver
 {

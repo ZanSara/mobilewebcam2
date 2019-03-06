@@ -14,10 +14,10 @@
 */
 package com.mobilewebcam2.legacycode;
 
-import java.util.Date;
-
 import android.content.Context;
 import android.widget.Toast;
+
+import java.util.Date;
 
 // base for all image storage
 abstract class Upload extends Thread

@@ -15,27 +15,34 @@
 
 package com.mobilewebcam2.legacycode;
 
-import java.io.*;
-import java.util.*;
-
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.Debug;
-import android.util.Log;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.os.Debug;
+import android.util.Log;
 
-import java.io.ByteArrayInputStream;
-import java.lang.reflect.Field;
-
-import com.mobilewebcam2.mobilewebcam2.R;
 import com.mobilewebcam2.legacycode.PhotoSettings.BooleanPref;
 import com.mobilewebcam2.legacycode.PhotoSettings.EditFloatPref;
 import com.mobilewebcam2.legacycode.PhotoSettings.EditIntPref;
 import com.mobilewebcam2.legacycode.PhotoSettings.IntPref;
 import com.mobilewebcam2.legacycode.PhotoSettings.Mode;
 import com.mobilewebcam2.legacycode.PhotoSettings.StringPref;
+import com.mobilewebcam2.mobilewebcam2.R;
+
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Properties;
+import java.util.TreeMap;
 
 /**
  * An example of subclassing NanoHTTPD to make a custom HTTP server.

@@ -15,8 +15,6 @@
 
 package com.mobilewebcam2.legacycode;
 
-import java.util.Date;
-import java.util.List;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.hardware.Camera;
@@ -24,6 +22,9 @@ import android.media.AudioManager;
 import android.os.Handler;
 import android.util.Log;
 import android.widget.Toast;
+
+import java.util.Date;
+import java.util.List;
 
 @SuppressLint("Instantiatable")
 public class PhotoService

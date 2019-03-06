@@ -18,6 +18,7 @@ package com.mobilewebcam2.legacycode;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.hardware.Camera;
@@ -26,12 +27,17 @@ import android.hardware.SensorManager;
 import android.media.AudioManager;
 import android.net.Uri;
 import android.os.Environment;
+import android.os.Handler;
+import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
+import android.view.OrientationEventListener;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-import java.util.Date;
-import android.util.AttributeSet;
-import android.view.OrientationEventListener;
+import android.widget.Toast;
+
+import com.mobilewebcam2.legacycode.PhotoSettings.Mode;
+import com.mobilewebcam2.mobilewebcam2.R;
 
 import java.io.DataInputStream;
 import java.io.File;
@@ -39,19 +45,11 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-
-import android.os.Handler;
-
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
-import android.util.Log;
-import android.widget.Toast;
-import android.content.Intent;
-
-import com.mobilewebcam2.mobilewebcam2.R;
-import com.mobilewebcam2.legacycode.PhotoSettings.Mode;
 
 public class Preview extends SurfaceView implements SurfaceHolder.Callback, ITextUpdater
 {

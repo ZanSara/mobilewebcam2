@@ -1,10 +1,5 @@
 package com.mobilewebcam2.legacycode;
 
-import java.util.Calendar;
-import java.util.concurrent.atomic.AtomicInteger;
-
-import com.mobilewebcam2.legacycode.PhotoSettings.Mode;
-
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
@@ -12,6 +7,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+
+import com.mobilewebcam2.legacycode.PhotoSettings.Mode;
+
+import java.util.Calendar;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class ControlReceiver extends BroadcastReceiver
 {

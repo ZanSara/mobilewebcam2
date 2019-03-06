@@ -15,9 +15,6 @@
 
 package com.mobilewebcam2.legacycode;
 
-import com.mobilewebcam2.mobilewebcam2.R;
-import com.mobilewebcam2.legacycode.PhotoSettings.Mode;
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -30,6 +27,9 @@ import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import com.mobilewebcam2.legacycode.PhotoSettings.Mode;
+import com.mobilewebcam2.mobilewebcam2.R;
 
 public class CamActivity extends Activity
 {

@@ -15,10 +15,10 @@
 
 package com.mobilewebcam2.legacycode;
 
-import java.util.List;
-
 import android.hardware.Camera;
 import android.hardware.Camera.Size;
+
+import java.util.List;
 
 public class NewCameraFunctions
 {

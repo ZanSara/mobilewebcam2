@@ -16,15 +16,16 @@
 package com.mobilewebcam2.legacycode;
 
 import android.app.Activity;
+import android.app.AlarmManager;
 import android.app.KeyguardManager;
 import android.app.KeyguardManager.KeyguardLock;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.app.AlarmManager;
+
 import java.util.Calendar;
-import android.app.PendingIntent;
-import android.content.Context;
 
 public class StartMobileWebCamAction extends Activity
 {

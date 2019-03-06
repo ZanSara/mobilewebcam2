@@ -14,6 +14,14 @@
 */
 package com.mobilewebcam2.legacycode;
 
+import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
+import android.os.Environment;
+import android.widget.Toast;
+
+import com.mobilewebcam2.mobilewebcam2.R;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -25,14 +33,6 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.concurrent.atomic.AtomicBoolean;
-
-import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
-import android.os.Environment;
-import android.widget.Toast;
-
-import com.mobilewebcam2.mobilewebcam2.R;
 
 public class SavePhoto extends Thread
 {

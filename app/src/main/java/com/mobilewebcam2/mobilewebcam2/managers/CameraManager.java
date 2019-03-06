@@ -1,10 +1,8 @@
 package com.mobilewebcam2.mobilewebcam2.managers;
 
 import android.content.res.Resources;
-import  	java.text.DateFormat;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Picture;
 import android.hardware.Camera;
 import android.hardware.Camera.PictureCallback;
 import android.os.Build;
@@ -16,6 +14,7 @@ import com.mobilewebcam2.mobilewebcam2.settings.CameraSettings;
 import com.mobilewebcam2.mobilewebcam2.settings.SettingsManager;
 
 import java.io.IOException;
+import java.text.DateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -38,17 +37,21 @@ public class CameraManager {
      */
     private Camera camera;
     private int cameraId = 0;
+    private boolean cameraHasFailed = false;
     private Camera.PictureCallback pictureCallback;
 
 
     private CameraManager() {
         // TODO instantiate the CameraManager according to default settings
         cameraId = 0; // FIXME This is configurable!
+
+        /*
         try {
             openCamera();
         } catch (CameraNotReadyException e){
             Log.e(LOG_TAG, "CameraManager failed to open the camera at creation. Camera is null. Exception is: ", e);
         }
+        */
 
         // Set what to do once the picture is taken
         Camera.PictureCallback pictureCallback = new PictureCallback() {
@@ -87,6 +90,21 @@ public class CameraManager {
     }
 
     /**
+     * Returns True if last attempt to open the camera has failed.
+     * @return true if the camera failed to open at the last attempt.
+     */
+    public boolean isCameraFailing(){
+        return cameraHasFailed;
+    }
+
+    /**
+     * Switch the cameraFailing flag to True. Usually used by CameraNotReadyException
+     */
+    public void cameraFailed(){
+        cameraHasFailed = true;
+    }
+
+    /**
      * This method inspects the camera parameters and returns the best preview size.
      * NOTE: it will open the camera if needed, but won't close it.
      *
@@ -109,39 +127,41 @@ public class CameraManager {
         for(int p=0; p<supportedSizes.size(); p++){
             Log.v(LOG_TAG, "w" + supportedSizes.get(p).width + " h" + supportedSizes.get(p).height);
         }
-        Log.v(LOG_TAG, "Screen Size: h" + Resources.getSystem().getDisplayMetrics().heightPixels+
-                " w" + Resources.getSystem().getDisplayMetrics().widthPixels );
-        Log.v(LOG_TAG, "Preview Margin: " + SettingsManager.getInstance().getPrS().getMinimumPreviewMargin() * 100 +"%");
 
-        Camera.Size maxPreviewSize = camera.new Size(
-                (int)(Resources.getSystem().getDisplayMetrics().widthPixels * (1 - SettingsManager.getInstance().getPrS().getMinimumPreviewMargin())),
-                (int)(Resources.getSystem().getDisplayMetrics().heightPixels * (1 - SettingsManager.getInstance().getPrS().getMinimumPreviewMargin())) );
-        Log.v(LOG_TAG, "Max Preview Size: h" + maxPreviewSize.height +" w" + maxPreviewSize.width );
+        Camera.Size maxPreviewSize = camera.new Size(Resources.getSystem().getDisplayMetrics().widthPixels,
+                Resources.getSystem().getDisplayMetrics().heightPixels);
+        Log.v(LOG_TAG, "Screen Size: w" + Resources.getSystem().getDisplayMetrics().widthPixels+
+                " h" + Resources.getSystem().getDisplayMetrics().heightPixels );
 
         final int orientation = SettingsManager.getInstance().getCaS().getOrientation();
         final boolean isPortrait = orientation == CameraSettings.IMAGE_ORIENTATION_PORTRAIT ||
                 orientation == CameraSettings.IMAGE_ORIENTATION_UPSIDE_DOWN_PORTRAIT;
 
         if(isPortrait){
-            // Swap height and width to normalize the comparison. The standard situation indeed is
-            // Phone: portrait , Camera: landscape
-            final int width = maxPreviewSize.width;
-            maxPreviewSize.width = maxPreviewSize.height;
-            maxPreviewSize.height = width;
+            maxPreviewSize = swapHeightWidth(maxPreviewSize);
         }
+
         Camera.Size bestSize = supportedSizes.get(0); // Provides a fail-safe value in case of problems.
         for(int i=0; i < supportedSizes.size(); i++){
-            if (supportedSizes.get(i).width < maxPreviewSize.width && supportedSizes.get(i).width > bestSize.width) {
+
+            if (supportedSizes.get(i).width < maxPreviewSize.width && supportedSizes.get(i).height < maxPreviewSize.height &&
+                    ( supportedSizes.get(i).width > bestSize.width || supportedSizes.get(i).height > bestSize.height)) {
                 bestSize = supportedSizes.get(i);
             }
         }
-        if (isPortrait){
-            // Swap height and width, so CameraPreviewSurface will interpret them reverse
-            final int width = bestSize.width;
-            bestSize.width = bestSize.height;
-            bestSize.height = width;
+        if(isPortrait){
+            bestSize = swapHeightWidth(bestSize);
         }
         return bestSize;
+    }
+
+    /**
+     * Changes a Camera.Size portrait into landscape and vice-versa. Swaps height and width.
+     * @param size the Size to rotate
+     * @return a rotated Camera.Size
+     */
+    private Camera.Size swapHeightWidth(Camera.Size size){
+        return camera.new Size(size.height, size.width);
     }
 
     /**
@@ -149,11 +169,30 @@ public class CameraManager {
      * @throws IOException if camera.setPreviewDisplay() does.
      * @see com.mobilewebcam2.mobilewebcam2.app_ui.CameraPreviewSurface
      */
-    public void startPreview(SurfaceHolder previewHolder) throws CameraNotReadyException {
+    public void startPreview() throws CameraNotReadyException {
         if(camera == null){
+            Log.v(LOG_TAG, "CameraManager.startPreview() was called without any open camera. Opening camera.");
+            openCamera();
+        }
+        setCameraDisplayOrientation();
+        camera.startPreview();
+    }
+
+    /**
+     * Simple wrapper for setPreviewDisplay that handles a few exceptions.
+     * @param previewHolder the holder to pass tu camera.setPreviewDisplay
+     * @throws CameraNotReadyException if the camera throws an IOException.
+     */
+    public void setPreviewDisplay(SurfaceHolder previewHolder) throws CameraNotReadyException {
+        if(previewHolder == null){
+            throw new IllegalArgumentException("previewHolder cannot be null");
+        }
+        if(camera == null){
+            Log.v(LOG_TAG, "CameraManager.startPreview() was called without any open camera. Opening camera.");
             openCamera();
         }
         try {
+            // camera.reconnect();
             camera.setPreviewDisplay(previewHolder);
 
         } catch (IOException e) {
@@ -163,8 +202,6 @@ public class CameraManager {
         //Camera.Parameters parameters = camera.getParameters();
         //parameters.getSupportedPreviewSizes();
         //camera.setParameters(parameters);
-        setCameraDisplayOrientation();
-        camera.startPreview();
     }
 
     /**
@@ -195,6 +232,7 @@ public class CameraManager {
 
     /**
      * Shoots a picture.
+     * The method is synchronized, because it is called from an AsyncTask.
      *
      * WARNING: it can fail due to the camera being offline. This is not considered an exception,
      * but a misconfiguration, and even if it does not make the app fail, it should be notified with
@@ -202,7 +240,7 @@ public class CameraManager {
      *
      * @see CameraManager#openCamera()
      */
-    public void shootPicture(){
+    public synchronized void shootPicture(){
         // FIXME is shooting fails due to camera offline, it should be notified with high priority
         // After taking a picture, preview display will have stopped. To take more photos, call startPreview() again first.
         try {
@@ -211,17 +249,25 @@ public class CameraManager {
                 Log.i(LOG_TAG, "CameraManager.shootPicture was called before the camera was ready. Quickly setting it up.");
                 openCamera();
                 setCameraDisplayOrientation();
-                camera.startPreview();
             }
-            camera.startPreview(); // Allows to take new pictures afterwards.
+            //camera.stopPreview();
+            camera.startPreview();
             camera.takePicture(null, null, pictureCallback);
             Log.i(LOG_TAG, "Picture taken (current time " + DateFormat.getDateTimeInstance().format(new Date()) + ")");
+
+            try{
+                Thread.sleep(2000);
+            } catch (InterruptedException e){
+                Log.w(LOG_TAG, "Interrupted while sleeping for one second after shooting a picture");
+            }
+            camera.startPreview(); // takePicture stops the preview automatically
 
         } catch (Exception e){
             Log.e(LOG_TAG, "CameraManager.shootPicture failed! Exception is: ", e);
             ImageManager.getInstance().postProcessNOCAMImage();
         }
     }
+
 
     /**
      * Switches on and off the camera, thus preventing any more picture to be taken EVEN IF the
@@ -287,6 +333,7 @@ public class CameraManager {
             Log.w(LOG_TAG, "Someone called .openCamera(), but `camera` was not null (that means, it was already opened). Doing nothing.");
             return;
         }
+        Log.v(LOG_TAG, "Opening camera ID: "+cameraId);
         try {
             if(Build.VERSION.SDK_INT < 9) {
                 if(cameraId != 0){
@@ -312,7 +359,7 @@ public class CameraManager {
         Log.v(LOG_TAG, "Camera opened successfully");
 
 
-        /* TODO check if this code is useful to anything
+        // TODO check if this code is useful to anything
         camera.setErrorCallback(new Camera.ErrorCallback() {
                 @Override
                 public void onError(int error, Camera failed_camera) {
@@ -320,7 +367,7 @@ public class CameraManager {
                     closeCamera(failed_camera);
                 }
         });
-        */
+
     }
 
     /**
@@ -343,8 +390,8 @@ public class CameraManager {
             Log.w(LOG_TAG, "Someone triggered the private CameraManager.closeCamera(camera) on a null camera. This shouldn't happen. Doing nothing.");
             return;
         }
-        camera.setPreviewCallback(null);
         camera.stopPreview();
+        camera.setPreviewCallback(null);
         camera.release();
         Log.v(LOG_TAG, "Camera" + camera.toString() + "was released successfully");
     }

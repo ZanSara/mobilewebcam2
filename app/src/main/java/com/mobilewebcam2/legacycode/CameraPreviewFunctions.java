@@ -15,9 +15,9 @@
 
 package com.mobilewebcam2.legacycode;
 
-import java.util.List;
-
 import android.hardware.Camera;
+
+import java.util.List;
 
 public class CameraPreviewFunctions
 {

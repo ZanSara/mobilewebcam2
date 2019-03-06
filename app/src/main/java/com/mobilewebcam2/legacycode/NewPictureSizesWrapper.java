@@ -1,10 +1,10 @@
 package com.mobilewebcam2.legacycode;
 
-import java.util.List;
-
 import android.annotation.TargetApi;
 import android.hardware.Camera;
 import android.hardware.Camera.Size;
+
+import java.util.List;
 
 @TargetApi(5)
 public class NewPictureSizesWrapper

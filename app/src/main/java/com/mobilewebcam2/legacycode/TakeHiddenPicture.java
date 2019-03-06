@@ -15,16 +15,14 @@
 
 package com.mobilewebcam2.legacycode;
 
-import android.os.Bundle;
-
 import android.app.KeyguardManager;
 import android.app.KeyguardManager.KeyguardLock;
-
+import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.view.KeyEvent;
 
 import com.mobilewebcam2.mobilewebcam2.R;
 

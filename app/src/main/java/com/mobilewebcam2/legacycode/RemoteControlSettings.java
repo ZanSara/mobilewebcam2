@@ -1,24 +1,23 @@
 package com.mobilewebcam2.legacycode;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.util.Log;
-import android.content.Context;
-
-import android.net.NetworkInfo;
-import android.net.ConnectivityManager;
 
 import com.mobilewebcam2.mobilewebcam2.R;
 
+import org.apache.http.conn.util.InetAddressUtils;
+
 import java.net.InetAddress;
 import java.net.NetworkInterface;
-
-import org.apache.http.conn.util.InetAddressUtils;
 import java.util.Enumeration;
 
 public class RemoteControlSettings extends PreferenceActivity implements OnSharedPreferenceChangeListener

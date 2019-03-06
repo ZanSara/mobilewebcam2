@@ -1,14 +1,14 @@
 package com.mobilewebcam2.legacycode;
 
-import java.io.IOException;
-import java.util.concurrent.atomic.AtomicBoolean;
-
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.IBinder;
+
+import java.io.IOException;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class MobileWebCamHttpService extends Service implements OnSharedPreferenceChangeListener
 {

@@ -15,18 +15,17 @@
 
 package com.mobilewebcam2.legacycode;
 
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.app.AlarmManager;
-
-import java.lang.ref.WeakReference;
-import java.util.Calendar;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.util.Log;
 
 import com.mobilewebcam2.legacycode.PhotoSettings.Mode;
 
-import android.app.PendingIntent;
-import android.content.Intent;
-import android.util.Log;
+import java.lang.ref.WeakReference;
+import java.util.Calendar;
 
 public class PhotoAlarmReceiver extends PhotoReceiver
 {

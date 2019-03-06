@@ -14,6 +14,12 @@
 */
 package com.mobilewebcam2.legacycode;
 
+import android.content.Context;
+
+import com.mobilewebcam2.mobilewebcam2.R;
+
+import org.apache.commons.net.ftp.FTPClient;
+
 import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -26,12 +32,6 @@ import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
-import org.apache.commons.net.ftp.FTPClient;
-
-import android.content.Context;
-
-import com.mobilewebcam2.mobilewebcam2.R;
 
 public class UploadFTPPhoto extends Upload
 {

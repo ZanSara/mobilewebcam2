@@ -3,18 +3,16 @@ package com.mobilewebcam2.mobilewebcam2.app_ui;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
+import android.view.View;
+import android.widget.Button;
 
 import com.mobilewebcam2.mobilewebcam2.R;
 import com.mobilewebcam2.mobilewebcam2.managers.TriggersManager;
 
-import java.util.Timer;
-import java.util.TimerTask;
-
 
 /**
- * Entry point of the application.
- * Keeps a few references and passes them along at need.
+ * Displays the preview.
+ * Useful for debugging and eventually setting up the application at the beginning.
  */
 public class MainActivity extends Activity {
 
@@ -24,18 +22,28 @@ public class MainActivity extends Activity {
     private static final String LOG_TAG = "MainActivity";
 
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.layout);
 
-        TriggersManager.getInstance().startShooting();
+        // Button Listener Setup
+        final Button button = findViewById(R.id.goBackground);
+        button.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                TriggersManager.getInstance().goBackground();
+                finish();
+            }
+        });
     }
 
     @Override
-    public void onResume()
-    {
+    public void onResume() {
         super.onResume();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
     }
 
     /**

@@ -1,17 +1,17 @@
 package com.mobilewebcam2.legacycode;
 
-import java.io.IOException;
-import java.util.Calendar;
-
-import android.content.Context;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
-import android.content.Intent;
-import android.os.Bundle;
-import android.widget.Toast;
 import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Bundle;
 import android.telephony.gsm.SmsMessage;
+import android.widget.Toast;
+
+import java.io.IOException;
+import java.util.Calendar;
 
 public class SMSReceiver extends BroadcastReceiver
 {

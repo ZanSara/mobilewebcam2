@@ -14,12 +14,6 @@
 */
 package com.mobilewebcam2.legacycode;
 
-import java.lang.ref.WeakReference;
-import java.util.Date;
-import java.util.concurrent.atomic.AtomicInteger;
-
-import com.mobilewebcam2.legacycode.PhotoSettings.Mode;
-
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -30,6 +24,12 @@ import android.os.Handler;
 import android.os.PowerManager;
 import android.util.Log;
 import android.widget.Toast;
+
+import com.mobilewebcam2.legacycode.PhotoSettings.Mode;
+
+import java.lang.ref.WeakReference;
+import java.util.Date;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class BackgroundPhoto implements ITextUpdater
 {

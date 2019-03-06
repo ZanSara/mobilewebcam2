@@ -70,14 +70,6 @@ public final class SettingsManager {
         return this.settings.getImageSettings();
     }
 
-    /**
-     * Shortcut to access Preview's settings
-     */
-    public PreviewSettings getPrS(){
-        return this.settings.getPreviewSettings();
-    }
-
-
 
     private Settings readSettingsFile(){
         try {

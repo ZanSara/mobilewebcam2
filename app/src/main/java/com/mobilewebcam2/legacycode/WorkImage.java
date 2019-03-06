@@ -16,6 +16,31 @@
 package com.mobilewebcam2.legacycode;
 
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.ColorMatrix;
+import android.graphics.ColorMatrixColorFilter;
+import android.graphics.Matrix;
+import android.graphics.Paint;
+import android.graphics.Paint.FontMetrics;
+import android.graphics.Rect;
+import android.graphics.Typeface;
+import android.hardware.Camera;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
+import android.os.Bundle;
+import android.os.Looper;
+import android.util.Log;
+
+import com.mobilewebcam2.legacycode.PhotoSettings.ImageScaleMode;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -37,31 +62,6 @@ import magick.util.MagickBitmap;
 import fakeawt.Dimension;
 import fakeawt.Rectangle;
 */
-import com.mobilewebcam2.legacycode.PhotoSettings.ImageScaleMode;
-
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
-import android.graphics.ColorMatrix;
-import android.graphics.ColorMatrixColorFilter;
-import android.graphics.Matrix;
-import android.graphics.Paint;
-import android.graphics.Paint.FontMetrics;
-import android.graphics.Rect;
-import android.graphics.Color;
-import android.graphics.Typeface;
-import android.hardware.Camera;
-import android.location.Geocoder;
-import android.location.Location;
-import android.location.LocationManager;
-import android.util.Log;
-
-import android.location.Address;
-import android.location.LocationListener;
-import android.os.Bundle;
-import android.os.Looper;
 
 public class WorkImage implements Runnable
 {

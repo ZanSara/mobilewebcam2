@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Mobile WebCam 2</string>
+	<string name="gobackground_btn">Go background</string>
+
+
+
+
+
+
+
 
   <string name="upload_setup">Picture Upload</string>
   <string name="webcam_settings">Settings</string>

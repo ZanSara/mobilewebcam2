@@ -15,40 +15,38 @@
 
 package com.mobilewebcam2.legacycode;
 
+import android.app.AlarmManager;
 import android.app.AlertDialog;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.hardware.Camera;
 import android.os.Bundle;
 import android.os.Debug;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
-import android.app.AlarmManager;
+import android.widget.Toast;
+
+import com.mobilewebcam2.legacycode.PhotoSettings.Mode;
+import com.mobilewebcam2.mobilewebcam2.R;
+
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-
-import android.app.PendingIntent;
-import 	android.content.Intent;
-
-import com.mobilewebcam2.mobilewebcam2.R;
-import com.mobilewebcam2.legacycode.PhotoSettings.Mode;
-
-import android.util.Log;
-import android.widget.Toast;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
-import android.view.View.OnClickListener;
-
-import android.content.SharedPreferences;
 
 // ----------------------------------------------------------------------
 

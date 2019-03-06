@@ -15,13 +15,13 @@
 
 package com.mobilewebcam2.legacycode;
 
-import java.io.IOException;
-import java.util.Locale;
-
 import android.annotation.TargetApi;
 import android.graphics.Typeface;
 import android.media.ExifInterface;
 import android.os.Build;
+
+import java.io.IOException;
+import java.util.Locale;
 
 @TargetApi(Build.VERSION_CODES.ECLAIR)
 public class ExifWrapper

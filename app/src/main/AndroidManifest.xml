@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-      package="com.mobilewebcam2.mobilewebcam2"
-      android:installLocation="auto"
-      android:versionCode="127"
-      android:versionName="2.997" xmlns:tools="http://schemas.android.com/tools">
+    package="com.mobilewebcam2.mobilewebcam2"
+    android:installLocation="auto"
+    android:versionCode="010"
+    android:versionName="0.1.0">
 
 	<supports-screens android:smallScreens="true"
 	          android:normalScreens="true"
@@ -11,7 +11,7 @@
 	          android:anyDensity="true"/>
 	
 	<uses-feature android:name="android.hardware.touchscreen" android:required="false" />
-	<uses-feature android:name="android.hardware.camera" android:required="false"/> <!-- for front facing only (aka Nexus 7) -->
+	<uses-feature android:name="android.hardware.camera" android:required="false"/> <!-- some phones (aka Nexus 7) only have front facing cameras and would fail this check. -->
 	<uses-feature android:name="android.hardware.camera.autofocus" android:required="false"/>
 	<uses-feature android:name="android.hardware.camera.front" android:required="false" />
 	<uses-feature android:name="android.hardware.camera.flash" android:required="false" />
@@ -38,17 +38,13 @@
     	android:label="@string/app_name"
     	android:largeHeap="true">
         <!--android:theme="@style/AppTheme" -->
-        	
-     	
+
+
         <activity android:name=".app_ui.MainActivity"
-                  android:label="@string/app_name"
-                  android:launchMode="singleTop"
-                  android:exported="true">
+            android:label="@string/app_name"
+            android:launchMode="singleTop"
+            android:exported="true">
             <!-- android:screenOrientation="landscape" -->
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
 
         <!--

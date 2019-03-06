@@ -15,14 +15,14 @@
 
 package com.mobilewebcam2.legacycode;
 
-import java.io.IOException;
-
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
 
 import com.mobilewebcam2.mobilewebcam2.R;
+
+import java.io.IOException;
 
 public class FTPSettings extends PreferenceActivity implements OnSharedPreferenceChangeListener
 {

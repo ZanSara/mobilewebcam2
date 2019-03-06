@@ -14,12 +14,6 @@
 */
 package com.mobilewebcam2.legacycode;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
@@ -30,6 +24,12 @@ import android.preference.PreferenceActivity;
 import android.widget.Toast;
 
 import com.mobilewebcam2.mobilewebcam2.R;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 
 public class SystemSettings extends PreferenceActivity
 {
