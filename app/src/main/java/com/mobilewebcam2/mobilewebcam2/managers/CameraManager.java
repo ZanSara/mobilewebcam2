@@ -1,5 +1,6 @@
 package com.mobilewebcam2.mobilewebcam2.managers;
 
+import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -9,6 +10,7 @@ import android.os.Build;
 import android.util.Log;
 import android.view.SurfaceHolder;
 
+import com.google.gson.annotations.Expose;
 import com.mobilewebcam2.mobilewebcam2.exceptions.CameraNotReadyException;
 import com.mobilewebcam2.mobilewebcam2.settings.CameraSettings;
 import com.mobilewebcam2.mobilewebcam2.settings.SettingsManager;
@@ -36,22 +38,31 @@ public class CameraManager {
      * Open camera reference. It can **always** be null!!
      */
     private Camera camera;
-    private int cameraId = 0;
     private boolean cameraHasFailed = false;
     private Camera.PictureCallback pictureCallback;
 
 
+    /**
+     * The cameraOrientation is set while checking the camera's native format
+     * and whether it requires any correction to be displayed properly.
+     * @see CameraManager#setCameraDisplayOrientation()
+     * TODO Understand this better...
+     */
+    private int cameraOrientation;
+
     private CameraManager() {
         // TODO instantiate the CameraManager according to default settings
-        cameraId = 0; // FIXME This is configurable!
 
-        /*
-        try {
+        // Verify the camera orientation using the camera resolution.
+        // Not perfect: pictures can be upside down, it's not verified.
+        try{
             openCamera();
+            Camera.Size pictureSize = camera.getParameters().getSupportedPictureSizes().get(0);
+            cameraOrientation = ((pictureSize.width > pictureSize.height)? 0 : 90);
         } catch (CameraNotReadyException e){
-            Log.e(LOG_TAG, "CameraManager failed to open the camera at creation. Camera is null. Exception is: ", e);
+            Log.w(LOG_TAG, "CameraManager could not assess the orientation of the camera. Exception is: ", e);
+            cameraOrientation = 0;
         }
-        */
 
         // Set what to do once the picture is taken
         Camera.PictureCallback pictureCallback = new PictureCallback() {
@@ -63,7 +74,6 @@ public class CameraManager {
                 ImageManager.getInstance().postProcessImage(bitmap);
             }
         };
-
     }
 
     // https://www.journaldev.com/1377/java-singleton-design-pattern-best-practices-examples
@@ -77,6 +87,13 @@ public class CameraManager {
      */
     public static CameraManager getInstance(){
         return CameraManager.SingletonHelper.INSTANCE;
+    }
+
+    /**
+     * Shortcut to access the camera settings without saving the reference
+     */
+    private CameraSettings getCameraSettings(){
+        return SettingsManager.getInstance().getCaS();
     }
 
     /**
@@ -94,6 +111,9 @@ public class CameraManager {
      * @return true if the camera failed to open at the last attempt.
      */
     public boolean isCameraFailing(){
+        if(cameraHasFailed){
+            Log.d(LOG_TAG, "Camera is flagged as failing!");
+        }
         return cameraHasFailed;
     }
 
@@ -112,56 +132,43 @@ public class CameraManager {
      * @throws CameraNotReadyException if the camera cannot be opened or its data accessed
      * @see "https://developer.android.com/reference/android/hardware/Camera.Size.html"
      */
-    public Camera.Size getBestPreviewSize() throws CameraNotReadyException {
+    public Camera.Size getPreviewSize() throws CameraNotReadyException {
 
         if(camera == null){
-            Log.w(LOG_TAG, "CameraManager.getBestPreviewSize() was called without any camera being open. Calling openCamera() before proceeding.");
+            Log.w(LOG_TAG, "CameraManager.getBestPreviewSize() was called without any "+
+                    "camera being open. Calling openCamera() before proceeding.");
             openCamera();
         }
-        List<Camera.Size> supportedSizes = camera.getParameters().getSupportedPreviewSizes();
-        if(supportedSizes.size() <= 0){
-            Log.e(LOG_TAG, "openCamera threw no exception, but camera.getParameters().getSupportedPreviewSizes() returned an empty list. ***** PLEASE DEBUG *****");
-            supportedSizes.add(camera.new Size(320, 240));
-        }
-        Log.v(LOG_TAG, "Supported Preview Sizes: ");
-        for(int p=0; p<supportedSizes.size(); p++){
-            Log.v(LOG_TAG, "w" + supportedSizes.get(p).width + " h" + supportedSizes.get(p).height);
-        }
 
-        Camera.Size maxPreviewSize = camera.new Size(Resources.getSystem().getDisplayMetrics().widthPixels,
-                Resources.getSystem().getDisplayMetrics().heightPixels);
-        Log.v(LOG_TAG, "Screen Size: w" + Resources.getSystem().getDisplayMetrics().widthPixels+
-                " h" + Resources.getSystem().getDisplayMetrics().heightPixels );
-
-        final int orientation = SettingsManager.getInstance().getCaS().getOrientation();
-        final boolean isPortrait = orientation == CameraSettings.IMAGE_ORIENTATION_PORTRAIT ||
-                orientation == CameraSettings.IMAGE_ORIENTATION_UPSIDE_DOWN_PORTRAIT;
-
-        if(isPortrait){
-            maxPreviewSize = swapHeightWidth(maxPreviewSize);
-        }
-
-        Camera.Size bestSize = supportedSizes.get(0); // Provides a fail-safe value in case of problems.
-        for(int i=0; i < supportedSizes.size(); i++){
-
-            if (supportedSizes.get(i).width < maxPreviewSize.width && supportedSizes.get(i).height < maxPreviewSize.height &&
-                    ( supportedSizes.get(i).width > bestSize.width || supportedSizes.get(i).height > bestSize.height)) {
-                bestSize = supportedSizes.get(i);
+        // Get native camera size (the biggest among the available ones)
+        List<Camera.Size> availableSizes = camera.getParameters().getSupportedPictureSizes();
+        Camera.Size nativeSize = availableSizes.get(0);
+        for(Camera.Size size : availableSizes){
+            if(size.height*size.width > nativeSize.height*nativeSize.width){
+                nativeSize = size;
             }
         }
-        if(isPortrait){
-            bestSize = swapHeightWidth(bestSize);
-        }
-        return bestSize;
-    }
+        Log.d(LOG_TAG, "Preview Sizing - Native camera Size: h"+nativeSize.height+
+                " w"+nativeSize.width );
 
-    /**
-     * Changes a Camera.Size portrait into landscape and vice-versa. Swaps height and width.
-     * @param size the Size to rotate
-     * @return a rotated Camera.Size
-     */
-    private Camera.Size swapHeightWidth(Camera.Size size){
-        return camera.new Size(size.height, size.width);
+        // Calculating margins - FIXME remove only 50px of supposed navigation bar height
+        double margin = SettingsManager.getInstance().getCaS().getPreviewMargin();
+        int screenWidth = Resources.getSystem().getDisplayMetrics().widthPixels;
+        int screenHeight = Resources.getSystem().getDisplayMetrics().heightPixels;
+        screenWidth = screenWidth - (int)(screenWidth * margin);
+        screenHeight = screenHeight - (int)(screenHeight * margin);
+
+        Camera.Size screenSize = camera.new Size(screenWidth, screenHeight);
+        Log.d(LOG_TAG, "Preview Sizing - Screen Size: : h"+screenSize.height+
+                " w"+screenSize.width +" (margin is "+margin*100+"%)");
+
+        // Calculating scale
+        float xScale = ((float) screenSize.width) / nativeSize.width;
+        float yScale = ((float) screenSize.height) / nativeSize.height;
+        float scale = Math.min(xScale, yScale);
+
+        return camera.new Size((int)(nativeSize.width*scale), (int)(nativeSize.height*scale));
+
     }
 
     /**
@@ -199,13 +206,10 @@ public class CameraManager {
             Log.e(LOG_TAG, "An error occurred setting the CameraPreviewSurface as Preview Display for the camera. Exception is: ", e);
             throw new CameraNotReadyException(this, "An error occurred setting the CameraPreviewSurface as Preview Display for the camera.");
         }
-        //Camera.Parameters parameters = camera.getParameters();
-        //parameters.getSupportedPreviewSizes();
-        //camera.setParameters(parameters);
     }
 
     /**
-     * Makes the preview and the camera orientation match.
+     * Makes the preview and the camera orientation match. Useful especially for front cameras.
      * Slightly modified from https://developer.android.com/reference/android/hardware/Camera.html#setDisplayOrientation%28int%29
      */
     private void setCameraDisplayOrientation() {
@@ -215,18 +219,21 @@ public class CameraManager {
             Log.w(LOG_TAG, "Camera Orientation settings are not available for Android SDK < 9");
             return;
         }
-        Camera.CameraInfo info = new Camera.CameraInfo();
-        Camera.getCameraInfo(cameraId, info);
 
-        final int degrees = SettingsManager.getInstance().getCaS().getOrientation();
+        Camera.CameraInfo info = new Camera.CameraInfo();
+        Camera.getCameraInfo(getCameraSettings().getCameraId(), info);
+
         final int result;
         if (info.facing == Camera.CameraInfo.CAMERA_FACING_FRONT) {
-            result = (360 - (info.orientation + degrees) % 360) % 360;  // compensate the mirror
+            //result = (360 - (info.orientation + degrees) % 360) % 360;  // compensate the mirror
+            result = (360 - (cameraOrientation) % 360) % 360;  // compensate the mirror
         } else {  // back-facing
-            result = (info.orientation - degrees + 360) % 360;
+            result = (cameraOrientation + 360) % 360;
         }
         camera.setDisplayOrientation(result);
-        Log.v(LOG_TAG, "Camera Orientation set to " + degrees + " degrees.");
+
+        Log.d(LOG_TAG, "Camera Orientation set to " + result + "º");
+        Log.d(LOG_TAG, "Note that in this case, info.orientation says "+ info.orientation +"º");
 
     }
 
@@ -333,10 +340,14 @@ public class CameraManager {
             Log.w(LOG_TAG, "Someone called .openCamera(), but `camera` was not null (that means, it was already opened). Doing nothing.");
             return;
         }
-        Log.v(LOG_TAG, "Opening camera ID: "+cameraId);
+
+        // Saving it here to make sure its value won't change (and improve a little bit performance)
+        int cameraId = getCameraSettings().getCameraId();
+
+        Log.v(LOG_TAG, "Opening camera ID: "+ cameraId);
         try {
             if(Build.VERSION.SDK_INT < 9) {
-                if(cameraId != 0){
+                if(getCameraSettings().getCameraId() != 0){
                     Log.i(LOG_TAG, "CameraManager.openCamera() was called with a nonzero camera_id, but the phone runs SDK version "
                             + Build.VERSION.SDK_INT + ". Support for multiple cameras was introduced in SDK 9");
                 }
@@ -361,11 +372,11 @@ public class CameraManager {
 
         // TODO check if this code is useful to anything
         camera.setErrorCallback(new Camera.ErrorCallback() {
-                @Override
-                public void onError(int error, Camera failed_camera) {
-                    Log.e(LOG_TAG, "Camera threw an error (code " + error + "). Trying to release and close camera.");
-                    closeCamera(failed_camera);
-                }
+            @Override
+            public void onError(int error, Camera failed_camera) {
+                Log.e(LOG_TAG, "Camera threw an error (code " + error + "). Trying to release and close camera.");
+                closeCamera(failed_camera);
+            }
         });
 
     }
@@ -377,7 +388,6 @@ public class CameraManager {
     public void closeCamera() {
         this.closeCamera(this.camera);
         this.camera = null;
-        this.cameraId = 0;
         Log.v(LOG_TAG, "Camera closed successfully");
     }
 

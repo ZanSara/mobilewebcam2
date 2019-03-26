@@ -12,19 +12,11 @@ public class CameraSettings {
     @Expose(serialize = false, deserialize = false)
     private static final String LOG_TAG = "CameraSettings";
 
-    @SerializedName("Orientation (degrees)")
-    private final int orientation;
-    /**
-     * Utility constants for the Orientation value
-     */
-    @Expose(serialize = false, deserialize = false)
-    public static final int IMAGE_ORIENTATION_UPSIDE_DOWN_PORTRAIT = 0;
-    @Expose(serialize = false, deserialize = false)
-    public static final int IMAGE_ORIENTATION_LANDSCAPE = 90;
-    @Expose(serialize = false, deserialize = false)
-    public static final int IMAGE_ORIENTATION_PORTRAIT = 180;
-    @Expose(serialize = false, deserialize = false)
-    public static final int IMAGE_ORIENTATION_UPSIDE_DOWN_LANDSCAPE = 270;
+    @SerializedName("Camera ID")
+    private final int cameraId;
+
+    @SerializedName("Preview Margin (0% - 100%)")
+    private final double previewMargin;
 
     @SerializedName("If Camera fails to open, retry after (in seconds. 0 to never retry): ")
     private final long retryTime;
@@ -36,23 +28,23 @@ public class CameraSettings {
      * The class is protected: should be not instantiated by something else than SettingsManager.
      */
     protected CameraSettings(){
-        this.orientation = IMAGE_ORIENTATION_PORTRAIT;
-        retryTime = 0;
+        this.cameraId = 0; // FIXME Good in most phones, but note that in some, only ID=1 exists!
+        this.previewMargin = 0.1;
+        this.retryTime = 0;
     }
 
-    public int getOrientation(){
-        return orientation;
-    }
+    public int getCameraId() { return cameraId; }
 
-    public long getRetryTime(){
-        return retryTime;
-    }
+    public double getPreviewMargin() {return previewMargin; }
+
+    public long getRetryTime(){ return retryTime; }
 
     @Override
     public String toString(){
         String repr = "\n\tCamera Settings:\n";
-        repr += "\t\tOrientation (degrees) = " + this.orientation + "\n";
-        repr += "\t\tCamera Opening Retry Time (sec): " + retryTime + "\n";
+        repr += "\t\tCamera ID = " + this.cameraId + "\n";
+        repr += "\t\tPreview Margin = " + this.previewMargin*100 + "%\n";
+        repr += "\t\tCamera Opening Retry Time = " + retryTime + "s\n";
         return repr;
     }
 

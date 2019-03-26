@@ -37,7 +37,6 @@ public class CameraPreviewSurface extends SurfaceView implements SurfaceHolder.C
         SurfaceHolder holder = getHolder();
         holder.addCallback(this);
         holder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS); // Useful for "backgrounding"context +"\n"+  attrs
-        //getHolder().setFixedSize(320, 240); // Fallback value, in case the camera will not provide better values.
 
         camFailedPaint = new Paint(Color.RED);
         camFailedPaint.setTextSize(40);
@@ -62,15 +61,14 @@ public class CameraPreviewSurface extends SurfaceView implements SurfaceHolder.C
 
         try {
 
-            Camera.Size bestPreviewSize = CameraManager.getInstance().getBestPreviewSize();
+            Camera.Size bestPreviewSize = CameraManager.getInstance().getPreviewSize();
+            Log.d(LOG_TAG, "Preview Sizing - Final preview size: h"+bestPreviewSize.height+" w"+bestPreviewSize.width);
 
             ViewGroup.LayoutParams lp = getLayoutParams();
             lp.width = bestPreviewSize.width;
             lp.height = bestPreviewSize.height;
             setLayoutParams(lp);
 
-            Log.d(LOG_TAG, "Size of the preview: w" + this.getWidth() + " h" + this.getHeight() );
-            getHolder().setFixedSize(this.getWidth(), this.getHeight());
             CameraManager.getInstance().setPreviewDisplay(getHolder());
 
             Log.d(LOG_TAG, "Start the preview");

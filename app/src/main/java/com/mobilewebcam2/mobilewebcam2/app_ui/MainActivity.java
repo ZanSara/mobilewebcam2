@@ -30,6 +30,7 @@ public class MainActivity extends Activity {
         final Button button = findViewById(R.id.goBackground);
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
+
                 TriggersManager.getInstance().goBackground();
                 finish();
             }
