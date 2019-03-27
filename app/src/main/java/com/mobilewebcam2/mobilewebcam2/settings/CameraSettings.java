@@ -21,6 +21,9 @@ public class CameraSettings {
     @SerializedName("If Camera fails to open, retry after (in seconds. 0 to never retry): ")
     private final long retryTime;
 
+    @SerializedName("Time to wait after the picture is shot (ms)")
+    private final int afterShootingWaitingTime;
+
     /**
      * If SettingsManager fails to read the settings file,
      * the constructor provides some default values.
@@ -31,6 +34,7 @@ public class CameraSettings {
         this.cameraId = 0; // FIXME Good in most phones, but note that in some, only ID=1 exists!
         this.previewMargin = 0.1;
         this.retryTime = 0;
+        this.afterShootingWaitingTime = 2000;
     }
 
     public int getCameraId() { return cameraId; }
@@ -39,12 +43,15 @@ public class CameraSettings {
 
     public long getRetryTime(){ return retryTime; }
 
+    public int getAfterShootingWaitingTime(){ return afterShootingWaitingTime; }
+
     @Override
     public String toString(){
         String repr = "\n\tCamera Settings:\n";
         repr += "\t\tCamera ID = " + this.cameraId + "\n";
         repr += "\t\tPreview Margin = " + this.previewMargin*100 + "%\n";
         repr += "\t\tCamera Opening Retry Time = " + retryTime + "s\n";
+        repr += "\t\tAfter Shooting Waiting Time = " + afterShootingWaitingTime + "ms\n";
         return repr;
     }
 

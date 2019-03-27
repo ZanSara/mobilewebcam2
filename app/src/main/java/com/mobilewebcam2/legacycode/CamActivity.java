@@ -41,7 +41,7 @@ public class CamActivity extends Activity
     
     protected Handler mHandler = new Handler();
     
-    protected int mLayout = R.layout.layout;
+    protected int mLayout = R.layout.takepic_layout;
 
     public DrawOnTop mDrawOnTop;
 	public TextView mTextView = null;

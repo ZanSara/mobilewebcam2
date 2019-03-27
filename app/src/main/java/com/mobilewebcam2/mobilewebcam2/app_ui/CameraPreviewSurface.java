@@ -15,7 +15,9 @@ import com.mobilewebcam2.mobilewebcam2.exceptions.CameraNotReadyException;
 import com.mobilewebcam2.mobilewebcam2.managers.CameraManager;
 
 /**
- * Provides the camera preview in the main screen.
+ * The camera preview.
+ *
+ * Calls CameraManager to shoot a picture as soon as it can.
  */
 public class CameraPreviewSurface extends SurfaceView implements SurfaceHolder.Callback {
 
@@ -36,7 +38,7 @@ public class CameraPreviewSurface extends SurfaceView implements SurfaceHolder.C
 
         SurfaceHolder holder = getHolder();
         holder.addCallback(this);
-        holder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS); // Useful for "backgrounding"context +"\n"+  attrs
+        holder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS); // FIXME Useful for "backgrounding" ?
 
         camFailedPaint = new Paint(Color.RED);
         camFailedPaint.setTextSize(40);
@@ -55,63 +57,51 @@ public class CameraPreviewSurface extends SurfaceView implements SurfaceHolder.C
         Log.d(LOG_TAG, "Surface changed");
 
         if(CameraManager.getInstance().isCameraFailing()){
-            Log.d(LOG_TAG, "Camera is currently flagged as Failing. Skip the .startPreview() call");
+            Log.d(LOG_TAG, "Camera is currently flagged as Failing. "+
+                    "Skip the .startPreview() call");
             return;
         }
 
         try {
-
-            Camera.Size bestPreviewSize = CameraManager.getInstance().getPreviewSize();
-            Log.d(LOG_TAG, "Preview Sizing - Final preview size: h"+bestPreviewSize.height+" w"+bestPreviewSize.width);
-
+            // Set SurfaceView Parameters
             ViewGroup.LayoutParams lp = getLayoutParams();
+            Camera.Size bestPreviewSize = CameraManager.getInstance().getPreviewSize();
             lp.width = bestPreviewSize.width;
             lp.height = bestPreviewSize.height;
             setLayoutParams(lp);
+            Log.d(LOG_TAG, "SurfaceView Set - Final preview size: h"+
+                    getLayoutParams().height+" w"+getLayoutParams().width);
 
-            CameraManager.getInstance().setPreviewDisplay(getHolder());
+            // Start Preview
+            CameraManager.getInstance().startPreview(getHolder());
+            Log.d(LOG_TAG, "Preview Started");
 
-            Log.d(LOG_TAG, "Start the preview");
-            CameraManager.getInstance().startPreview();
+            // Take the picture
+            Log.d(LOG_TAG, "Now shooting the picture...");
+            CameraManager.getInstance().shootPicture();
+
+            // TODO now quit everything
 
         } catch(CameraNotReadyException e){
             Log.e(LOG_TAG, "Cannot start the preview: camera not ready! Exception is:", e);
         }
-
-
-
-        /*
-        try {
-            Log.d(LOG_TAG, "Camera not yet open: setting it up");
-            Camera.Size bestPreviewSize = CameraManager.getInstance().getBestPreviewSize();
-
-            //this.setMinimumHeight(bestPreviewSize.height);
-            //this.setMinimumWidth(bestPreviewSize.width);
-
-            getHolder().setFixedSize(bestPreviewSize.width, bestPreviewSize.height);
-            Log.d(LOG_TAG, "Size of the preview: w" + this.getHeight() + " h" + this.getWidth() );
-            CameraManager.getInstance().setPreviewDisplay(getHolder());
-
-
-        } catch (CameraNotReadyException e) {
-            Log.e(LOG_TAG, "Cannot get the best preview size: camera not ready! Exception is:", e);
-        } */
     }
+
+
 
     @Override
     public void surfaceDestroyed(SurfaceHolder holder) {
         Log.d(LOG_TAG, "Surface destroyed");
-        // CameraManager.getInstance().closeCamera();
     }
 
     /**
-     * This method is overridden with the sole purpose of providing a NO PIC preview if the camera is
-     * down.
+     * This method is overridden with the sole purpose of providing a NO PIC preview if the camera
+     * is down.
      */
     @Override
     protected void onDraw(Canvas canvas) {
         // Setup some placeholder to highlight how the camera is down
-        // TODO Shall we upload fake "CAMERA OFFLINE" pics in case the camera is down?
+        // TODO Upload fake "CAMERA OFFLINE" pics in case the camera is down
 
         if(!CameraManager.getInstance().isCameraFailing()) {
             super.onDraw(canvas);

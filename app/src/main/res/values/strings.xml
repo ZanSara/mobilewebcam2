@@ -1,7 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Mobile WebCam 2</string>
-	<string name="gobackground_btn">Go background</string>
+
+	<string name="welcomepage_text">Welcome to MobileWebcam2!
+		<br/>
+		This application is only one part of the full system. Please make sure to read carefully
+		this web page and to set up your phone properly according to the mentioned instructions.
+		<br/>
+		In case of problems, please report them
+		<a href="https://github.com/ZanSara/mobilewebcam2/issues">here</a>
+
+	</string>
 
 
 

@@ -1,6 +1,7 @@
 package com.mobilewebcam2.mobilewebcam2.managers;
 
 import android.graphics.Bitmap;
+import android.util.Log;
 
 /**
  * Applies image-specific settings, like scaling & cropping, post-processing, color alteration,
@@ -32,25 +33,23 @@ public class ImageManager {
 
     /**
      * Called on every picture taken. Applies all required editing before saving the image on disk.
+     * If a NULL is passed, assumes camera had failed somewhere and loads a NOCAM picture
      */
     public void postProcessImage(Bitmap bitmap) {
+        if(bitmap == null) {
+            Log.v(LOG_TAG, "postProcessImage() received a null bitmap, therefore camera "+
+                    "must have failed. Uploading the NOCAM default image.");
+            // Loads a NOCAM image
+        }
+        Log.d(LOG_TAG, "post-processing the picture");
 
+        // TODO actually post-process it, if needed.
 
         StorageManager.getInstance().storePicture();
     }
 
     /**
-     * Call this each time the camera fails, but you still want to store a default "NO CAM" picture
-     */
-    public void postProcessNOCAMImage() {
-        // TODO load the stock picture
-
-        postProcessImage(null);
-    }
-
-
-    /**
-     * FIXME Copypasted from MobileWebCam2. No idea if it is useful or what does it do really.
+     * FIXME Copypasted from the legacy MobileWebCam. No idea if it is useful or what does it do really.
      */
     static public void decodeYUV420SPGrayscale(int[] rgb, byte[] yuv420sp, int width, int height)
     {

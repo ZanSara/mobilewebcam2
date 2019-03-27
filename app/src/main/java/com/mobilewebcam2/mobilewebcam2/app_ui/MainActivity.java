@@ -1,13 +1,23 @@
 package com.mobilewebcam2.mobilewebcam2.app_ui;
 
 import android.app.Activity;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
 import com.mobilewebcam2.mobilewebcam2.R;
 import com.mobilewebcam2.mobilewebcam2.managers.TriggersManager;
+
+import java.text.DateFormat;
+import java.util.Calendar;
+import java.util.Date;
 
 
 /**
@@ -24,14 +34,14 @@ public class MainActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.layout);
+        setContentView(R.layout.welcomepage_layout);
+
 
         // Button Listener Setup
-        final Button button = findViewById(R.id.goBackground);
+        final Button button = findViewById(R.id.start);
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-
-                TriggersManager.getInstance().goBackground();
+                TriggersManager.getInstance().setupShootingAlarm(MainActivity.this);
                 finish();
             }
         });
@@ -47,15 +57,24 @@ public class MainActivity extends Activity {
         super.onPause();
     }
 
-    /**
-     * FIXME this method might have contained something useful, but surely it needs some refactoring.
-     * It was showing the little popups when it shoot a photo in the background.
-     * Check MobileWebCam2.onNewIntent() in the legacy code to make sure.
-     */
-    @Override
-    protected void onNewIntent(Intent intent)
-    {
-        super.onNewIntent(intent);
+
+
+
+    public static class AlarmReceiver extends BroadcastReceiver {
+
+        private final static String LOG_TAG = "AlarmReceiver";
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Log.d(LOG_TAG, "AlarmReceiver has been triggered (at "+
+                    DateFormat.getDateTimeInstance().format(new Date()) +")");
+
+            Intent i = new Intent(context, TakePictureActivity.class);
+            //i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            context.startActivity(i);
+
+        }
     }
+
 
 }

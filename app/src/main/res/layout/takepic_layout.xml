@@ -42,7 +42,8 @@
 			android:layout_marginEnd="8dp"
 			android:layout_marginRight="8dp"
 			android:layout_marginBottom="8dp"
-			android:text="@string/gobackground_btn" />
+			android:text="Start"
+			android:textSize="30sp" />
 
 	</LinearLayout>
 

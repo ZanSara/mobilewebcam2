@@ -1,11 +1,23 @@
 package com.mobilewebcam2.mobilewebcam2.managers;
 
+import android.app.Activity;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Handler;
 import android.util.Log;
+import android.view.WindowManager;
 
+import com.mobilewebcam2.mobilewebcam2.app_ui.MainActivity;
+import com.mobilewebcam2.mobilewebcam2.app_ui.TakePictureActivity;
+
+import java.util.Calendar;
 import java.util.Timer;
 import java.util.TimerTask;
+
+import static android.content.Context.ALARM_SERVICE;
 
 /**
  * Manages timing related functions and manages the triggers logic (day-night, winter,
@@ -35,63 +47,30 @@ public class TriggersManager {
         return TriggersManager.SingletonHelper.INSTANCE;
     }
 
-    /**
-     * Sets up all the recurring alarms. Entry point to go background.
-     */
-    public void goBackground(){
-        Log.d(LOG_TAG, "************* Going in background *************");
-        setupShootingAlarm();
-    }
 
     /**
-     * Sets up the Alarms that will take pictures regularly.
+     * Sets up the Alarms that will tae pictures regularly.
      */
-    private void setupShootingAlarm(){
-        Log.d(LOG_TAG, "Setting up the Alarms to shoot pictures");
+    public void setupShootingAlarm(Activity activity){
+        Log.d(LOG_TAG, "Setting up the alarm for the next picture");
 
-    }
+        // Get the AlarmManager
+        AlarmManager alarmManager = (AlarmManager) activity.getSystemService(ALARM_SERVICE);
 
+        // Create the pending intent
+        Intent myIntent = new Intent(activity, MainActivity.AlarmReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(activity, 0, myIntent, 0);
 
-
-
-
-
-
-
-    private Handler handler;
-    private Timer shootingTimer;
-    /**
-     * OLD CODE Sets up the main timer that shoots pictures. Called by CameraPreviewSurface at creation.
-     */
-    public void startShooting(){
-        // Setup the timed events:
-        shootingTimer = new Timer();
-        shootingTimer.scheduleAtFixedRate(new TimerTask() {
-            @Override
-            public void run() {
-                handler.post(new Runnable() {
-                    public void run() {
-                        //CameraManager.getInstance().shootPicture();
-                        new ShootPicture().execute();
-                    }
-                });
-            }
-        },1000,5000);
-    }
-
-
-    private class ShootPicture extends AsyncTask<Void, Void, Void> {
-        private final String LOG_TAG = "ShootPicture [AsyncT]";
-        @Override
-        protected Void doInBackground(Void... params) {
-            Log.v(LOG_TAG,"Shooting");
-            CameraManager.getInstance().shootPicture();
-            return null;
+        // Sets the next timer
+        Calendar calendar = Calendar.getInstance();
+        if(Build.VERSION.SDK_INT >= 19) {
+            alarmManager.setExact(AlarmManager.RTC_WAKEUP,
+                    calendar.getTimeInMillis() + (10*1000), pendingIntent);
+        } else {
+            alarmManager.set(AlarmManager.RTC_WAKEUP,
+                    calendar.getTimeInMillis() + (10*1000), pendingIntent);
         }
-        @Override
-        protected void onPostExecute(Void result) {
-        }
-    }
 
+    }
 
 }

@@ -51,10 +51,9 @@ public class CameraManager {
     private int cameraOrientation;
 
     private CameraManager() {
-        // TODO instantiate the CameraManager according to default settings
 
         // Verify the camera orientation using the camera resolution.
-        // Not perfect: pictures can be upside down, it's not verified.
+        //      Not perfect: pictures can be upside down, it's not verified.
         try{
             openCamera();
             Camera.Size pictureSize = camera.getParameters().getSupportedPictureSizes().get(0);
@@ -172,32 +171,20 @@ public class CameraManager {
     }
 
     /**
-     * Setup the camera for the preview.
-     * @throws IOException if camera.setPreviewDisplay() does.
+     * Setup the camera for the preview and starts it.
+     * @throws CameraNotReadyException if camera.setPreviewDisplay() throws IOException.
      * @see com.mobilewebcam2.mobilewebcam2.app_ui.CameraPreviewSurface
      */
-    public void startPreview() throws CameraNotReadyException {
-        if(camera == null){
-            Log.v(LOG_TAG, "CameraManager.startPreview() was called without any open camera. Opening camera.");
-            openCamera();
-        }
-        setCameraDisplayOrientation();
-        camera.startPreview();
-    }
-
-    /**
-     * Simple wrapper for setPreviewDisplay that handles a few exceptions.
-     * @param previewHolder the holder to pass tu camera.setPreviewDisplay
-     * @throws CameraNotReadyException if the camera throws an IOException.
-     */
-    public void setPreviewDisplay(SurfaceHolder previewHolder) throws CameraNotReadyException {
+    public void startPreview(SurfaceHolder previewHolder) throws CameraNotReadyException {
         if(previewHolder == null){
-            throw new IllegalArgumentException("previewHolder cannot be null");
+            throw new IllegalArgumentException("previewHolder cannot be null (I think)");
         }
         if(camera == null){
             Log.v(LOG_TAG, "CameraManager.startPreview() was called without any open camera. Opening camera.");
             openCamera();
         }
+
+        // Sets the preview display
         try {
             // camera.reconnect();
             camera.setPreviewDisplay(previewHolder);
@@ -206,7 +193,13 @@ public class CameraManager {
             Log.e(LOG_TAG, "An error occurred setting the CameraPreviewSurface as Preview Display for the camera. Exception is: ", e);
             throw new CameraNotReadyException(this, "An error occurred setting the CameraPreviewSurface as Preview Display for the camera.");
         }
+
+        if(Build.VERSION.SDK_INT < 9) {
+            setCameraDisplayOrientation(); // private method
+        }
+        camera.startPreview();
     }
+
 
     /**
      * Makes the preview and the camera orientation match. Useful especially for front cameras.
@@ -225,15 +218,14 @@ public class CameraManager {
 
         final int result;
         if (info.facing == Camera.CameraInfo.CAMERA_FACING_FRONT) {
-            //result = (360 - (info.orientation + degrees) % 360) % 360;  // compensate the mirror
+            //result = (360 - (info.orientation + degrees) % 360) % 360;  // original (wrong?) line
             result = (360 - (cameraOrientation) % 360) % 360;  // compensate the mirror
         } else {  // back-facing
             result = (cameraOrientation + 360) % 360;
         }
         camera.setDisplayOrientation(result);
 
-        Log.d(LOG_TAG, "Camera Orientation set to " + result + "º");
-        Log.d(LOG_TAG, "Note that in this case, info.orientation says "+ info.orientation +"º");
+        Log.d(LOG_TAG, "Camera Orientation set to " + result + "º\nNote that, in this case, info.orientation says "+ info.orientation +"º");
 
     }
 
@@ -249,7 +241,7 @@ public class CameraManager {
      */
     public synchronized void shootPicture(){
         // FIXME is shooting fails due to camera offline, it should be notified with high priority
-        // After taking a picture, preview display will have stopped. To take more photos, call startPreview() again first.
+
         try {
             if (camera == null) {
                 // Shouldn't happen, but can be fixed
@@ -260,18 +252,19 @@ public class CameraManager {
             //camera.stopPreview();
             camera.startPreview();
             camera.takePicture(null, null, pictureCallback);
-            Log.i(LOG_TAG, "Picture taken (current time " + DateFormat.getDateTimeInstance().format(new Date()) + ")");
+            Log.i(LOG_TAG, "Picture taken (at " + DateFormat.getDateTimeInstance().format(new Date()) + ")");
 
             try{
-                Thread.sleep(2000);
+                Thread.sleep(getCameraSettings().getAfterShootingWaitingTime());
             } catch (InterruptedException e){
-                Log.w(LOG_TAG, "Interrupted while sleeping for one second after shooting a picture");
+                Log.w(LOG_TAG, "Interrupted while sleeping after shooting a picture");
             }
+
             camera.startPreview(); // takePicture stops the preview automatically
 
         } catch (Exception e){
             Log.e(LOG_TAG, "CameraManager.shootPicture failed! Exception is: ", e);
-            ImageManager.getInstance().postProcessNOCAMImage();
+            ImageManager.getInstance().postProcessImage(null); // TODO in case of failure, pretend you shot a default NOCAM image
         }
     }
 
