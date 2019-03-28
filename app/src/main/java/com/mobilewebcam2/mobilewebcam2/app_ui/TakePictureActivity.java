@@ -50,16 +50,4 @@ public class TakePictureActivity extends Activity {
                         WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
     }
 
-    /*
-     * FIXME this method might have contained something useful, but surely it needs some refactoring.
-     * It was showing the little popups when it shoot a photo in the background.
-     * Check MobileWebCam2.onNewIntent() in the legacy code to make sure.
-     * /
-    @Override
-    protected void onNewIntent(Intent intent)
-    {
-        super.onNewIntent(intent);
-    } */
-
-
 }

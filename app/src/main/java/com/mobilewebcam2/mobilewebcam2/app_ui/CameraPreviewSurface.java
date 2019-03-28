@@ -1,6 +1,8 @@
 package com.mobilewebcam2.mobilewebcam2.app_ui;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.ContextWrapper;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -13,6 +15,7 @@ import android.view.ViewGroup;
 
 import com.mobilewebcam2.mobilewebcam2.exceptions.CameraNotReadyException;
 import com.mobilewebcam2.mobilewebcam2.managers.CameraManager;
+import com.mobilewebcam2.mobilewebcam2.managers.TriggersManager;
 
 /**
  * The camera preview.
@@ -80,7 +83,10 @@ public class CameraPreviewSurface extends SurfaceView implements SurfaceHolder.C
             Log.d(LOG_TAG, "Now shooting the picture...");
             CameraManager.getInstance().shootPicture();
 
-            // TODO now quit everything
+            // Setup the next wakeup and quit everything
+            TriggersManager.getInstance().setupShootingAlarm(getActivity());
+            getActivity().finish();
+
 
         } catch(CameraNotReadyException e){
             Log.e(LOG_TAG, "Cannot start the preview: camera not ready! Exception is:", e);
@@ -109,5 +115,22 @@ public class CameraPreviewSurface extends SurfaceView implements SurfaceHolder.C
             canvas.drawColor(Color.WHITE);
             canvas.drawText("NO IMAGE", 70, 120, camFailedPaint);
         }
+    }
+
+
+    /**
+     * From
+     * https://stackoverflow.com/questions/8276634/android-get-hosting-activity-from-a-view
+     * @return the parent activity
+     */
+    private Activity getActivity() {
+        Context context = getContext();
+        while (context instanceof ContextWrapper) {
+            if (context instanceof Activity) {
+                return (Activity)context;
+            }
+            context = ((ContextWrapper)context).getBaseContext();
+        }
+        return null;
     }
 }
