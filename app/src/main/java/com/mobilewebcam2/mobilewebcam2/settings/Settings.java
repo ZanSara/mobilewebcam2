@@ -27,6 +27,9 @@ public class Settings {
     @SerializedName("Camera Settings")
     private final CameraSettings camSettings;
 
+    @SerializedName("Storage Settings")
+    private final StorageSettings stoSettings;
+
     /**
      * If SettingsManager fails to read the settings file,
      * the constructor provides some default values.
@@ -35,6 +38,7 @@ public class Settings {
         settingsFilePath = "/";
         imgSettings = new ImageSettings();
         camSettings = new CameraSettings();
+        stoSettings = new LocalStorageSettings();
     }
 
     public String getSettingsFilePath() {
@@ -49,13 +53,17 @@ public class Settings {
         return camSettings;
     }
 
+    public StorageSettings getStorageSettings(){
+        return stoSettings;
+    }
+
     @Override
     public String toString(){
         String repr =  "\n******\nSettings Class:\n";
         repr += "\tSettings File Path: " + this.settingsFilePath + "\n";
         repr += imgSettings.toString();
         repr += camSettings.toString();
-
+        repr += stoSettings.toString();
         repr += "******\n";
         return repr;
     }

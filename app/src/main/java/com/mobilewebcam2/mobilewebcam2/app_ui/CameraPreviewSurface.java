@@ -20,7 +20,7 @@ import com.mobilewebcam2.mobilewebcam2.managers.TriggersManager;
 /**
  * The camera preview.
  *
- * Calls CameraManager to shoot a picture as soon as it can.
+ * Calls CameraManager to shoot a picture as soon as everything is set up.
  */
 public class CameraPreviewSurface extends SurfaceView implements SurfaceHolder.Callback {
 
@@ -34,6 +34,11 @@ public class CameraPreviewSurface extends SurfaceView implements SurfaceHolder.C
      */
     private final Paint camFailedPaint;
 
+    /**
+     * Reference to the parent activity
+     */
+    private final Activity parentActivity;
+
     public CameraPreviewSurface(Context context, AttributeSet attrs) {
         super(context, attrs);
 
@@ -42,6 +47,8 @@ public class CameraPreviewSurface extends SurfaceView implements SurfaceHolder.C
         SurfaceHolder holder = getHolder();
         holder.addCallback(this);
         holder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS); // FIXME Useful for "backgrounding" ?
+
+        parentActivity = getActivity();
 
         camFailedPaint = new Paint(Color.RED);
         camFailedPaint.setTextSize(40);
@@ -79,17 +86,12 @@ public class CameraPreviewSurface extends SurfaceView implements SurfaceHolder.C
             CameraManager.getInstance().startPreview(getHolder());
             Log.d(LOG_TAG, "Preview Started");
 
-            // Take the picture
-            Log.d(LOG_TAG, "Now shooting the picture...");
-            CameraManager.getInstance().shootPicture();
-
-            // Setup the next wakeup and quit everything
-            TriggersManager.getInstance().setupShootingAlarm(getActivity());
-            getActivity().finish();
-
-
         } catch(CameraNotReadyException e){
             Log.e(LOG_TAG, "Cannot start the preview: camera not ready! Exception is:", e);
+
+        } finally {
+            // Goes straight to surfaceDestroyed, which is surely called just once.
+            parentActivity.finish();
         }
     }
 
@@ -97,6 +99,15 @@ public class CameraPreviewSurface extends SurfaceView implements SurfaceHolder.C
 
     @Override
     public void surfaceDestroyed(SurfaceHolder holder) {
+        Log.d(LOG_TAG, "surfaceDestroyed called");
+
+        // Take the picture
+        Log.d(LOG_TAG, "Now shooting the picture...");
+        CameraManager.getInstance().shootPicture();
+
+        // Setup the next wakeup and quit everything
+        TriggersManager.getInstance().setupShootingAlarm(parentActivity);
+
         Log.d(LOG_TAG, "Surface destroyed");
     }
 

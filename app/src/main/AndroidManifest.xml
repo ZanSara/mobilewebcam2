@@ -9,7 +9,7 @@
 	          android:normalScreens="true"
 	          android:largeScreens="true"
 	          android:anyDensity="true"/>
-	
+
 	<uses-feature android:name="android.hardware.touchscreen" android:required="false" />
 	<uses-feature android:name="android.hardware.camera" android:required="false"/> <!-- some phones (aka Nexus 7) only have front facing cameras and would fail this check. -->
 	<uses-feature android:name="android.hardware.camera.autofocus" android:required="false"/>
@@ -26,6 +26,7 @@
 	<uses-permission android:name="android.permission.CAMERA" />
 	<uses-permission android:name="android.permission.FLASHLIGHT"/>
 	<uses-permission android:name="android.permission.WAKE_LOCK" />
+	<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
 	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 	<uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
 	<uses-permission android:name="android.permission.DISABLE_KEYGUARD"/>

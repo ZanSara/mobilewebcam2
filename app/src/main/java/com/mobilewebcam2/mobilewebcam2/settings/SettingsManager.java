@@ -70,6 +70,13 @@ public final class SettingsManager {
         return this.settings.getImageSettings();
     }
 
+    /**
+     * Shortcut to access Images's settings
+     */
+    public StorageSettings getStoS(){
+        return this.settings.getStorageSettings();
+    }
+
 
     private Settings readSettingsFile(){
         try {

@@ -4,18 +4,12 @@ import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Build;
-import android.os.Handler;
 import android.util.Log;
-import android.view.WindowManager;
 
 import com.mobilewebcam2.mobilewebcam2.app_ui.MainActivity;
-import com.mobilewebcam2.mobilewebcam2.app_ui.TakePictureActivity;
 
 import java.util.Calendar;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import static android.content.Context.ALARM_SERVICE;
 

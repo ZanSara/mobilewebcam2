@@ -3,6 +3,9 @@ package com.mobilewebcam2.mobilewebcam2.managers;
 import android.graphics.Bitmap;
 import android.util.Log;
 
+import com.mobilewebcam2.mobilewebcam2.managers.storage.StorageManager;
+
+
 /**
  * Applies image-specific settings, like scaling & cropping, post-processing, color alteration,
  * imprints. NOT RESPONSIBLE FOR STORING THE PICTURE IN THE FILESYSTEM.
@@ -45,7 +48,7 @@ public class ImageManager {
 
         // TODO actually post-process it, if needed.
 
-        StorageManager.getInstance().storePicture();
+        StorageManager.getInstance().storePicture(bitmap);
     }
 
     /**

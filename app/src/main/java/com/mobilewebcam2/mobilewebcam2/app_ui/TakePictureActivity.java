@@ -1,24 +1,10 @@
 package com.mobilewebcam2.mobilewebcam2.app_ui;
 
 import android.app.Activity;
-import android.app.AlarmManager;
-import android.app.PendingIntent;
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
 import android.view.WindowManager;
-import android.widget.Button;
 
 import com.mobilewebcam2.mobilewebcam2.R;
-import com.mobilewebcam2.mobilewebcam2.managers.CameraManager;
-
-import java.text.DateFormat;
-import java.util.Calendar;
-import java.util.Date;
 
 
 /**
@@ -38,8 +24,6 @@ public class TakePictureActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.takepic_layout);
-
-        this.getSystemService(ALARM_SERVICE);
 
         // Flags required for the activity to wake up the phone at startup
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD |

@@ -1,12 +1,9 @@
 package com.mobilewebcam2.mobilewebcam2.app_ui;
 
 import android.app.Activity;
-import android.app.AlarmManager;
-import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -16,7 +13,6 @@ import com.mobilewebcam2.mobilewebcam2.R;
 import com.mobilewebcam2.mobilewebcam2.managers.TriggersManager;
 
 import java.text.DateFormat;
-import java.util.Calendar;
 import java.util.Date;
 
 
@@ -47,19 +43,10 @@ public class MainActivity extends Activity {
         });
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-    }
 
-    @Override
-    public void onPause() {
-        super.onPause();
-    }
-
-
-
-
+    /**
+     * This inner class receives the alarm and triggers the TakePictureActivity intent.
+     */
     public static class AlarmReceiver extends BroadcastReceiver {
 
         private final static String LOG_TAG = "AlarmReceiver";
@@ -69,10 +56,10 @@ public class MainActivity extends Activity {
             Log.d(LOG_TAG, "AlarmReceiver has been triggered (at "+
                     DateFormat.getDateTimeInstance().format(new Date()) +")");
 
-            Intent i = new Intent(context, TakePictureActivity.class);
-            //i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            context.startActivity(i);
-
+            Intent takePicture = new Intent(context, TakePictureActivity.class);
+            takePicture.addCategory(Intent.CATEGORY_HOME);
+            takePicture.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            context.startActivity(takePicture);
         }
     }
 
