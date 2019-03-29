@@ -3,7 +3,8 @@ package com.mobilewebcam2.mobilewebcam2.managers;
 import android.graphics.Bitmap;
 import android.util.Log;
 
-import com.mobilewebcam2.mobilewebcam2.managers.storage.StorageManager;
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
 
 
 /**
@@ -15,23 +16,24 @@ public class ImageManager {
     /**
      * Tag for the logger. Every class should have one.
      */
+    @Expose(serialize = false, deserialize = false)
     private static final String LOG_TAG = "ImageManager";
 
-    private ImageManager() {
-        // TODO
-    }
-
-    // https://www.journaldev.com/1377/java-singleton-design-pattern-best-practices-examples
-    private static class SingletonHelper{
-        private static final ImageManager INSTANCE = new ImageManager();
-    }
+    @SerializedName("Height")
+    private final int height;
+    @SerializedName("Width")
+    private final int width;
+    @SerializedName("File Type")
+    private final ImageExtension fileType;
 
     /**
-     * Returns the singleton instance of the manager. It is lazily created.
-     * @return the ImageManager instance.
+     * If SettingsManager fails to read the settings file, the constructor provides some
+     * default values.
      */
-    public static ImageManager getInstance(){
-        return ImageManager.SingletonHelper.INSTANCE;
+    protected ImageManager() {
+        this.height = 480;
+        this.width = 640;
+        this.fileType = ImageExtension.JPG;
     }
 
     /**
@@ -48,8 +50,10 @@ public class ImageManager {
 
         // TODO actually post-process it, if needed.
 
-        StorageManager.getInstance().storePicture(bitmap);
+        RootManager.getInstance().getPictureStorageManager().storePicture(bitmap);
     }
+
+
 
     /**
      * FIXME Copypasted from the legacy MobileWebCam. No idea if it is useful or what does it do really.
@@ -62,6 +66,41 @@ public class ImageManager {
             if (pixVal < 0) pixVal = 0;
             if (pixVal > 255) pixVal = 255;
             rgb[pix] = 0xff000000 | (pixVal << 16) | (pixVal << 8) | pixVal;
+        }
+    }
+
+
+
+    @Override
+    public String toString(){
+        String repr =  "";
+        repr += "\t\tHeight = " + this.height + "\n";
+        repr += "\t\tWidth = " + this.width + "\n";
+        repr += "\t\tFile Type = " + this.fileType + "\n";
+        return repr;
+    }
+
+    /**
+     * List of all the extensione an image can have.
+     */
+    public enum ImageExtension {
+        JPG(".jpg"),
+        PNG(".png"),
+        GIF(".gif");
+
+        private String extensionString;
+
+        ImageExtension(String ext){
+            extensionString = ext;
+        }
+
+        public String getExtension(){
+            return extensionString;
+        }
+
+        @Override
+        public String toString(){
+            return extensionString;
         }
     }
 }

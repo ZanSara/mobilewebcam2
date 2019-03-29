@@ -258,7 +258,7 @@ public class MobileWebCam2 extends CamActivity
     	    	if(NewCameraFunctions.isFlashSupported(params))
     	    		addMenuItem(menu, MENU_SET_FLASH, "Toggle Camera Flashlight", android.R.drawable.ic_dialog_alert, MenuItem.SHOW_AS_ACTION_IF_ROOM);
 
-    			addMenuItem(menu, MENU_CONFIGURE_NIGHT, "Toggle Day/Night Settings", android.R.drawable.ic_menu_day, MenuItem.SHOW_AS_ACTION_IF_ROOM);
+    			addMenuItem(menu, MENU_CONFIGURE_NIGHT, "Toggle Day/Night RootSettings", android.R.drawable.ic_menu_day, MenuItem.SHOW_AS_ACTION_IF_ROOM);
     		}
     	}
 
@@ -538,8 +538,8 @@ public class MobileWebCam2 extends CamActivity
 	        	HoneyCombFunctions.invalidateOptionsMenu(com.mobilewebcam2.legacycode.MobileWebCam2.this);
 	        	
 				Toast.makeText(com.mobilewebcam2.legacycode.MobileWebCam2.this,
-						mSettings.mSetNightConfiguration ? "Choose Night Settings now!" :
-							(mSettings.IsNight() ? "Disable night start/endtime first to configure day settings during night!" : "Choose Day Settings now!"),
+						mSettings.mSetNightConfiguration ? "Choose Night RootSettings now!" :
+							(mSettings.IsNight() ? "Disable night start/endtime first to configure day settings during night!" : "Choose Day RootSettings now!"),
 							Toast.LENGTH_LONG).show();
 
 	        	return true;	        	

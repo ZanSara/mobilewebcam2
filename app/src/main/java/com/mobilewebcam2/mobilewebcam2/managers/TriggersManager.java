@@ -24,21 +24,9 @@ public class TriggersManager {
      */
     private static final String LOG_TAG = "TriggersManager";
 
-    private TriggersManager() {
-        // TODO
-    }
 
-    // https://www.journaldev.com/1377/java-singleton-design-pattern-best-practices-examples
-    private static class SingletonHelper{
-        private static final TriggersManager INSTANCE = new TriggersManager();
-    }
-
-    /**
-     * Returns the singleton instance of the manager. It is lazily created.
-     * @return the TriggersManager instance.
-     */
-    public static TriggersManager getInstance(){
-        return TriggersManager.SingletonHelper.INSTANCE;
+    protected TriggersManager() {
+        // TODO Instantiate the default settings values
     }
 
 
@@ -65,6 +53,14 @@ public class TriggersManager {
                     calendar.getTimeInMillis() + (10*1000), pendingIntent);
         }
 
+    }
+
+    @Override
+    public String toString(){
+        String repr = "";
+        repr += "\t\t " + "\n";
+
+        return repr;
     }
 
 }

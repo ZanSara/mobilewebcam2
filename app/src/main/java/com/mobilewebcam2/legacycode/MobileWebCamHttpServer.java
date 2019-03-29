@@ -290,7 +290,7 @@ public class MobileWebCamHttpServer extends NanoHTTPD
 		}		
 		
 		msg += "<p><form  action='configure' enctype='multipart/form-data' method='post'>";
-	    msg += "<input style='color: #FFFFFF; font-family: arial;background-color: #000000' value='Change Settings' type='submit'>";
+	    msg += "<input style='color: #FFFFFF; font-family: arial;background-color: #000000' value='Change RootSettings' type='submit'>";
 	    msg += "</form></p>";		
 	    
 	    msg += "<hr>";
