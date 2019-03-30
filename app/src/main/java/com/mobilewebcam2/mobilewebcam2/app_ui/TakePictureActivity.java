@@ -1,10 +1,17 @@
 package com.mobilewebcam2.mobilewebcam2.app_ui;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.WindowManager;
 
 import com.mobilewebcam2.mobilewebcam2.R;
+
+import java.text.DateFormat;
+import java.util.Date;
 
 
 /**
@@ -33,5 +40,4 @@ public class TakePictureActivity extends Activity {
                         WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED |
                         WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
     }
-
 }

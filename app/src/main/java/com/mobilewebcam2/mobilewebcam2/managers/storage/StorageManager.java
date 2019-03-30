@@ -37,9 +37,7 @@ public abstract class StorageManager {
      *
      * @return the proper manager instance.
      */
-    public static StorageManager getInstance() {
-
-        String storageType = SettingsManager.getInstance().getStoS().getStorageTypeName();
+    public static StorageManager getInstance(String storageType) {
 
         if(storageManager != null && storageManager.getStorageTypeName().equals(storageType)){
             return storageManager;

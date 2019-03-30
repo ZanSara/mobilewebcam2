@@ -11,6 +11,9 @@ import android.widget.Button;
 
 import com.mobilewebcam2.mobilewebcam2.R;
 import com.mobilewebcam2.mobilewebcam2.managers.TriggersManager;
+import com.mobilewebcam2.mobilewebcam2.settings.LocalStorageSettings;
+import com.mobilewebcam2.mobilewebcam2.settings.Settings;
+import com.mobilewebcam2.mobilewebcam2.settings.SettingsManager;
 
 import java.text.DateFormat;
 import java.util.Date;
@@ -41,11 +44,24 @@ public class MainActivity extends Activity {
                 finish();
             }
         });
+
+
+        SettingsManager s = SettingsManager.getInstance();
+        String sf = s.writeConfigFile();
+        Log.d(LOG_TAG, "$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
+        Log.d(LOG_TAG, "sf: "+sf);
+        Log.d(LOG_TAG, "$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
+        Log.d(LOG_TAG, "Generated Tree: " + s.readSettingsJSON(sf));
+        Log.d(LOG_TAG, "$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
+
     }
 
 
     /**
      * This inner class receives the alarm and triggers the TakePictureActivity intent.
+     *
+     * NOTE: for some reason, it works only if it's here. Moving it into TakePictureActivity
+     * will fail to trigger the onReceive method. FIXME investigate
      */
     public static class AlarmReceiver extends BroadcastReceiver {
 
@@ -62,6 +78,5 @@ public class MainActivity extends Activity {
             context.startActivity(takePicture);
         }
     }
-
 
 }

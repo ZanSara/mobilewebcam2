@@ -9,6 +9,7 @@ import com.mobilewebcam2.mobilewebcam2.settings.StorageSettings;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.DateFormat;
 import java.util.Date;
 
 /**
@@ -32,7 +33,8 @@ public class LocalStorageManager extends StorageManager {
     public void storePicture(Bitmap bitmap){
 
         String folderPath = Environment.getExternalStorageDirectory().toString();
-        File picturePath = new File(folderPath, "examplePicture"+new Date().getTime() +".png");
+        File picturePath = new File(folderPath, "examplePicture" +
+                DateFormat.getDateTimeInstance().format(new Date()) +".png");
         Log.d(LOG_TAG, "Storing "+picturePath);
 
         try (FileOutputStream outputStream = new FileOutputStream(picturePath)) {

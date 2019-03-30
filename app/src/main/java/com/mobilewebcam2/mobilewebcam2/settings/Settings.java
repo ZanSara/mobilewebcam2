@@ -18,31 +18,36 @@ public class Settings {
     @Expose(serialize = false, deserialize = false)
     private static final String LOG_TAG = "Settings";
 
-    @SerializedName("Settings File Path")
-    private final String settingsFilePath;
-
     @SerializedName("Image Settings")
     private final ImageSettings imgSettings;
 
     @SerializedName("Camera Settings")
     private final CameraSettings camSettings;
 
-    @SerializedName("Storage Settings")
-    private final StorageSettings stoSettings;
+    @SerializedName("Picture Storage Settings")
+    private final StorageSettings picStoSettings;
+
+    @SerializedName("Logs Storage Settings")
+    private final StorageSettings logStoSettings;
+
+    @SerializedName("Picture Triggers Settings")
+    private final TriggersSettings picTriSettings;
+
+    @SerializedName("Settings File Path")
+    private final String settingsFilePath;
+
 
     /**
      * If SettingsManager fails to read the settings file,
      * the constructor provides some default values.
      */
     protected Settings(){
-        settingsFilePath = "/";
         imgSettings = new ImageSettings();
         camSettings = new CameraSettings();
-        stoSettings = new LocalStorageSettings();
-    }
-
-    public String getSettingsFilePath() {
-        return new String(settingsFilePath);
+        picStoSettings = new LocalStorageSettings();
+        logStoSettings = new LocalStorageSettings();
+        picTriSettings = new TriggersSettings();
+        settingsFilePath = "/";
     }
 
     public ImageSettings getImageSettings(){
@@ -53,17 +58,25 @@ public class Settings {
         return camSettings;
     }
 
-    public StorageSettings getStorageSettings(){
-        return stoSettings;
+    public StorageSettings getPicturesStorageSettings(){
+        return picStoSettings;
     }
+
+    public String getSettingsFilePath() {
+        return new String(settingsFilePath);
+    }
+
 
     @Override
     public String toString(){
         String repr =  "\n******\nSettings Class:\n";
+        repr += "\n\tImage Settings:\n" + imgSettings.toString();
+        repr += "\n\tCamera Settings:\n" + camSettings.toString();
+        repr += "\n\tPictures Storage Settings:\n" + picStoSettings.toString();
+        repr += "\n\tLogs Storage Settings:\n" + logStoSettings.toString();
+        repr += "\n\tPicture Triggers Settings:\n" + picTriSettings.toString();
+
         repr += "\tSettings File Path: " + this.settingsFilePath + "\n";
-        repr += imgSettings.toString();
-        repr += camSettings.toString();
-        repr += stoSettings.toString();
         repr += "******\n";
         return repr;
     }

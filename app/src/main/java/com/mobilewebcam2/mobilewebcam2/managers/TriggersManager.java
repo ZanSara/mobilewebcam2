@@ -8,6 +8,7 @@ import android.os.Build;
 import android.util.Log;
 
 import com.mobilewebcam2.mobilewebcam2.app_ui.MainActivity;
+import com.mobilewebcam2.mobilewebcam2.app_ui.TakePictureActivity;
 
 import java.util.Calendar;
 

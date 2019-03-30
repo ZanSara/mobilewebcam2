@@ -38,7 +38,7 @@ public abstract class StorageSettings {
 
     @Override
     public String toString(){
-        String repr = "\n\tStorage Settings:\n";
+        String repr = "";
         repr += "\t\tStorage Type = " + this.storageTypeName + "\n";
         return repr;
     }

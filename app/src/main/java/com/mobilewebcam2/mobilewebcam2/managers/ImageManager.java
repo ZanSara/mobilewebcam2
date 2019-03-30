@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 import android.util.Log;
 
 import com.mobilewebcam2.mobilewebcam2.managers.storage.StorageManager;
+import com.mobilewebcam2.mobilewebcam2.settings.SettingsManager;
 
 
 /**
@@ -48,7 +49,9 @@ public class ImageManager {
 
         // TODO actually post-process it, if needed.
 
-        StorageManager.getInstance().storePicture(bitmap);
+        // FIXME this is getting out of hand
+        StorageManager.getInstance(SettingsManager.getInstance().getPicStoS().getStorageTypeName())
+                .storePicture(bitmap);
     }
 
     /**

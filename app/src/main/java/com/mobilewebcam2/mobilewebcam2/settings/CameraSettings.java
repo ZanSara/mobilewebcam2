@@ -47,7 +47,7 @@ public class CameraSettings {
 
     @Override
     public String toString(){
-        String repr = "\n\tCamera Settings:\n";
+        String repr = "";
         repr += "\t\tCamera ID = " + this.cameraId + "\n";
         repr += "\t\tPreview Margin = " + this.previewMargin*100 + "%\n";
         repr += "\t\tCamera Opening Retry Time = " + retryTime + "s\n";

@@ -47,7 +47,7 @@ public class ImageSettings {
 
     @Override
     public String toString(){
-        String repr =  "\n\tImage Settings:\n";
+        String repr = "";
         repr += "\t\tHeight = " + this.height + "\n";
         repr += "\t\tWidth = " + this.width + "\n";
         repr += "\t\tFile Type = " + this.fileType + "\n";

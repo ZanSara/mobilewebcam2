@@ -71,10 +71,10 @@ public final class SettingsManager {
     }
 
     /**
-     * Shortcut to access Images's settings
+     * Shortcut to access Picture Storage's settings
      */
-    public StorageSettings getStoS(){
-        return this.settings.getStorageSettings();
+    public StorageSettings getPicStoS(){
+        return this.settings.getPicturesStorageSettings();
     }
 
 
@@ -98,7 +98,7 @@ public final class SettingsManager {
      *
      * @return reference to the root Settings object
      */
-    private Settings readSettingsJSON(String settings) {
+    public Settings readSettingsJSON(String settings) {
         JsonParser parser = new JsonParser();
         JsonElement jsonElement = parser.parse(settings);
         Gson gson = new Gson();
