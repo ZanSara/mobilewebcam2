@@ -16,7 +16,6 @@ import android.view.ViewGroup;
 import com.mobilewebcam2.mobilewebcam2.exceptions.CameraNotReadyException;
 import com.mobilewebcam2.mobilewebcam2.managers.CameraManager;
 import com.mobilewebcam2.mobilewebcam2.managers.RootManager;
-import com.mobilewebcam2.mobilewebcam2.managers.TriggersManager;
 
 /**
  * The camera preview.
@@ -110,7 +109,7 @@ public class CameraPreviewSurface extends SurfaceView implements SurfaceHolder.C
         RootManager.getInstance().getCameraManager().shootPicture();
 
         // Setup the next wakeup and quit everything
-        RootManager.getInstance().getPictureTriggerManager().setupShootingAlarm(parentActivity);
+        RootManager.getInstance().getTakePictureTriggersManager().setupNextAlarm(parentActivity);
 
         Log.d(LOG_TAG, "Surface destroyed");
     }

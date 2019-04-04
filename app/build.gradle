@@ -41,9 +41,14 @@ android {
 }
 
 dependencies {
-    implementation files('libs/commons-net-ftp-2.0.jar')
     // FIXME review this dep, comes from the old project
-    implementation 'com.google.code.gson:gson:2.8.5'
-    api 'com.google.guava:guava:27.0.1-android'
+    // api 'com.google.guava:guava:27.0.1-android'
+    // implementation files('libs/commons-net-ftp-2.0.jar')
+
+    //implementation 'com.google.code.gson:gson:2.8.5'
+    implementation 'com.fasterxml.jackson.core:jackson-core:2.7.3'
+    implementation 'com.fasterxml.jackson.core:jackson-annotations:2.7.3'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.7.3'
+
     testImplementation 'junit:junit:4.12'
 }

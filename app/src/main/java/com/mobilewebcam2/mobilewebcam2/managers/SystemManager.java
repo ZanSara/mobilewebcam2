@@ -3,7 +3,7 @@ package com.mobilewebcam2.mobilewebcam2.managers;
 /**
  * Applies the setting relative to Android itself, like: prevent sleeping, keep screen on/off, etc
  */
-public class SystemManager {
+public class SystemManager extends MWCSettings {
 
     /**
      * Tag for the logger. Every class should have one.

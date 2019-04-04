@@ -11,8 +11,6 @@ import android.widget.Button;
 
 import com.mobilewebcam2.mobilewebcam2.R;
 import com.mobilewebcam2.mobilewebcam2.managers.RootManager;
-import com.mobilewebcam2.mobilewebcam2.managers.SettingsManager;
-import com.mobilewebcam2.mobilewebcam2.managers.TriggersManager;
 
 import java.text.DateFormat;
 import java.util.Date;
@@ -39,21 +37,14 @@ public class MainActivity extends Activity {
         final Button button = findViewById(R.id.start);
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                RootManager.getInstance().getPictureTriggerManager()
-                        .setupShootingAlarm(MainActivity.this);
+                RootManager.getInstance().getTakePictureTriggersManager()
+                        .setupNextAlarm(MainActivity.this);
                 finish();
             }
         });
 
         // FIXME Test only - remove me later on!!
-        SettingsManager sm = RootManager.getInstance().getSettingsManager();
-        String sf = sm.writeConfigFile();
-        Log.d(LOG_TAG, "\n");
-        Log.d(LOG_TAG, "########################################");
-        Log.d(LOG_TAG, "" + sf );
-        //Log.d(LOG_TAG, "" + sm.readSettingsJSON(sf) );
-        Log.d(LOG_TAG, "########################################");
-
+        RootManager.getInstance().testJSONSerialization();
     }
 
 

@@ -3,38 +3,50 @@ package com.mobilewebcam2.mobilewebcam2.managers;
 import android.graphics.Bitmap;
 import android.util.Log;
 
-import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
-
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 /**
  * Applies image-specific settings, like scaling & cropping, post-processing, color alteration,
  * imprints. NOT RESPONSIBLE FOR STORING THE PICTURE IN THE FILESYSTEM.
  */
-public class ImageManager {
+@JsonIgnoreProperties(ignoreUnknown = true)
+public class ImageManager  extends MWCSettings {
 
     /**
      * Tag for the logger. Every class should have one.
      */
-    @Expose(serialize = false, deserialize = false)
+    //@Expose(serialize = false, deserialize = false)
     private static final String LOG_TAG = "ImageManager";
 
-    @SerializedName("Height")
-    private final int height;
-    @SerializedName("Width")
-    private final int width;
-    @SerializedName("File Type")
-    private final ImageExtension fileType;
-
     /**
-     * If SettingsManager fails to read the settings file, the constructor provides some
-     * default values.
+     * Internal Settings class, to be serialized.
      */
-    protected ImageManager() {
-        this.height = 480;
-        this.width = 640;
-        this.fileType = ImageExtension.JPG;
+    @JsonProperty("Settings")
+    private InternalSettings internalSettings = new InternalSettings();
+
+    // Jackson has trouble with non static inner classes
+    // http://cowtowncoder.com/blog/archives/2010/08/entry_411.html
+    @JsonPropertyOrder(alphabetic=true)
+    static private class InternalSettings {
+
+        @JsonProperty("Height")
+        private final int height;
+        @JsonProperty("Width")
+        private final int width;
+        @JsonProperty("File Type")
+        private final ImageExtension fileType;
+
+        InternalSettings() {
+            this.height = 480;
+            this.width = 640;
+            this.fileType = ImageExtension.JPG;
+        }
+
     }
+
+    protected ImageManager() { }
 
     /**
      * Called on every picture taken. Applies all required editing before saving the image on disk.
@@ -74,9 +86,9 @@ public class ImageManager {
     @Override
     public String toString(){
         String repr =  "";
-        repr += "\t\tHeight = " + this.height + "\n";
-        repr += "\t\tWidth = " + this.width + "\n";
-        repr += "\t\tFile Type = " + this.fileType + "\n";
+        repr += "\t\tHeight: " + internalSettings.height + "\n";
+        repr += "\t\tWidth: " + internalSettings.width + "\n";
+        repr += "\t\tFile Type: " + internalSettings.fileType + "\n";
         return repr;
     }
 
