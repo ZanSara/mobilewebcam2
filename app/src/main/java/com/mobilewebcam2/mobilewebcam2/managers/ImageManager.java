@@ -3,50 +3,35 @@ package com.mobilewebcam2.mobilewebcam2.managers;
 import android.graphics.Bitmap;
 import android.util.Log;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 /**
  * Applies image-specific settings, like scaling & cropping, post-processing, color alteration,
  * imprints. NOT RESPONSIBLE FOR STORING THE PICTURE IN THE FILESYSTEM.
  */
-@JsonIgnoreProperties(ignoreUnknown = true)
-public class ImageManager  extends MWCSettings {
+public class ImageManager {
 
     /**
      * Tag for the logger. Every class should have one.
      */
-    //@Expose(serialize = false, deserialize = false)
+    @JsonIgnore
     private static final String LOG_TAG = "ImageManager";
 
-    /**
-     * Internal Settings class, to be serialized.
-     */
-    @JsonProperty("Settings")
-    private InternalSettings internalSettings = new InternalSettings();
+    @JsonProperty("Height")
+    private final int height;
+    @JsonProperty("Width")
+    private final int width;
+    @JsonProperty("File Type")
+    private final ImageExtension fileType;
 
-    // Jackson has trouble with non static inner classes
-    // http://cowtowncoder.com/blog/archives/2010/08/entry_411.html
-    @JsonPropertyOrder(alphabetic=true)
-    static private class InternalSettings {
 
-        @JsonProperty("Height")
-        private final int height;
-        @JsonProperty("Width")
-        private final int width;
-        @JsonProperty("File Type")
-        private final ImageExtension fileType;
-
-        InternalSettings() {
-            this.height = 480;
-            this.width = 640;
-            this.fileType = ImageExtension.JPG;
-        }
-
+    protected ImageManager() {
+        this.height = 480;
+        this.width = 640;
+        this.fileType = ImageExtension.JPG;
     }
-
-    protected ImageManager() { }
 
     /**
      * Called on every picture taken. Applies all required editing before saving the image on disk.
@@ -86,9 +71,9 @@ public class ImageManager  extends MWCSettings {
     @Override
     public String toString(){
         String repr =  "";
-        repr += "\t\tHeight: " + internalSettings.height + "\n";
-        repr += "\t\tWidth: " + internalSettings.width + "\n";
-        repr += "\t\tFile Type: " + internalSettings.fileType + "\n";
+        repr += "\t\tHeight: " + height + "\n";
+        repr += "\t\tWidth: " + width + "\n";
+        repr += "\t\tFile Type: " + fileType + "\n";
         return repr;
     }
 

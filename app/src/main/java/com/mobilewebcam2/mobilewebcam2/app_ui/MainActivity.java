@@ -44,6 +44,7 @@ public class MainActivity extends Activity {
         });
 
         // FIXME Test only - remove me later on!!
+        Log.d(LOG_TAG, "Calling testJSONSerialization()");
         RootManager.getInstance().testJSONSerialization();
     }
 

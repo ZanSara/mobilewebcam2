@@ -1,10 +1,10 @@
 package com.mobilewebcam2.mobilewebcam2.managers;
 
 import android.util.Log;
-import android.widget.TextView;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 import com.fasterxml.jackson.annotation.JsonFilter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
@@ -14,7 +14,6 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.ser.FilterProvider;
 import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
 import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
-import com.mobilewebcam2.mobilewebcam2.R;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -25,25 +24,53 @@ import java.io.IOException;
 /**
  * The head of the Manager's hierarchy. Singleton class.
  */
-@JsonFilter("Only Settings")
-public class RootManager extends MWCSettings{
+public class RootManager {
 
     /**
      * Tag for the logger. Every class should have one.
      */
+    @JsonIgnore
     private static final String LOG_TAG = "RootManager";
 
-    /**
-     * Internal Settings class, to be serialized.
-     */
-    @JsonProperty("Settings")
-    private InternalSettings internalSettings = new InternalSettings();
+    @JsonProperty("Camera Settings")
+    private final CameraManager cameraManager;
 
+    @JsonProperty("Image Settings")
+    private final ImageManager imageManager;
+
+    @JsonProperty("Picture Storage Settings")
+    private final StorageManager pictureStorageManager;
+
+    @JsonProperty("Log Storage Settings")
+    private final StorageManager logStorageManager;
+
+    @JsonProperty("Take Picture Triggers Settings")
+    private final TriggersManager takePictureTriggersManager;
+
+    //@JsonProperty("General Settings")
+    //@JsonFilter("Only Settings")
+    //private final SettingsManager setManager;
+
+    // FIXME it may merge with the above
+    @JsonProperty("Settings File Path")
+    private final String settingsFilePath;
+
+
+    @JsonIgnore
     private transient ObjectMapper objectMapper;
+    @JsonIgnore
     private transient FilterProvider serializationFilters;
 
 
     private RootManager() {
+        settingsFilePath = "/sdcard/";
+        imageManager = new ImageManager();
+        cameraManager = new CameraManager();
+        pictureStorageManager = new LocalStorageManager();
+        logStorageManager = new LocalStorageManager();
+        takePictureTriggersManager = new TriggersManager();
+        //setManager = new SettingsManager();
+
         /*
          * Setup Jackson's ObjectMapper
          */
@@ -52,6 +79,9 @@ public class RootManager extends MWCSettings{
         objectMapper.setVisibility(PropertyAccessor.ALL, Visibility.NONE);
         // Serialize also private and protected fields.
         objectMapper.setVisibility(PropertyAccessor.FIELD, Visibility.ANY);
+
+        //objectMapper.configure(SerializationFeature.;
+
         // Specifies that only the "Settings" field should be serialized
         // FIXME this does not really work somehow
         serializationFilters = new SimpleFilterProvider()
@@ -75,77 +105,32 @@ public class RootManager extends MWCSettings{
         return RootManager.SingletonHelper.INSTANCE;
     }
 
-    // Jackson has trouble with non static inner classes
-    // http://cowtowncoder.com/blog/archives/2010/08/entry_411.html
-    @JsonPropertyOrder(alphabetic=true)
-    static private class InternalSettings {
-
-        @JsonProperty("Image")
-        @JsonFilter("Only Settings")
-        private final ImageManager imageManager;
-
-        @JsonProperty("Camera")
-        @JsonFilter("Only Settings")
-        private final CameraManager cameraManager;
-
-        @JsonProperty("Picture Storage")
-        @JsonFilter("Only Settings")
-        private final StorageManager pictureStorageManager;
-
-        @JsonProperty("Log Storage")
-        @JsonFilter("Only Settings")
-        private final StorageManager logStorageManager;
-
-        @JsonProperty("Take Picture Triggers")
-        @JsonFilter("Only Settings")
-        private final TriggersManager takePictureTriggersManager;
-
-        //@JsonProperty("General")
-        //@JsonFilter("Only Settings")
-        //private final SettingsManager setManager;
-
-        // FIXME it may merge with the above
-        @JsonProperty("Settings File Path")
-        private final String settingsFilePath;
-
-        InternalSettings() {
-            settingsFilePath = "/sdcard/";
-            imageManager = new ImageManager();
-            cameraManager = new CameraManager();
-            pictureStorageManager = new LocalStorageManager();
-            logStorageManager = new LocalStorageManager();
-            takePictureTriggersManager = new TriggersManager();
-            //setManager = new SettingsManager();
-        }
-
-    }
-
 
     public String getSettingsFilePath() {
-        return new String(internalSettings.settingsFilePath);
+        return new String(settingsFilePath);
     }
 
     public ImageManager getImageManager(){
-        return internalSettings.imageManager;
+        return imageManager;
     }
 
     public CameraManager getCameraManager(){
-        return internalSettings.cameraManager;
+        return cameraManager;
     }
 
     public StorageManager getPictureStorageManager(){
-        return internalSettings.pictureStorageManager;
+        return pictureStorageManager;
     }
 
     public StorageManager getLogStorageManager(){
-        return internalSettings.logStorageManager;
+        return logStorageManager;
     }
 
     public TriggersManager getTakePictureTriggersManager(){
-        return internalSettings.takePictureTriggersManager;
+        return takePictureTriggersManager;
     }
 
-    //public SettingsManager getSettingsManager() { return internalSettings.setManager; }
+    //public SettingsManager getSettingsManager() { return setManager; }
 
     /**
      * Reads settings file into a string and instantiates the hierarchy of RootSettings objects.

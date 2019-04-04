@@ -5,7 +5,6 @@ import android.os.Environment;
 import android.util.Log;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -23,27 +22,18 @@ public class LocalStorageManager extends StorageManager {
     //@Expose(serialize = false, deserialize = false)
     private static final String LOG_TAG = "LocalStorageManager";
 
-    /**
-     * Internal Settings class, to be serialized.
-     */
-    @JsonProperty("Settings")
-    private InternalSettings internalSettings = new InternalSettings();
+    @JsonProperty("Save on external storage? (Yes = on SD, No = on the internal memory)")
+    private final boolean externalStorage;
+    @JsonProperty("Folder to save the picture in: ")
+    private final String path;
 
-    @JsonPropertyOrder(alphabetic=true)
-    private static class InternalSettings {
-        @JsonProperty("Save on external storage? (Yes = on SD, No = on the internal memory)")
-        private final boolean externalStorage;
-        @JsonProperty("Folder to save the picture in: ")
-        private final String path;
-
-        protected InternalSettings(){
-            externalStorage = true;
-            path = ""; // FIXME point this to the phone gallery or something similar
-        }
-    }
 
     protected LocalStorageManager(){
         super(StorageManager.STORAGE_LOCAL);
+
+        externalStorage = true;
+        path = ""; // FIXME point this to the phone gallery or something similar
+
     }
 
     @Override
@@ -70,8 +60,8 @@ public class LocalStorageManager extends StorageManager {
     @Override
     public String toString(){
         String repr = super.toString();
-        repr += "\t\tSave on external storage? "+ internalSettings.externalStorage+"\n";
-        repr += "\t\tPath to save pictures in: "+ internalSettings.path+"\n";
+        repr += "\t\tSave on external storage? "+ externalStorage+"\n";
+        repr += "\t\tPath to save pictures in: "+ path+"\n";
         return repr;
     }
 
