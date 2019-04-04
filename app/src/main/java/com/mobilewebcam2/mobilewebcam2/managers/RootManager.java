@@ -141,7 +141,7 @@ public class RootManager {
      */
     public RootManager readSettingsFile(){
 
-        File file = new File(getSettingsFilePath(),"mbw2_config.txt");
+        File file = new File(getSettingsFilePath(),"mbw2_config.json");
         StringBuilder text = new StringBuilder();
         try {
             BufferedReader br = new BufferedReader(new FileReader(file));
@@ -211,11 +211,11 @@ public class RootManager {
 
     // FIXME make a proper test out of this!!
     public void testJSONSerialization(){
-        String sf = writeConfigFile(this);
+        //String sf = writeConfigFile(this);
+        //Log.d(LOG_TAG, "$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
+        //Log.d(LOG_TAG, "" + sf );
         Log.d(LOG_TAG, "$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
-        Log.d(LOG_TAG, "" + sf );
-        Log.d(LOG_TAG, "$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
-        Log.d(LOG_TAG, "" + readSettingsJSON(sf) );
+        Log.d(LOG_TAG, "" + readSettingsFile() );
         Log.d(LOG_TAG, "$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
     }
 

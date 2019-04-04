@@ -1,0 +1,33 @@
+{
+  "Camera Settings" : {
+    "Time to wait after the picture is shot (ms)" : 2000,
+    "ID of camera to use (0 back, 1 front. Recent devices may have more)" : 0,
+    "Preview Margin (%)" : 0.1,
+    "If Camera fails to open, retry after (sec. Set 0 to never retry) " : 0
+  },
+  "Image Settings" : {
+    "File Type" : "PNG",
+    "Height" : 480,
+    "Width" : 640
+  },
+  "Log Storage Settings" : {
+    "Add the timestamp to the picture name?" : true,
+    "Storage Type" : "Local Storage (Save on disk)",
+    "Add the timestap to the beginning or the end of the name?" : false,
+    "Format string for the timestamp: " : "",
+    "Save on external storage? (Yes = on SD, No = on the internal memory)" : true,
+    "Folder to save the picture in: " : ""
+  },
+  "Picture Storage Settings" : {
+    "Add the timestamp to the picture name?" : true,
+    "Storage Type" : "Local Storage (Save on disk)",
+    "Add the timestap to the beginning or the end of the name?" : false,
+    "Format string for the timestamp: " : "",
+    "Save on external storage? (Yes = on SD, No = on the internal memory)" : true,
+    "Folder to save the picture in: " : ""
+  },
+  "Settings File Path" : "/sdcard/",
+  "Take Picture Triggers Settings" : {
+    "Interval between [event](sec)" : 10
+  }
+}
