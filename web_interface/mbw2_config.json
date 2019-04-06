@@ -1,0 +1,185 @@
+{
+  "cameraManager" : {
+    "className" : "com.mobilewebcam2.mobilewebcam2.managers.CameraManager",
+    "fullName" : "Camera Settings",
+    "value" : {
+      "afterShootingWaitingTime" : {
+        "className" : "java.lang.Integer",
+        "fullName" : "After Shooting Waiting Time",
+        "value" : 2000,
+        "defaultValue" : 2000,
+        "unit" : "milliseconds",
+        "description" : "Time to wait after the camera has sot the picture. Highly device depended. It should never be higher than the interval between shooting pictures. The default value is usually good, change this at your own risk.",
+        "upperBound" : 2147483647,
+        "lowerBound" : 0
+      },
+      "cameraId" : {
+        "className" : "java.lang.Integer",
+        "fullName" : "Camera ID",
+        "value" : 0,
+        "defaultValue" : 0,
+        "description" : "ID of the camera to use. In most phones, 0 means back camera, and 1 means front camera. Check for your phone model if this does not hold, of if your phone hasmore than 2 cameras.",
+        "upperBound" : 2147483647,
+        "lowerBound" : 0
+   },
+      "previewMargin" : {
+        "className" : "java.lang.Double",
+        "fullName" : "Preview Margin",
+        "value" : 10.0,
+        "defaultValue" : 10.0,
+        "unit" : "%",
+        "description" : "Margin between the phone screen size and the preview. Does not affect the picture take in any way: useful only for the user to see the preview better.",
+        "upperBound" : 100.0,
+        "lowerBound" : 0.0
+      },
+      "retryTime" : {
+        "className" : "java.lang.Long",
+        "fullName" : "After Failure Retry Time",
+        "value" : 0,
+        "defaultValue" : 0,
+        "unit" : "milliseconds",
+        "description" : "After the camera has failed to open or to shoot a picture, time to wait before retrying to open the camera. Set 0 to never retry.",
+        "upperBound" : 9223372036854775807,
+        "lowerBound" : 0
+      }
+    },
+    "description" : "Settings of the camera, like which camera to use (front or back), zoom, flash, etc..."
+  },
+  "imageManager" : {
+    "className" : "com.mobilewebcam2.mobilewebcam2.managers.ImageManager",
+    "fullName" : "Image Settings",
+    "value" : {
+      "ImageManager" : {
+        "fileType" : {
+          "className" : "com.mobilewebcam2.mobilewebcam2.managers.ImageManager$ImageExtension",
+          "fullName" : "Image Format",
+          "value" : "PNG",
+          "defaultValue" : "JPG",
+          "description" : "Format of the picture (its extensions, like image.png or image.jpg)",
+          "allowedValues" : [ "JPG", "PNG", "GIF" ]
+        },
+        "height" : {
+          "className" : "java.lang.Integer",
+          "fullName" : "Image Height",
+          "value" : 960,
+          "defaultValue" : 480,
+          "unit" : "px",
+          "description" : "Height of the picture",
+          "upperBound" : 2147483647,
+          "lowerBound" : 0
+        },
+        "width" : {
+          "className" : "java.lang.Integer",
+          "fullName" : "Image Width",
+          "value" : 1280,
+          "defaultValue" : 640,
+          "unit" : "px",
+          "description" : "Width of the picture",
+          "upperBound" : 2147483647,
+       "lowerBound" : 0
+        }
+      }
+    },
+    "description" : "Post-processing options, like brightness/contrast corrections, size of the picture, image format, resolution, imprints, etc..."
+  },
+  "logStorageManager" : {
+    "className" : "com.mobilewebcam2.mobilewebcam2.managers.StorageManager",
+    "fullName" : "Picture Storage Settings",
+    "value" : {
+      "@type" : "Local Storage (Save on disk)",
+      "addTimestamp" : {
+        "className" : "java.lang.Boolean",
+        "fullName" : "Add the timestamp to the picture name",
+        "value" : true,
+        "defaultValue" : true,
+        "description" : "If true, adds the timestamp to the picture name.",
+        "allowedValues" : [ true, false ]
+      },
+      "storageTypeName" : {
+        "className" : "java.lang.String",
+        "fullName" : "Storage Type",
+        "value" : "Local Storage (Save on disk)",
+        "defaultValue" : "Local Storage (Save on disk)",
+        "description" : "Where to store the files",
+        "allowedValues" : [ "Local Storage (Save on disk)", "FTP Storage (Upload)", "Social Media Storage (Sharing)" ]
+      },
+      "timestampAtTheBeginning" : {
+        "className" : "java.lang.Boolean",
+        "fullName" : "Put the timestamp at the beginning of the picture name",
+        "value" : true,
+        "defaultValue" : true,
+        "description" : "If true, adds the timestamp to the beginning of the picture name. If false, it puts it at the end of it. IGNORED IF THE TIMESTAMP IS DISABLED",
+        "allowedValues" : [ true, false ]
+      },
+      "timestampFormatString" : {
+        "className" : "java.lang.String",
+        "fullName" : "Timestamp Format",
+        "value" : "",
+        "defaultValue" : "",
+        "description" : "Format string for the timestamp (i.e. YYYY/MM/DD hh:mm:ss). If empty, a regular UNIX timestamp is used."
+      },
+      "Save on external storage? (Yes = on SD, No = on the internal memory)" : true,
+      "Folder to save the picture in: " : ""
+    },
+    "description" : "Where to store the logs of the application: on the device, on a server, etc..."
+  },
+  "pictureStorageManager" : {
+    "className" : "com.mobilewebcam2.mobilewebcam2.managers.StorageManager",
+    "fullName" : "Picture Storage Settings",
+    "value" : {
+      "@type" : "Local Storage (Save on disk)",
+      "addTimestamp" : {
+        "className" : "java.lang.Boolean",
+        "fullName" : "Add the timestamp to the picture name",
+        "value" : true,
+        "defaultValue" : true,
+        "description" : "If true, adds the timestamp to the picture name.",
+        "allowedValues" : [ true, false ]
+      },
+      "storageTypeName" : {
+        "className" : "java.lang.String",
+        "fullName" : "Storage Type",
+        "value" : "Local Storage (Save on disk)",
+        "defaultValue" : "Local Storage (Save on disk)",
+        "description" : "Where to store the files",
+        "allowedValues" : [ "Local Storage (Save on disk)", "FTP Storage (Upload)", "Social Media Storage (Sharing)" ]
+      },
+      "timestampAtTheBeginning" : {
+        "className" : "java.lang.Boolean",
+        "fullName" : "Put the timestamp at the beginning of the picture name",
+        "value" : false,
+        "defaultValue" : true,
+        "description" : "If true, adds the timestamp to the beginning of the picture name. If false, it puts it at the end of it. IGNORED IF THE TIMESTAMP IS DISABLED",
+        "allowedValues" : [ true, false ]
+   },
+      "timestampFormatString" : {
+        "className" : "java.lang.String",
+        "fullName" : "Timestamp Format",
+        "value" : "",
+        "defaultValue" : "",
+        "description" : "Format string for the timestamp (i.e. YYYY/MM/DD hh:mm:ss). If empty, a regular UNIX timestamp is used."
+      },
+      "Save on external storage? (Yes = on SD, No = on the internal memory)" : true,
+      "Folder to save the picture in: " : ""
+    },
+    "description" : "Where to store the pictures shot: on the device, on a server, etc..."
+  },
+  "takePictureTriggersManager" : {
+    "className" : "com.mobilewebcam2.mobilewebcam2.managers.TriggersManager",
+    "fullName" : "Picture Storage Settings",
+    "value" : {
+      "nextAlarmInterval" : {
+        "className" : "java.lang.Long",
+        "fullName" : "Interval",
+        "value" : 11,
+        "defaultValue" : 10,
+        "unit" : "seconds",
+        "description" : "How long to wait before the following repetition.",
+        "upperBound" : 9223372036854775807,
+        "lowerBound" : 0
+      }
+    },
+    "description" : "When to take pictures and when to not do it (at night, in low battery conditions, etc...)"
+  },
+  "Settings File Path" : "/sdcard/"
+}

@@ -3,10 +3,8 @@ package com.mobilewebcam2.mobilewebcam2.managers;
 import android.util.Log;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
-import com.fasterxml.jackson.annotation.JsonFilter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -14,6 +12,7 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.ser.FilterProvider;
 import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
 import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
+import com.mobilewebcam2.mobilewebcam2.SerializableSetting;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -32,23 +31,11 @@ public class RootManager {
     @JsonIgnore
     private static final String LOG_TAG = "RootManager";
 
-    @JsonProperty("Camera Settings")
-    private final CameraManager cameraManager;
-
-    @JsonProperty("Image Settings")
-    private final ImageManager imageManager;
-
-    @JsonProperty("Picture Storage Settings")
-    private final StorageManager pictureStorageManager;
-
-    @JsonProperty("Log Storage Settings")
-    private final StorageManager logStorageManager;
-
-    @JsonProperty("Take Picture Triggers Settings")
-    private final TriggersManager takePictureTriggersManager;
-
-    //@JsonProperty("General Settings")
-    //@JsonFilter("Only Settings")
+    private final SerializableSetting<CameraManager> cameraManager;
+    private final SerializableSetting<ImageManager> imageManager;
+    private final SerializableSetting<StorageManager> pictureStorageManager;
+    private final SerializableSetting<StorageManager> logStorageManager;
+    private final SerializableSetting<TriggersManager> takePictureTriggersManager;
     //private final SettingsManager setManager;
 
     // FIXME it may merge with the above
@@ -64,11 +51,27 @@ public class RootManager {
 
     private RootManager() {
         settingsFilePath = "/sdcard/";
-        imageManager = new ImageManager();
-        cameraManager = new CameraManager();
-        pictureStorageManager = new LocalStorageManager();
-        logStorageManager = new LocalStorageManager();
-        takePictureTriggersManager = new TriggersManager();
+        imageManager = new SerializableSetting<>( ImageManager.class,
+                "Image Settings", new ImageManager(),
+                "Post-processing options, like brightness/contrast corrections, "+
+                        "size of the picture, image format, resolution, imprints, etc...");
+
+        cameraManager = new SerializableSetting<>( CameraManager.class,
+                "Camera Settings", new CameraManager(),
+                "Settings of the camera, like which camera to use "+
+                        "(front or back), zoom, flash, etc...");
+
+        pictureStorageManager = new SerializableSetting<>( StorageManager.class,
+                "Picture Storage Settings", new LocalStorageManager(),
+                "Where to store the pictures shot: on the device, on a server, etc...");
+
+        logStorageManager = new SerializableSetting<>( StorageManager.class,
+                "Picture Storage Settings", new LocalStorageManager(),
+                "Where to store the logs of the application: on the device, on a server, etc...");
+
+        takePictureTriggersManager = new SerializableSetting<>( TriggersManager.class,
+                "Picture Storage Settings", new TriggersManager(),
+                "When to take pictures and when to not do it (at night, in low battery conditions, etc...)");
         //setManager = new SettingsManager();
 
         /*
@@ -111,23 +114,23 @@ public class RootManager {
     }
 
     public ImageManager getImageManager(){
-        return imageManager;
+        return imageManager.getValue();
     }
 
     public CameraManager getCameraManager(){
-        return cameraManager;
+        return cameraManager.getValue();
     }
 
     public StorageManager getPictureStorageManager(){
-        return pictureStorageManager;
+        return pictureStorageManager.getValue();
     }
 
     public StorageManager getLogStorageManager(){
-        return logStorageManager;
+        return logStorageManager.getValue();
     }
 
     public TriggersManager getTakePictureTriggersManager(){
-        return takePictureTriggersManager;
+        return takePictureTriggersManager.getValue();
     }
 
     //public SettingsManager getSettingsManager() { return setManager; }
@@ -211,9 +214,10 @@ public class RootManager {
 
     // FIXME make a proper test out of this!!
     public void testJSONSerialization(){
-        //String sf = writeConfigFile(this);
+        String sf = writeConfigFile(this);
         //Log.d(LOG_TAG, "$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
-        //Log.d(LOG_TAG, "" + sf );
+        //for( String line : sf.split("\n") )
+        //    Log.d( LOG_TAG, line );
         Log.d(LOG_TAG, "$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
         Log.d(LOG_TAG, "" + readSettingsFile() );
         Log.d(LOG_TAG, "$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");

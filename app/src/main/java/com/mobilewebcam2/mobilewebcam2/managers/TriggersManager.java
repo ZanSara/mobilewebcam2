@@ -8,7 +8,7 @@ import android.os.Build;
 import android.util.Log;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.mobilewebcam2.mobilewebcam2.SerializableSetting;
 import com.mobilewebcam2.mobilewebcam2.app_ui.MainActivity;
 
 import java.util.Calendar;
@@ -28,12 +28,13 @@ public class TriggersManager {
     private static final String LOG_TAG = "TriggersManager";
 
 
-    @JsonProperty("Interval between [event](sec)")
-    private final long nextAlarmInterval;
+    private final SerializableSetting<Long> nextAlarmInterval;
 
 
     protected TriggersManager() {
-        nextAlarmInterval = 10;
+        this.nextAlarmInterval = new SerializableSetting<>(Long.class, "Interval",
+                10l, 10l, "seconds", "How long to wait before the following repetition.",
+                Long.MAX_VALUE, 0l, null);
     }
 
 
@@ -56,11 +57,11 @@ public class TriggersManager {
         if(Build.VERSION.SDK_INT >= 19) {
             alarmManager.setExact(AlarmManager.RTC_WAKEUP,
                     calendar.getTimeInMillis() +
-                            (nextAlarmInterval*1000), pendingIntent);
+                            (nextAlarmInterval.getValue()*1000), pendingIntent);
         } else {
             alarmManager.set(AlarmManager.RTC_WAKEUP,
                     calendar.getTimeInMillis() +
-                            (nextAlarmInterval*1000), pendingIntent);
+                            (nextAlarmInterval.getValue()*1000), pendingIntent);
         }
 
     }
@@ -68,7 +69,7 @@ public class TriggersManager {
     @Override
     public String toString(){
         String repr = "";
-        repr += "\t\tTime to the next alarm: " + nextAlarmInterval + "sec.\n";
+        repr += "\t\tTime to the next alarm: " + nextAlarmInterval.getValue() + "sec.\n";
 
         return repr;
     }

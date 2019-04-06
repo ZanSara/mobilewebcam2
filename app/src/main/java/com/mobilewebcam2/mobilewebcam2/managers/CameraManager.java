@@ -12,6 +12,7 @@ import android.view.SurfaceHolder;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.mobilewebcam2.mobilewebcam2.SerializableSetting;
 import com.mobilewebcam2.mobilewebcam2.exceptions.CameraNotReadyException;
 
 import java.io.IOException;
@@ -35,14 +36,10 @@ public class CameraManager {
     @JsonIgnore
     private static final String LOG_TAG = "CameraManager";
 
-    @JsonProperty("ID of camera to use (0 back, 1 front. Recent devices may have more)")
-    private final int cameraId;
-    @JsonProperty("Preview Margin (%)")
-    private final double previewMargin;
-    @JsonProperty("If Camera fails to open, retry after (sec. Set 0 to never retry) ")
-    private final long retryTime;
-    @JsonProperty("Time to wait after the picture is shot (ms)")
-    private final int afterShootingWaitingTime;
+    private final SerializableSetting<Integer> cameraId;
+    private final SerializableSetting<Double> previewMargin;
+    private final SerializableSetting<Long> retryTime;
+    private final SerializableSetting<Integer> afterShootingWaitingTime;
 
 
     // TODO those 'transient' are required because of Jackson. Maybe there is a better solution.
@@ -52,21 +49,37 @@ public class CameraManager {
     @JsonIgnore
     private transient Camera camera;
     @JsonIgnore
-    private transient boolean cameraHasFailed = false;
+    private boolean cameraHasFailed = false;
     @JsonIgnore
     private transient Camera.PictureCallback pictureCallback;
     @JsonIgnore
-    private transient int cameraOrientation = -1; // Default value for 'unchecked yet'
+    private int cameraOrientation = -1; // Default value for 'unchecked yet'
 
 
     /**
      * Opens the camera to try assessing its orientation, and sets up the picture callback.
      */
     protected CameraManager() {
-        this.cameraId = 0; // FIXME Good in most phones, but note that in some, only ID=1 exists!
-        this.previewMargin = 0.1;
-        this.retryTime = 0;
-        this.afterShootingWaitingTime = 2000;
+        this.cameraId = new SerializableSetting<>(Integer.class, "Camera ID", 0, 0, null,
+                "ID of the camera to use. In most phones, 0 means back camera, and 1 means front "+
+                "camera. Check for your phone model if this does not hold, of if your phone has"+
+                "more than 2 cameras.", Integer.MAX_VALUE, 0, null);
+
+        this.previewMargin = new SerializableSetting<>(Double.class, "Preview Margin", 10.0, 10.0,
+                "%", "Margin between the phone screen size and the preview. Does not affect the "+
+                "picture take in any way: useful only for the user to see the preview better.",
+                100.0, 0.0, null);
+
+        this.retryTime = new SerializableSetting<>(Long.class, "After Failure Retry Time", 0l, 0l,
+                "milliseconds", "After the camera has failed to open or to shoot "+
+                "a picture, time to wait before retrying to open the camera. Set 0 to never retry.",
+                Long.MAX_VALUE, 0l, null);
+
+        this.afterShootingWaitingTime = new SerializableSetting<>(Integer.class,
+                "After Shooting Waiting Time", 2000, 2000, "milliseconds",
+                "Time to wait after the camera has sot the picture. Highly device depended. "+
+                "It should never be higher than the interval between shooting pictures. The default "+
+                "value is usually good, change this at your own risk.", Integer.MAX_VALUE, 0, null);
 
         // Set what to do once the picture is taken
         pictureCallback = new PictureCallback() {
@@ -97,14 +110,14 @@ public class CameraManager {
         Log.v(LOG_TAG, "Opening camera ID: " + cameraId);
         try {
             if (Build.VERSION.SDK_INT < 9) {
-                if (cameraId != 0) {
+                if (cameraId.getValue() != 0) {
                     Log.i(LOG_TAG, "CameraManager.openCamera() was called with a nonzero " +
                             "camera_id, but the phone runs SDK version " + Build.VERSION.SDK_INT +
                             ". Support for multiple cameras was introduced in SDK 9");
                 }
                 camera = Camera.open();
             } else {
-                camera = Camera.open(cameraId);
+                camera = Camera.open(cameraId.getValue());
             }
 
             if (camera == null) {
@@ -228,12 +241,12 @@ public class CameraManager {
         // Calculating margins - FIXME remove only 50px of supposed navigation bar height
         int screenWidth = Resources.getSystem().getDisplayMetrics().widthPixels;
         int screenHeight = Resources.getSystem().getDisplayMetrics().heightPixels;
-        screenWidth = screenWidth - (int) (screenWidth * previewMargin);
-        screenHeight = screenHeight - (int) (screenHeight * previewMargin);
+        screenWidth = screenWidth - (int) (screenWidth * (previewMargin.getValue()/100));
+        screenHeight = screenHeight - (int) (screenHeight * (previewMargin.getValue()/100));
 
         Camera.Size screenSize = camera.new Size(screenWidth, screenHeight);
         Log.d(LOG_TAG, "Preview Sizing - Screen Size: : h" + screenSize.height +
-                " w" + screenSize.width + " (margin is " + previewMargin * 100 + "%)");
+                " w" + screenSize.width + " (margin is " + previewMargin.getValue() + "%)");
 
         // Calculating scale
         float xScale = ((float) screenSize.width) / nativeSize.width;
@@ -293,7 +306,7 @@ public class CameraManager {
         }
 
         Camera.CameraInfo info = new Camera.CameraInfo();
-        Camera.getCameraInfo(cameraId, info);
+        Camera.getCameraInfo(cameraId.getValue(), info);
 
         final int result;
         if (info.facing == Camera.CameraInfo.CAMERA_FACING_FRONT) {
@@ -351,7 +364,7 @@ public class CameraManager {
             Log.i(LOG_TAG, "Picture taken (at " + DateFormat.getDateTimeInstance().format(new Date()) + ")");
 
             try {
-                Thread.sleep(afterShootingWaitingTime);
+                Thread.sleep(afterShootingWaitingTime.getValue());
             } catch (InterruptedException e) {
                 Log.w(LOG_TAG, "Interrupted while sleeping after shooting a picture");
             }
@@ -425,10 +438,10 @@ public class CameraManager {
     @Override
     public String toString(){
         String repr = "";
-        repr += "\t\tCamera ID: " + cameraId + "\n";
-        repr += "\t\tPreview Margin: " + previewMargin*100 + "%\n";
-        repr += "\t\tCamera Opening Retry Time: " + retryTime + "s\n";
-        repr += "\t\tAfter Shooting Waiting Time: " + afterShootingWaitingTime + "ms\n";
+        repr += "\t\tCamera ID: " + cameraId.getValue() + "\n";
+        repr += "\t\tPreview Margin: " + previewMargin.getValue() + "%\n";
+        repr += "\t\tCamera Opening Retry Time: " + retryTime.getValue() + "s\n";
+        repr += "\t\tAfter Shooting Waiting Time: " + afterShootingWaitingTime.getValue() + "ms\n";
         return repr;
     }
 

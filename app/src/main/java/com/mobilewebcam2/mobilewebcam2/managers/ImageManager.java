@@ -4,13 +4,20 @@ import android.graphics.Bitmap;
 import android.util.Log;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.mobilewebcam2.mobilewebcam2.SerializableSetting;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Applies image-specific settings, like scaling & cropping, post-processing, color alteration,
  * imprints. NOT RESPONSIBLE FOR STORING THE PICTURE IN THE FILESYSTEM.
  */
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.WRAPPER_OBJECT)
+@JsonTypeName("ImageManager")
 public class ImageManager {
 
     /**
@@ -19,18 +26,20 @@ public class ImageManager {
     @JsonIgnore
     private static final String LOG_TAG = "ImageManager";
 
-    @JsonProperty("Height")
-    private final int height;
-    @JsonProperty("Width")
-    private final int width;
-    @JsonProperty("File Type")
-    private final ImageExtension fileType;
+    private final SerializableSetting<Integer> height;
+    private final SerializableSetting<Integer> width;
+    private final SerializableSetting<ImageExtension> fileType;
 
 
     protected ImageManager() {
-        this.height = 480;
-        this.width = 640;
-        this.fileType = ImageExtension.JPG;
+        this.height = new SerializableSetting<>(Integer.class, "Image Height", 480, 480, "px",
+                "Height of the picture", Integer.MAX_VALUE, 0, null);
+        this.width = new SerializableSetting<>(Integer.class, "Image Width", 640, 640, "px",
+                "Width of the picture", Integer.MAX_VALUE, 0, null);
+        this.fileType = new SerializableSetting<>(ImageExtension.class, "Image Format", ImageExtension.JPG, ImageExtension.JPG,
+                null,"Format of the picture (its extensions, like image.png or image.jpg)",
+                null, null, ImageExtension.allowedValues());
+                /**/
     }
 
     /**
@@ -71,9 +80,9 @@ public class ImageManager {
     @Override
     public String toString(){
         String repr =  "";
-        repr += "\t\tHeight: " + height + "\n";
-        repr += "\t\tWidth: " + width + "\n";
-        repr += "\t\tFile Type: " + fileType + "\n";
+        repr += "\t\tHeight: " + height.getValue() + "\n";
+        repr += "\t\tWidth: " + width.getValue() + "\n";
+        repr += "\t\tFile Type: " + fileType.getValue() + "\n";
         return repr;
     }
 
@@ -93,6 +102,14 @@ public class ImageManager {
 
         public String getExtension(){
             return extensionString;
+        }
+
+        public static List<ImageExtension> allowedValues(){
+            List<ImageExtension> list = new ArrayList<>();
+            list.add(ImageExtension.JPG);
+            list.add(ImageExtension.PNG);
+            list.add(ImageExtension.GIF);
+            return list;
         }
 
         @Override
