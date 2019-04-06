@@ -80,6 +80,6 @@ public class SettingsTabActivity extends TabActivity
     	
 		MobileWebCam2.gInSettings = false;
 
-		Log.i("MobileWebCam2", "Settings onPause");
+		Log.i("MobileWebCam2", "RootSettings onPause");
     }
 }

@@ -10,10 +10,7 @@ import android.view.View;
 import android.widget.Button;
 
 import com.mobilewebcam2.mobilewebcam2.R;
-import com.mobilewebcam2.mobilewebcam2.managers.TriggersManager;
-import com.mobilewebcam2.mobilewebcam2.settings.LocalStorageSettings;
-import com.mobilewebcam2.mobilewebcam2.settings.Settings;
-import com.mobilewebcam2.mobilewebcam2.settings.SettingsManager;
+import com.mobilewebcam2.mobilewebcam2.managers.RootManager;
 
 import java.text.DateFormat;
 import java.util.Date;
@@ -40,20 +37,15 @@ public class MainActivity extends Activity {
         final Button button = findViewById(R.id.start);
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                TriggersManager.getInstance().setupShootingAlarm(MainActivity.this);
+                RootManager.getInstance().getTakePictureTriggersManager()
+                        .setupNextAlarm(MainActivity.this);
                 finish();
             }
         });
 
-
-        SettingsManager s = SettingsManager.getInstance();
-        String sf = s.writeConfigFile();
-        Log.d(LOG_TAG, "$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
-        Log.d(LOG_TAG, "sf: "+sf);
-        Log.d(LOG_TAG, "$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
-        Log.d(LOG_TAG, "Generated Tree: " + s.readSettingsJSON(sf));
-        Log.d(LOG_TAG, "$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
-
+        // FIXME Test only - remove me later on!!
+        Log.d(LOG_TAG, "Calling testJSONSerialization()");
+        RootManager.getInstance().testJSONSerialization();
     }
 
 

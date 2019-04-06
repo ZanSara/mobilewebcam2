@@ -3,36 +3,42 @@ package com.mobilewebcam2.mobilewebcam2.managers;
 import android.graphics.Bitmap;
 import android.util.Log;
 
-import com.mobilewebcam2.mobilewebcam2.managers.storage.StorageManager;
-import com.mobilewebcam2.mobilewebcam2.settings.SettingsManager;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.mobilewebcam2.mobilewebcam2.SerializableSetting;
 
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Applies image-specific settings, like scaling & cropping, post-processing, color alteration,
  * imprints. NOT RESPONSIBLE FOR STORING THE PICTURE IN THE FILESYSTEM.
  */
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.WRAPPER_OBJECT)
+@JsonTypeName("ImageManager")
 public class ImageManager {
 
     /**
      * Tag for the logger. Every class should have one.
      */
+    @JsonIgnore
     private static final String LOG_TAG = "ImageManager";
 
-    private ImageManager() {
-        // TODO
-    }
+    private final SerializableSetting<Integer> height;
+    private final SerializableSetting<Integer> width;
+    private final SerializableSetting<ImageExtension> fileType;
 
-    // https://www.journaldev.com/1377/java-singleton-design-pattern-best-practices-examples
-    private static class SingletonHelper{
-        private static final ImageManager INSTANCE = new ImageManager();
-    }
 
-    /**
-     * Returns the singleton instance of the manager. It is lazily created.
-     * @return the ImageManager instance.
-     */
-    public static ImageManager getInstance(){
-        return ImageManager.SingletonHelper.INSTANCE;
+    protected ImageManager() {
+        this.height = new SerializableSetting<>(Integer.class, "Image Height", 480, 480, "px",
+                "Height of the picture", Integer.MAX_VALUE, 0, null);
+        this.width = new SerializableSetting<>(Integer.class, "Image Width", 640, 640, "px",
+                "Width of the picture", Integer.MAX_VALUE, 0, null);
+        this.fileType = new SerializableSetting<>(ImageExtension.class, "Image Format", ImageExtension.JPG, ImageExtension.JPG,
+                null,"Format of the picture (its extensions, like image.png or image.jpg)",
+                null, null, ImageExtension.allowedValues());
+                /**/
     }
 
     /**
@@ -49,10 +55,10 @@ public class ImageManager {
 
         // TODO actually post-process it, if needed.
 
-        // FIXME this is getting out of hand
-        StorageManager.getInstance(SettingsManager.getInstance().getPicStoS().getStorageTypeName())
-                .storePicture(bitmap);
+        RootManager.getInstance().getPictureStorageManager().storePicture(bitmap);
     }
+
+
 
     /**
      * FIXME Copypasted from the legacy MobileWebCam. No idea if it is useful or what does it do really.
@@ -65,6 +71,49 @@ public class ImageManager {
             if (pixVal < 0) pixVal = 0;
             if (pixVal > 255) pixVal = 255;
             rgb[pix] = 0xff000000 | (pixVal << 16) | (pixVal << 8) | pixVal;
+        }
+    }
+
+
+
+    @Override
+    public String toString(){
+        String repr =  "";
+        repr += "\t\tHeight: " + height.getValue() + "\n";
+        repr += "\t\tWidth: " + width.getValue() + "\n";
+        repr += "\t\tFile Type: " + fileType.getValue() + "\n";
+        return repr;
+    }
+
+    /**
+     * List of all the extensione an image can have.
+     */
+    public enum ImageExtension {
+        JPG(".jpg"),
+        PNG(".png"),
+        GIF(".gif");
+
+        private String extensionString;
+
+        ImageExtension(String ext){
+            extensionString = ext;
+        }
+
+        public String getExtension(){
+            return extensionString;
+        }
+
+        public static List<ImageExtension> allowedValues(){
+            List<ImageExtension> list = new ArrayList<>();
+            list.add(ImageExtension.JPG);
+            list.add(ImageExtension.PNG);
+            list.add(ImageExtension.GIF);
+            return list;
+        }
+
+        @Override
+        public String toString(){
+            return extensionString;
         }
     }
 }

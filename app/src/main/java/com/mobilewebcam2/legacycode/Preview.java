@@ -249,7 +249,7 @@ public class Preview extends SurfaceView implements SurfaceHolder.Callback, ITex
 							{
 								if(System.currentTimeMillis() - mSetupServerMessage_lasttime > 10000)
 								{
-									Toast.makeText(mActivity, "Setup your server or email or local store!\n\nSettings: MENU", Toast.LENGTH_LONG).show();
+									Toast.makeText(mActivity, "Setup your server or email or local store!\n\nRootSettings: MENU", Toast.LENGTH_LONG).show();
 									mSetupServerMessage_lasttime = System.currentTimeMillis();
 								}
 								MobileWebCam2.LogE("Setup your server or email or local store!");

@@ -9,9 +9,11 @@ import android.os.Build;
 import android.util.Log;
 import android.view.SurfaceHolder;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.mobilewebcam2.mobilewebcam2.SerializableSetting;
 import com.mobilewebcam2.mobilewebcam2.exceptions.CameraNotReadyException;
-import com.mobilewebcam2.mobilewebcam2.settings.CameraSettings;
-import com.mobilewebcam2.mobilewebcam2.settings.SettingsManager;
 
 import java.io.IOException;
 import java.text.DateFormat;
@@ -25,42 +27,59 @@ import java.util.List;
  * acquire or retain the camera lock even when pushed in the background.
  */
 // TODO remember to perform tests without giving camera permissions to the app.
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class CameraManager {
 
     /**
      * Tag for the logger. Every class should have one.
      */
+    @JsonIgnore
     private static final String LOG_TAG = "CameraManager";
 
+    private final SerializableSetting<Integer> cameraId;
+    private final SerializableSetting<Double> previewMargin;
+    private final SerializableSetting<Long> retryTime;
+    private final SerializableSetting<Integer> afterShootingWaitingTime;
+
+
+    // TODO those 'transient' are required because of Jackson. Maybe there is a better solution.
     /**
-     * Open camera reference. It can **always** be null!!
+     * The last opened camera reference. It can **always** be null!!
      */
-    private Camera camera;
+    @JsonIgnore
+    private transient Camera camera;
+    @JsonIgnore
     private boolean cameraHasFailed = false;
-    private Camera.PictureCallback pictureCallback;
+    @JsonIgnore
+    private transient Camera.PictureCallback pictureCallback;
+    @JsonIgnore
+    private int cameraOrientation = -1; // Default value for 'unchecked yet'
 
 
     /**
-     * The cameraOrientation is set while checking the camera's native format
-     * and whether it requires any correction to be displayed properly.
-     *
-     * @see CameraManager#setCameraDisplayOrientation()
-     * TODO Understand this better...
+     * Opens the camera to try assessing its orientation, and sets up the picture callback.
      */
-    private int cameraOrientation;
+    protected CameraManager() {
+        this.cameraId = new SerializableSetting<>(Integer.class, "Camera ID", 0, 0, null,
+                "ID of the camera to use. In most phones, 0 means back camera, and 1 means front "+
+                "camera. Check for your phone model if this does not hold, of if your phone has"+
+                "more than 2 cameras.", Integer.MAX_VALUE, 0, null);
 
-    private CameraManager() {
+        this.previewMargin = new SerializableSetting<>(Double.class, "Preview Margin", 10.0, 10.0,
+                "%", "Margin between the phone screen size and the preview. Does not affect the "+
+                "picture take in any way: useful only for the user to see the preview better.",
+                100.0, 0.0, null);
 
-        // Verify the camera orientation using the camera resolution.
-        //      Not perfect: pictures can be upside down, it's not verified.
-        try {
-            openCamera();
-            Camera.Size pictureSize = camera.getParameters().getSupportedPictureSizes().get(0);
-            cameraOrientation = ((pictureSize.width > pictureSize.height) ? 0 : 90);
-        } catch (CameraNotReadyException e) {
-            Log.w(LOG_TAG, "CameraManager could not assess the orientation of the camera. Exception is: ", e);
-            cameraOrientation = 0;
-        }
+        this.retryTime = new SerializableSetting<>(Long.class, "After Failure Retry Time", 0l, 0l,
+                "milliseconds", "After the camera has failed to open or to shoot "+
+                "a picture, time to wait before retrying to open the camera. Set 0 to never retry.",
+                Long.MAX_VALUE, 0l, null);
+
+        this.afterShootingWaitingTime = new SerializableSetting<>(Integer.class,
+                "After Shooting Waiting Time", 2000, 2000, "milliseconds",
+                "Time to wait after the camera has sot the picture. Highly device depended. "+
+                "It should never be higher than the interval between shooting pictures. The default "+
+                "value is usually good, change this at your own risk.", Integer.MAX_VALUE, 0, null);
 
         // Set what to do once the picture is taken
         pictureCallback = new PictureCallback() {
@@ -69,30 +88,9 @@ public class CameraManager {
                 Log.v(LOG_TAG, "Picture taken successfully. Going to post-processing");
                 BitmapFactory.Options options = new BitmapFactory.Options();
                 Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length, options);
-                ImageManager.getInstance().postProcessImage(bitmap);
+                RootManager.getInstance().getImageManager().postProcessImage(bitmap);
             }
         };
-    }
-
-    // https://www.journaldev.com/1377/java-singleton-design-pattern-best-practices-examples
-    private static class SingletonHelper {
-        private static final CameraManager INSTANCE = new CameraManager();
-    }
-
-    /**
-     * Returns the singleton instance of the manager. It is lazily created.
-     *
-     * @return the CameraManager instance.
-     */
-    public static CameraManager getInstance() {
-        return CameraManager.SingletonHelper.INSTANCE;
-    }
-
-    /**
-     * Shortcut to access the camera settings without saving the reference
-     */
-    private CameraSettings getCameraSettings() {
-        return SettingsManager.getInstance().getCaS();
     }
 
     /**
@@ -109,20 +107,17 @@ public class CameraManager {
             closeCamera();
         }
 
-        // Saving it here to make sure its value won't change (and improve a little bit performance)
-        int cameraId = getCameraSettings().getCameraId();
-
         Log.v(LOG_TAG, "Opening camera ID: " + cameraId);
         try {
             if (Build.VERSION.SDK_INT < 9) {
-                if (getCameraSettings().getCameraId() != 0) {
+                if (cameraId.getValue() != 0) {
                     Log.i(LOG_TAG, "CameraManager.openCamera() was called with a nonzero " +
                             "camera_id, but the phone runs SDK version " + Build.VERSION.SDK_INT +
                             ". Support for multiple cameras was introduced in SDK 9");
                 }
                 camera = Camera.open();
             } else {
-                camera = Camera.open(cameraId);
+                camera = Camera.open(cameraId.getValue());
             }
 
             if (camera == null) {
@@ -244,15 +239,14 @@ public class CameraManager {
                 " w" + nativeSize.width);
 
         // Calculating margins - FIXME remove only 50px of supposed navigation bar height
-        double margin = SettingsManager.getInstance().getCaS().getPreviewMargin();
         int screenWidth = Resources.getSystem().getDisplayMetrics().widthPixels;
         int screenHeight = Resources.getSystem().getDisplayMetrics().heightPixels;
-        screenWidth = screenWidth - (int) (screenWidth * margin);
-        screenHeight = screenHeight - (int) (screenHeight * margin);
+        screenWidth = screenWidth - (int) (screenWidth * (previewMargin.getValue()/100));
+        screenHeight = screenHeight - (int) (screenHeight * (previewMargin.getValue()/100));
 
         Camera.Size screenSize = camera.new Size(screenWidth, screenHeight);
         Log.d(LOG_TAG, "Preview Sizing - Screen Size: : h" + screenSize.height +
-                " w" + screenSize.width + " (margin is " + margin * 100 + "%)");
+                " w" + screenSize.width + " (margin is " + previewMargin.getValue() + "%)");
 
         // Calculating scale
         float xScale = ((float) screenSize.width) / nativeSize.width;
@@ -307,8 +301,12 @@ public class CameraManager {
             return;
         }
 
+        if(cameraOrientation == -1){ // Then we did not check for its value yet
+            checkCameraOrientation();
+        }
+
         Camera.CameraInfo info = new Camera.CameraInfo();
-        Camera.getCameraInfo(getCameraSettings().getCameraId(), info);
+        Camera.getCameraInfo(cameraId.getValue(), info);
 
         final int result;
         if (info.facing == Camera.CameraInfo.CAMERA_FACING_FRONT) {
@@ -321,6 +319,23 @@ public class CameraManager {
 
         Log.d(LOG_TAG, "Camera Orientation set to " + result + "º\nNote that, in this case, info.orientation says " + info.orientation + "º");
 
+    }
+
+    /**
+     * Utility that verifies whether the camera has any orientation we should be aware of
+     */
+    private void checkCameraOrientation (){
+        // Verify the camera orientation using its native aspect ratio.
+        //      Not perfect: pictures can be upside down, it's not verified.
+        try {
+            openCamera();
+            Camera.Size pictureSize = camera.getParameters().getSupportedPictureSizes().get(0);
+            cameraOrientation = ((pictureSize.width > pictureSize.height) ? 0 : 90);
+        } catch (CameraNotReadyException e) {
+            Log.w(LOG_TAG, "CameraManager could not assess the orientation of the camera. "+
+                    "Exception is: ", e);
+            cameraOrientation = 0;
+        }
     }
 
     /**
@@ -345,19 +360,19 @@ public class CameraManager {
             }
             //camera.stopPreview();
             camera.startPreview();
-            Log.d(LOG_TAG, "#######################"+pictureCallback);
             camera.takePicture(null, null, pictureCallback);
             Log.i(LOG_TAG, "Picture taken (at " + DateFormat.getDateTimeInstance().format(new Date()) + ")");
 
             try {
-                Thread.sleep(getCameraSettings().getAfterShootingWaitingTime());
+                Thread.sleep(afterShootingWaitingTime.getValue());
             } catch (InterruptedException e) {
                 Log.w(LOG_TAG, "Interrupted while sleeping after shooting a picture");
             }
 
         } catch (Exception e) {
             Log.e(LOG_TAG, "CameraManager.shootPicture failed! Exception is: ", e);
-            ImageManager.getInstance().postProcessImage(null); // TODO in case of failure, pretend you shot a default NOCAM image
+            // Passing NULL tells the ImageManager to load the NOCAM image.
+            RootManager.getInstance().getImageManager().postProcessImage(null);
         }
     }
 
@@ -387,6 +402,7 @@ public class CameraManager {
      * Sets the camera zoom
      * Some code can be found at MobileWebCam2 in the legacy (in the switch case MENU_SET_ZOOM)
      */
+    @JsonIgnore
     public void setZoom() {
         // TODO
     }
@@ -395,6 +411,7 @@ public class CameraManager {
      * Sets the camera exposure
      * Some code can be found at MobileWebCam2 in the legacy (in the switch case MENU_SET_EXPOSURE)
      */
+    @JsonIgnore
     public void setExposure() {
         // TODO
     }
@@ -403,6 +420,7 @@ public class CameraManager {
      * Sets the camera white balance
      * Some code can be found at MobileWebCam2 in the legacy (in the switch case MENU_SET_WHITEBALANCE)
      */
+    @JsonIgnore
     public void setWhiteBalance() {
         // TODO
     }
@@ -410,8 +428,21 @@ public class CameraManager {
     /**
      * Sets the camera's flash mode (never, always, at need, etc)
      */
+    @JsonIgnore
     public void setFlash() {
         // TODO
+    }
+
+
+
+    @Override
+    public String toString(){
+        String repr = "";
+        repr += "\t\tCamera ID: " + cameraId.getValue() + "\n";
+        repr += "\t\tPreview Margin: " + previewMargin.getValue() + "%\n";
+        repr += "\t\tCamera Opening Retry Time: " + retryTime.getValue() + "s\n";
+        repr += "\t\tAfter Shooting Waiting Time: " + afterShootingWaitingTime.getValue() + "ms\n";
+        return repr;
     }
 
 

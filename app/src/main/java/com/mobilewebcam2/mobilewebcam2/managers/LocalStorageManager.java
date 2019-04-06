@@ -1,10 +1,10 @@
-package com.mobilewebcam2.mobilewebcam2.managers.storage;
+package com.mobilewebcam2.mobilewebcam2.managers;
 
 import android.graphics.Bitmap;
 import android.os.Environment;
 import android.util.Log;
 
-import com.mobilewebcam2.mobilewebcam2.settings.StorageSettings;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -20,13 +20,21 @@ public class LocalStorageManager extends StorageManager {
     /**
      * Tag for the logger. Every class should have one.
      */
+    //@Expose(serialize = false, deserialize = false)
     private static final String LOG_TAG = "LocalStorageManager";
 
-    protected LocalStorageManager(){}
+    @JsonProperty("Save on external storage? (Yes = on SD, No = on the internal memory)")
+    private final boolean externalStorage;
+    @JsonProperty("Folder to save the picture in: ")
+    private final String path;
 
-    @Override
-    public String getStorageTypeName(){
-        return StorageSettings.STORAGE_LOCAL;
+
+    protected LocalStorageManager(){
+        super(StorageManager.STORAGE_LOCAL);
+
+        externalStorage = true;
+        path = ""; // FIXME point this to the phone gallery or something similar
+
     }
 
     @Override
@@ -48,6 +56,15 @@ public class LocalStorageManager extends StorageManager {
             Log.e(LOG_TAG, "I/O Exception! Make sure the app has permission to "+
                     "write on the local storage. Exception is", e);
         }
+    }
+
+
+    @Override
+    public String toString(){
+        String repr = super.toString();
+        repr += "\t\tSave on external storage? "+ externalStorage+"\n";
+        repr += "\t\tPath to save pictures in: "+ path+"\n";
+        return repr;
     }
 
 }

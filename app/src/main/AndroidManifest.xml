@@ -102,7 +102,7 @@
             android:name=".legacycode.RemoteControlSettings">
         </activity>
       <activity
-            android:label="System Settings"
+            android:label="System RootSettings"
             android:name=".legacycode.SystemSettings">
         </activity>
         

@@ -15,7 +15,7 @@ import android.view.ViewGroup;
 
 import com.mobilewebcam2.mobilewebcam2.exceptions.CameraNotReadyException;
 import com.mobilewebcam2.mobilewebcam2.managers.CameraManager;
-import com.mobilewebcam2.mobilewebcam2.managers.TriggersManager;
+import com.mobilewebcam2.mobilewebcam2.managers.RootManager;
 
 /**
  * The camera preview.
@@ -66,7 +66,10 @@ public class CameraPreviewSurface extends SurfaceView implements SurfaceHolder.C
     public void surfaceChanged(SurfaceHolder holder, int format, int width,int height) {
         Log.d(LOG_TAG, "Surface changed");
 
-        if(CameraManager.getInstance().isCameraFailing()){
+        // Temporarily saved here to avoid long calls
+        CameraManager cameraManager = RootManager.getInstance().getCameraManager();
+
+        if(cameraManager.isCameraFailing()){
             Log.d(LOG_TAG, "Camera is currently flagged as Failing. "+
                     "Skip the .startPreview() call");
             return;
@@ -75,7 +78,7 @@ public class CameraPreviewSurface extends SurfaceView implements SurfaceHolder.C
         try {
             // Set SurfaceView Parameters
             ViewGroup.LayoutParams lp = getLayoutParams();
-            Camera.Size bestPreviewSize = CameraManager.getInstance().getPreviewSize();
+            Camera.Size bestPreviewSize = cameraManager.getPreviewSize();
             lp.width = bestPreviewSize.width;
             lp.height = bestPreviewSize.height;
             setLayoutParams(lp);
@@ -83,7 +86,7 @@ public class CameraPreviewSurface extends SurfaceView implements SurfaceHolder.C
                     getLayoutParams().height+" w"+getLayoutParams().width);
 
             // Start Preview
-            CameraManager.getInstance().startPreview(getHolder());
+            cameraManager.startPreview(getHolder());
             Log.d(LOG_TAG, "Preview Started");
 
         } catch(CameraNotReadyException e){
@@ -103,10 +106,10 @@ public class CameraPreviewSurface extends SurfaceView implements SurfaceHolder.C
 
         // Take the picture
         Log.d(LOG_TAG, "Now shooting the picture...");
-        CameraManager.getInstance().shootPicture();
+        RootManager.getInstance().getCameraManager().shootPicture();
 
         // Setup the next wakeup and quit everything
-        TriggersManager.getInstance().setupShootingAlarm(parentActivity);
+        RootManager.getInstance().getTakePictureTriggersManager().setupNextAlarm(parentActivity);
 
         Log.d(LOG_TAG, "Surface destroyed");
     }
@@ -120,7 +123,7 @@ public class CameraPreviewSurface extends SurfaceView implements SurfaceHolder.C
         // Setup some placeholder to highlight how the camera is down
         // TODO Upload fake "CAMERA OFFLINE" pics in case the camera is down
 
-        if(!CameraManager.getInstance().isCameraFailing()) {
+        if(!RootManager.getInstance().getCameraManager().isCameraFailing()) {
             super.onDraw(canvas);
         } else {
             canvas.drawColor(Color.WHITE);
