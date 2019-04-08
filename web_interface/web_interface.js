@@ -23,8 +23,8 @@ function populate_web_interface(){
       
     html_regular_field = `
                 <div class="form-group row">
-                    <label for="field_{{name}}" class="col-sm-2 col-form-label">{{fullName}}</label>
-                    <div class="col-sm-10">
+                    <label for="field_{{name}}" class="col-sm-3 col-form-label">{{fullName}}</label>
+                    <div class="col-sm-9">
                         <div class="input-group">
                             <input type="text" class="form-control" id="field_{{name}}" aria-describedby="field_{{name}}_desc" placeholder="{{defaultValue}}" value="{{value}}">
                             <div class="input-group-append">
@@ -41,7 +41,6 @@ function populate_web_interface(){
 }
 
 
-
 function render_template(data, html_outer_template, html_inner_template){
     var final_html = "";
     
@@ -54,8 +53,12 @@ function render_template(data, html_outer_template, html_inner_template){
       }
       
       content_html = "";
+      console.log(data[key]["value"]);
       // Now process the inner fields
       for(var field in data[key]["value"]){
+        console.log(key, field);
+      
+        if(!field.startsWith("@")){
           field_html = html_inner_template;
           field_html = field_html.split("{{name}}").join(field);
           
@@ -63,11 +66,15 @@ function render_template(data, html_outer_template, html_inner_template){
             field_html = field_html.split("{{"+subfield+"}}").join(data[key]["value"][field][subfield]);
           }
           content_html += field_html;
+        }
       }
       block_html = block_html.split("{{content}}").join(content_html);
       
       final_html += block_html;
     }
+    
+    // Now clean up for all the fields which weren't found and replace with empty string
+    final_html = final_html.replace(/\{\{[\s\S]*?\}\}/g, "");
                    
     return final_html;
 }

@@ -65,7 +65,7 @@ public abstract class StorageManager {
                         "If false, it puts it at the end of it. IGNORED IF THE TIMESTAMP IS DISABLED",
                 null, null, Arrays.asList(Boolean.TRUE, Boolean.FALSE));
 
-        // FIXME This field will have no JavaScript validation!!!
+        // FIXME add regex validation in the allowedValues field
         timestampFormatString = new SerializableSetting<>(String.class,
                 "Timestamp Format", "", "", null,
                 "Format string for the timestamp (i.e. YYYY/MM/DD hh:mm:ss). If empty, a " +

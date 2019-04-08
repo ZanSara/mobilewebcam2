@@ -15,8 +15,6 @@ import java.util.List;
  * Applies image-specific settings, like scaling & cropping, post-processing, color alteration,
  * imprints. NOT RESPONSIBLE FOR STORING THE PICTURE IN THE FILESYSTEM.
  */
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.WRAPPER_OBJECT)
-@JsonTypeName("ImageManager")
 public class ImageManager {
 
     /**
@@ -86,7 +84,7 @@ public class ImageManager {
     }
 
     /**
-     * List of all the extensione an image can have.
+     * List of all the extension an image can have.
      */
     public enum ImageExtension {
         JPG(".jpg"),

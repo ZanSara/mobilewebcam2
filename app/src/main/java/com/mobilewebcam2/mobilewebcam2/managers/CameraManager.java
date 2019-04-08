@@ -62,7 +62,7 @@ public class CameraManager {
     protected CameraManager() {
         this.cameraId = new SerializableSetting<>(Integer.class, "Camera ID", 0, 0, null,
                 "ID of the camera to use. In most phones, 0 means back camera, and 1 means front "+
-                "camera. Check for your phone model if this does not hold, of if your phone has"+
+                "camera. Check for your phone model if this does not hold, of if your phone has "+
                 "more than 2 cameras.", Integer.MAX_VALUE, 0, null);
 
         this.previewMargin = new SerializableSetting<>(Double.class, "Preview Margin", 10.0, 10.0,
