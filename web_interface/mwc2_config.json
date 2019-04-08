@@ -1,3 +1,4 @@
+var mwc2config = `
 {
   "cameraManager" : {
     "className" : "com.mobilewebcam2.mobilewebcam2.managers.CameraManager",
@@ -84,7 +85,7 @@
   },
   "logStorageManager" : {
     "className" : "com.mobilewebcam2.mobilewebcam2.managers.StorageManager",
-    "fullName" : "Picture Storage Settings",
+    "fullName" : "Logs Storage Settings",
     "value" : {
       "@type" : "Local Storage (Save on disk)",
       "addTimestamp" : {
@@ -166,7 +167,7 @@
   },
   "takePictureTriggersManager" : {
     "className" : "com.mobilewebcam2.mobilewebcam2.managers.TriggersManager",
-    "fullName" : "Picture Storage Settings",
+    "fullName" : "Picture Triggers Settings",
     "value" : {
       "nextAlarmInterval" : {
         "className" : "java.lang.Long",
@@ -182,4 +183,5 @@
     "description" : "When to take pictures and when to not do it (at night, in low battery conditions, etc...)"
   },
   "Settings File Path" : "/sdcard/"
-}
+} 
+`

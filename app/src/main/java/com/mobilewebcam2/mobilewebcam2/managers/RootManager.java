@@ -66,11 +66,11 @@ public class RootManager {
                 "Where to store the pictures shot: on the device, on a server, etc...");
 
         logStorageManager = new SerializableSetting<>( StorageManager.class,
-                "Picture Storage Settings", new LocalStorageManager(),
+                "Logs Storage Settings", new LocalStorageManager(),
                 "Where to store the logs of the application: on the device, on a server, etc...");
 
         takePictureTriggersManager = new SerializableSetting<>( TriggersManager.class,
-                "Picture Storage Settings", new TriggersManager(),
+                "Picture Triggers Settings", new TriggersManager(),
                 "When to take pictures and when to not do it (at night, in low battery conditions, etc...)");
         //setManager = new SettingsManager();
 
@@ -183,6 +183,9 @@ public class RootManager {
 
     /**
      * Serializes the internal settings of the application.
+     *
+     * REMEMBER TO PREPEND var mwc2config = ` AND TO APPEND `
+     *
      * FIXME this one should not be needed!
      */
     private String writeConfigFile(Object manager) {

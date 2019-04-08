@@ -11,6 +11,10 @@
     <!-- Bootstrap core CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
+    <!-- Reads JSON and populates the page -->
+    <script type="text/javascript" src="mwc2_config.json"></script>
+    <script type="text/javascript" src="web_interface.js"></script>
+
     <style>
         .bd-placeholder-img {
             font-size: 1.125rem;
@@ -37,7 +41,8 @@
 
     </style>
   </head>
-  <body>
+  <body onload="populate_web_interface();">
+  
     <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
       <a class="navbar-brand" href="#"> <img src="favicon.png" style="padding-right:5px;"/> Mobile Webcam 2</a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar_items" aria-controls="navbar_items" aria-expanded="false" aria-label="Toggle navigation">
@@ -64,19 +69,22 @@
 
     <main role="main" class="container">
     
+    
         <h1>Settings Panel</h1>
         <p class="lead">Here you can find all the remotely configurable settings of the Mobile Webcam 2 Android app.<br/>
         NOTE: All fields are required. If you don't know how to fill them up, just type the default value suggested as a placeholder.</p>
         <hr/>
 
-        <div id="accordion"><form>
+        
+        <form>
+        <div id="accordion">
 
           <div class="card">
             <div class="card-header" id="heading1">
               <h5 class="mb-0">
-                <button class="btn btn-link" data-toggle="collapse" data-target="#collapse1" aria-expanded="false" aria-controls="collapse1">
+                <a class="btn btn-link" data-toggle="collapse" data-target="#collapse1" aria-expanded="false" aria-controls="collapse1">
                   Empty Block
-                </button>
+                </a>
               </h5>
             </div>
             <div id="collapse1" class="collapse" aria-labelledby="heading1" data-parent="#accordion">
@@ -119,7 +127,8 @@
             </div>
           </div>
 
-        </form></div>
+        </div>
+        </form>
 
     </main><!-- /.container -->
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
