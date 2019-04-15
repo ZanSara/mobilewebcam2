@@ -438,10 +438,10 @@ public class CameraManager {
     @Override
     public String toString(){
         String repr = "";
-        repr += "\t\tCamera ID: " + cameraId.getValue() + "\n";
-        repr += "\t\tPreview Margin: " + previewMargin.getValue() + "%\n";
-        repr += "\t\tCamera Opening Retry Time: " + retryTime.getValue() + "s\n";
-        repr += "\t\tAfter Shooting Waiting Time: " + afterShootingWaitingTime.getValue() + "ms\n";
+        repr += cameraId;
+        repr += previewMargin;
+        repr += retryTime;
+        repr += afterShootingWaitingTime;
         return repr;
     }
 

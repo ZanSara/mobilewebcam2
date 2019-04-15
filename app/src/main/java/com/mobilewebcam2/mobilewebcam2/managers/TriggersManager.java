@@ -70,7 +70,7 @@ public class TriggersManager {
     @Override
     public String toString(){
         String repr = "";
-        repr += "\t\tTime to the next alarm: " + nextAlarmInterval.getValue() + "sec.\n";
+        repr += nextAlarmInterval;
 
         return repr;
     }

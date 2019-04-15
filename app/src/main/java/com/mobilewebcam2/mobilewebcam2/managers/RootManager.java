@@ -36,12 +36,7 @@ public class RootManager {
     private final SerializableSetting<StorageManager> pictureStorageManager;
     private final SerializableSetting<StorageManager> logStorageManager;
     private final SerializableSetting<TriggersManager> takePictureTriggersManager;
-    //private final SettingsManager setManager;
-
-    // FIXME it may merge with the above
-    @JsonProperty("Settings File Path")
-    private final String settingsFilePath;
-
+    private final SerializableSetting<SettingsManager> generalSettingsManager;
 
     @JsonIgnore
     private transient ObjectMapper objectMapper;
@@ -50,29 +45,36 @@ public class RootManager {
 
 
     private RootManager() {
-        settingsFilePath = "/sdcard/";
         imageManager = new SerializableSetting<>( ImageManager.class,
                 "Image Settings", new ImageManager(),
                 "Post-processing options, like brightness/contrast corrections, "+
-                        "size of the picture, image format, resolution, imprints, etc...");
+                        "size of the picture, image format, resolution, imprints, etc...", "image");
 
         cameraManager = new SerializableSetting<>( CameraManager.class,
                 "Camera Settings", new CameraManager(),
                 "Settings of the camera, like which camera to use "+
-                        "(front or back), zoom, flash, etc...");
+                        "(front or back), zoom, flash, etc...", "camera");
 
         pictureStorageManager = new SerializableSetting<>( StorageManager.class,
-                "Picture Storage Settings", new LocalStorageManager(),
-                "Where to store the pictures shot: on the device, on a server, etc...");
+                "Storage Settings", new LocalStorageManager(),
+                "Where to store the pictures shot: on the device, on a server, etc...",
+                "cloud-upload-alt");
 
         logStorageManager = new SerializableSetting<>( StorageManager.class,
-                "Logs Storage Settings", new LocalStorageManager(),
-                "Where to store the logs of the application: on the device, on a server, etc...");
+                "Log Settings", new LocalStorageManager(),
+                "Where to store the logs of the application: on the device, on a server, etc...",
+                "file-contract");
 
         takePictureTriggersManager = new SerializableSetting<>( TriggersManager.class,
-                "Picture Triggers Settings", new TriggersManager(),
-                "When to take pictures and when to not do it (at night, in low battery conditions, etc...)");
-        //setManager = new SettingsManager();
+                "Shooting Settings", new TriggersManager(),
+                "When to take pictures and when to not do it (at night, in low battery conditions, etc...)",
+                "stopwatch");
+
+        generalSettingsManager = new SerializableSetting<>( SettingsManager.class,
+                "General Settings", new SettingsManager(),
+                "Various minor configuration regarding the application overall.",
+                "wrench");
+
 
         /*
          * Setup Jackson's ObjectMapper
@@ -109,10 +111,6 @@ public class RootManager {
     }
 
 
-    public String getSettingsFilePath() {
-        return new String(settingsFilePath);
-    }
-
     public ImageManager getImageManager(){
         return imageManager.getValue();
     }
@@ -133,7 +131,7 @@ public class RootManager {
         return takePictureTriggersManager.getValue();
     }
 
-    //public SettingsManager getSettingsManager() { return setManager; }
+    public SettingsManager getSettingsManager() { return generalSettingsManager.getValue(); }
 
     /**
      * Reads settings file into a string and instantiates the hierarchy of RootSettings objects.
@@ -144,7 +142,7 @@ public class RootManager {
      */
     public RootManager readSettingsFile(){
 
-        File file = new File(getSettingsFilePath(),"mbw2_config.json");
+        File file = new File(getSettingsManager().getConfigFilePath());
         StringBuilder text = new StringBuilder();
         try {
             BufferedReader br = new BufferedReader(new FileReader(file));
@@ -158,7 +156,7 @@ public class RootManager {
             return readSettingsJSON(text.toString());
 
         } catch (FileNotFoundException e) {
-            Log.e(LOG_TAG, "Configuration file not found at "+ getSettingsFilePath() +"!");
+            Log.e(LOG_TAG, "Configuration file not found at "+ getSettingsManager().getConfigFilePath() +"!");
             Log.v(LOG_TAG, "Exact exception is :", e);
 
         } catch (IOException e) {
@@ -208,8 +206,7 @@ public class RootManager {
         repr += "\n\tPictures Storage Settings:\n" + getPictureStorageManager();
         repr += "\n\tLogs Storage Settings:\n" + getLogStorageManager();
         repr += "\n\tPicture Triggers Settings:\n" + getTakePictureTriggersManager();
-        //repr += "\n\tGeneral Settings:\n" + getSettingsManager();
-        repr += "\n\tSettings File Path: " + getSettingsFilePath() + "\n";
+        repr += "\n\tGeneral Settings:\n" + getSettingsManager();
         repr += "******\n";
         return repr;
     }

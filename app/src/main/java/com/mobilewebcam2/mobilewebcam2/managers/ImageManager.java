@@ -4,8 +4,6 @@ import android.graphics.Bitmap;
 import android.util.Log;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.mobilewebcam2.mobilewebcam2.SerializableSetting;
 
 import java.util.ArrayList;
@@ -77,9 +75,9 @@ public class ImageManager {
     @Override
     public String toString(){
         String repr =  "";
-        repr += "\t\tHeight: " + height.getValue() + "\n";
-        repr += "\t\tWidth: " + width.getValue() + "\n";
-        repr += "\t\tFile Type: " + fileType.getValue() + "\n";
+        repr += height;
+        repr += width;
+        repr += fileType;
         return repr;
     }
 

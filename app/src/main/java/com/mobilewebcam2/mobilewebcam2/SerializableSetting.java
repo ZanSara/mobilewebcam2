@@ -38,6 +38,7 @@ public class SerializableSetting<T> {
     private T upperBound;
     private T lowerBound;
     private List<T> allowedValues;
+    private String faIconName;
 
     public SerializableSetting(Class<T> className,
                                String fullName,
@@ -47,11 +48,12 @@ public class SerializableSetting<T> {
                                String description,
                                T upperBound,
                                T lowerBound,
-                               List<T> allowedValues){
+                               List<T> allowedValues,
+                               String faIconName){
 
         if(upperBound != null && lowerBound != null &&
                 upperBound instanceof Comparable && lowerBound instanceof Comparable &&
-                ((Comparable)upperBound).compareTo( ((Comparable)lowerBound) ) < 0 ){
+                ((Comparable)upperBound).compareTo( (lowerBound) ) < 0 ){
                 throw new IllegalArgumentException(LOG_TAG+": upperBound is higher than lowerBound");
             }
         this.className = className;
@@ -63,10 +65,23 @@ public class SerializableSetting<T> {
         this.upperBound = upperBound;
         this.lowerBound = lowerBound;
         this.allowedValues = allowedValues;
+        this.faIconName = faIconName;
     }
 
-    public SerializableSetting(Class<T> className, String fullName, T value, String description){
-        this(className, fullName, value, null, null, description, null, null, null);
+    public SerializableSetting(Class<T> className,
+                               String fullName,
+                               T value,
+                               T defaultValue,
+                               String unit,
+                               String description,
+                               T upperBound,
+                               T lowerBound,
+                               List<T> allowedValues ){
+            this(className, fullName, value, defaultValue, unit, description, upperBound, lowerBound, allowedValues, null);
+    }
+
+    public SerializableSetting(Class<T> className, String fullName, T value, String description, String faIconName){
+        this(className, fullName, value, null, null, description, null, null, null, faIconName);
     }
 
     public T getValue() {
@@ -84,7 +99,8 @@ public class SerializableSetting<T> {
             @JsonProperty("description") String description,
             @JsonProperty("upperBound") T upperBound,
             @JsonProperty("lowerBound")T lowerBound,
-            @JsonProperty("allowedValues")JsonNode allowedValues ) {
+            @JsonProperty("allowedValues")JsonNode allowedValues,
+            @JsonProperty("faIconName") String faIconName ) {
 
         ObjectMapper om = new ObjectMapper();
         ObjectReader or = om.reader();
@@ -99,7 +115,8 @@ public class SerializableSetting<T> {
                     description,
                     upperBound,
                     lowerBound,
-                    or.forType(valuesType).readValue(allowedValues));
+                    or.forType(valuesType).readValue(allowedValues),
+                    faIconName);
         } catch (JsonProcessingException e){
             Log.e(LOG_TAG, "JsonProcessingException while deserializing config.json", e);
             return null;
@@ -107,5 +124,13 @@ public class SerializableSetting<T> {
             Log.e(LOG_TAG, "IOException while deserializing config.json", e);
             return null;
         }
+    }
+
+    @Override
+    public String toString(){
+        if(unit == null){
+            return "\t\t"+fullName+ ":   "+ value + "\n";
+        }
+        return "\t\t"+fullName+ ":   "+ value + " "+ unit + "\n";
     }
 }

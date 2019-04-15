@@ -42,7 +42,7 @@ public class LocalStorageManager extends StorageManager {
 
         // FIXME point this to the phone gallery or something similar
         // FIXME add regex validation in the allowedValues field
-        path = new SerializableSetting<>(String.class, "Picture Folder",
+        path = new SerializableSetting<>(String.class, "Folder Name",
                 "mobilewebcam2_folder", "mobilewebcam2_folder", "",
                 "Path to the folder to save the files in.",
                 null, null, null);
@@ -74,8 +74,8 @@ public class LocalStorageManager extends StorageManager {
     @Override
     public String toString(){
         String repr = super.toString();
-        repr += "\t\tSave on external storage? "+ externalStorage+"\n";
-        repr += "\t\tPath to save pictures in: "+ path+"\n";
+        repr += externalStorage;
+        repr += path;
         return repr;
     }
 

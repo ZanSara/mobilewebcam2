@@ -54,14 +54,14 @@ public abstract class StorageManager {
                 STORAGE_LOCAL, STORAGE_LOCAL, null, "Where to store the files",
                 null, null, allowedStorageTypeValues());
 
-        addTimestamp = new SerializableSetting<>(Boolean.class, "Add the timestamp to the picture name",
-                Boolean.TRUE, Boolean.TRUE, null, "If true, adds the timestamp to the picture name.",
+        addTimestamp = new SerializableSetting<>(Boolean.class, "Add the timestamp to the file name",
+                Boolean.TRUE, Boolean.TRUE, null, "If true, adds the timestamp to the file name.",
                 null, null, Arrays.asList(Boolean.TRUE, Boolean.FALSE));
 
         timestampAtTheBeginning = new SerializableSetting<>(Boolean.class,
-                "Put the timestamp at the beginning of the picture name",
+                "Put the timestamp at the beginning of the file name",
                 Boolean.TRUE, Boolean.TRUE, null,
-                "If true, adds the timestamp to the beginning of the picture name. " +
+                "If true, adds the timestamp to the beginning of the file name. " +
                         "If false, it puts it at the end of it. IGNORED IF THE TIMESTAMP IS DISABLED",
                 null, null, Arrays.asList(Boolean.TRUE, Boolean.FALSE));
 
@@ -89,11 +89,10 @@ public abstract class StorageManager {
     @Override
     public String toString() {
         String repr = "";
-        repr += "\t\tStorage Type: " + storageTypeName.getValue() + "\n";
-        repr += "\t\tAdd timestamp to picture name? " + addTimestamp.getValue() + "\n";
-        repr += "\t\tAdd timestamp at the beginning of the picture name (if false, at the end)? "
-                + timestampAtTheBeginning.getValue() + "\n";
-        repr += "\t\tTimestamp format string: " + timestampFormatString.getValue() + "\n";
+        repr += storageTypeName;
+        repr += addTimestamp;
+        repr +=timestampAtTheBeginning;
+        repr += timestampFormatString;
 
         return repr;
     }
