@@ -15,10 +15,11 @@ public final class SettingsManager { // extends MWCSettings
 
     protected SettingsManager() {
         // FIXME add validation with regex for this field
-        configFilePath = new SerializableSetting<>(String.class, "Settings File Path",
+        configFilePath = new SerializableSetting<>(String.class, 10, "Settings File Path",
                 "/sdcard/mwc2_config.json", "/mobilewebcam2/config.json", null,
                 "Where the app will download and store the latest copy of this configuration file.",
-                null, null, null);
+                null, null, null,
+                SerializableSetting.SettingType.REGULAR);
     }
 
     public String getConfigFilePath(){

@@ -50,27 +50,31 @@ public abstract class StorageManager {
             throw new IllegalArgumentException(LOG_TAG+": StorageManager does not have any subclass named "+storageType);
         }
 
-        storageTypeName = new SerializableSetting<>(String.class, "Storage Type",
+        storageTypeName = new SerializableSetting<>(String.class, 10, "Storage Type",
                 STORAGE_LOCAL, STORAGE_LOCAL, null, "Where to store the files",
-                null, null, allowedStorageTypeValues());
+                null, null, allowedStorageTypeValues(),
+                SerializableSetting.SettingType.REGULAR);
 
-        addTimestamp = new SerializableSetting<>(Boolean.class, "Add the timestamp to the file name",
+        addTimestamp = new SerializableSetting<>(Boolean.class, 20, "Add the timestamp to the file name",
                 Boolean.TRUE, Boolean.TRUE, null, "If true, adds the timestamp to the file name.",
-                null, null, Arrays.asList(Boolean.TRUE, Boolean.FALSE));
+                null, null, Arrays.asList(Boolean.TRUE, Boolean.FALSE),
+                SerializableSetting.SettingType.REGULAR);
 
-        timestampAtTheBeginning = new SerializableSetting<>(Boolean.class,
+        timestampAtTheBeginning = new SerializableSetting<>(Boolean.class, 22,
                 "Put the timestamp at the beginning of the file name",
                 Boolean.TRUE, Boolean.TRUE, null,
                 "If true, adds the timestamp to the beginning of the file name. " +
                         "If false, it puts it at the end of it. IGNORED IF THE TIMESTAMP IS DISABLED",
-                null, null, Arrays.asList(Boolean.TRUE, Boolean.FALSE));
+                null, null, Arrays.asList(Boolean.TRUE, Boolean.FALSE),
+                SerializableSetting.SettingType.REGULAR);
 
         // FIXME add regex validation in the allowedValues field
-        timestampFormatString = new SerializableSetting<>(String.class,
+        timestampFormatString = new SerializableSetting<>(String.class, 24,
                 "Timestamp Format", "", "", null,
                 "Format string for the timestamp (i.e. YYYY/MM/DD hh:mm:ss). If empty, a " +
                         "regular UNIX timestamp is used.",
-                null, null, null);
+                null, null, null,
+                SerializableSetting.SettingType.REGULAR);
     }
 
 

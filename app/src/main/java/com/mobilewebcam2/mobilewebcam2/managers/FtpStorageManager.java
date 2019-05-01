@@ -26,6 +26,7 @@ public class FtpStorageManager extends StorageManager {
     private static final String LOG_TAG = "FtpStorageManager";
 
     private final SerializableSetting<String> serverAddress;
+    private final SerializableSetting<String> serverPort;
 
 
     protected FtpStorageManager(){
@@ -33,10 +34,17 @@ public class FtpStorageManager extends StorageManager {
 
         // FIXME point this to the phone gallery or something similar
         // FIXME add regex validation in the allowedValues field
-        serverAddress = new SerializableSetting<>(String.class, "Server Address",
+        serverAddress = new SerializableSetting<>(String.class, 110, "Server Address",
                 "127.0.0.1", "127.0.0.1", "",
                 "IP address of the FTP server where the files will be uploaded",
-                null, null, null);
+                null, null, null,
+                SerializableSetting.SettingType.REGULAR);
+
+        serverPort = new SerializableSetting<>(String.class, 120, "Server Port",
+                "8000", "8000", "",
+                "ID of the FTP port of the server where the files will be uploaded",
+                null, null, null,
+                SerializableSetting.SettingType.REGULAR);
 
     }
 

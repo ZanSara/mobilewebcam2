@@ -45,32 +45,32 @@ public class RootManager {
 
 
     private RootManager() {
-        imageManager = new SerializableSetting<>( ImageManager.class,
-                "Image Settings", new ImageManager(),
-                "Post-processing options, like brightness/contrast corrections, "+
-                        "size of the picture, image format, resolution, imprints, etc...", "image");
-
-        cameraManager = new SerializableSetting<>( CameraManager.class,
+        cameraManager = new SerializableSetting<>( CameraManager.class, 10,
                 "Camera Settings", new CameraManager(),
                 "Settings of the camera, like which camera to use "+
                         "(front or back), zoom, flash, etc...", "camera");
 
-        pictureStorageManager = new SerializableSetting<>( StorageManager.class,
-                "Storage Settings", new LocalStorageManager(),
-                "Where to store the pictures shot: on the device, on a server, etc...",
-                "cloud-upload-alt");
+        imageManager = new SerializableSetting<>( ImageManager.class, 20,
+                "Image Settings", new ImageManager(),
+                "Post-processing options, like brightness/contrast corrections, "+
+                        "size of the picture, image format, resolution, imprints, etc...", "image");
 
-        logStorageManager = new SerializableSetting<>( StorageManager.class,
-                "Log Settings", new LocalStorageManager(),
-                "Where to store the logs of the application: on the device, on a server, etc...",
-                "file-contract");
-
-        takePictureTriggersManager = new SerializableSetting<>( TriggersManager.class,
+        takePictureTriggersManager = new SerializableSetting<>( TriggersManager.class, 30,
                 "Shooting Settings", new TriggersManager(),
                 "When to take pictures and when to not do it (at night, in low battery conditions, etc...)",
                 "stopwatch");
 
-        generalSettingsManager = new SerializableSetting<>( SettingsManager.class,
+        pictureStorageManager = new SerializableSetting<>( StorageManager.class, 40,
+                "Storage Settings", new LocalStorageManager(),
+                "Where to store the pictures shot: on the device, on a server, etc...",
+                "cloud-upload-alt");
+
+        logStorageManager = new SerializableSetting<>( StorageManager.class, 50,
+                "Log Settings", new LocalStorageManager(),
+                "Where to store the logs of the application: on the device, on a server, etc...",
+                "file-contract");
+
+        generalSettingsManager = new SerializableSetting<>( SettingsManager.class, 60,
                 "General Settings", new SettingsManager(),
                 "Various minor configuration regarding the application overall.",
                 "wrench");

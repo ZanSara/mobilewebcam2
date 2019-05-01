@@ -27,13 +27,19 @@ public class ImageManager {
 
 
     protected ImageManager() {
-        this.height = new SerializableSetting<>(Integer.class, "Image Height", 480, 480, "px",
-                "Height of the picture", Integer.MAX_VALUE, 0, null);
-        this.width = new SerializableSetting<>(Integer.class, "Image Width", 640, 640, "px",
-                "Width of the picture", Integer.MAX_VALUE, 0, null);
-        this.fileType = new SerializableSetting<>(ImageExtension.class, "Image Format", ImageExtension.JPG, ImageExtension.JPG,
+        this.height = new SerializableSetting<>(Integer.class, 10, "Image Height",
+                480, 480, "px",
+                "Height of the picture", Integer.MAX_VALUE, 0, null,
+                SerializableSetting.SettingType.REGULAR);
+        this.width = new SerializableSetting<>(Integer.class, 11, "Image Width",
+                640, 640, "px",
+                "Width of the picture", Integer.MAX_VALUE, 0, null,
+                SerializableSetting.SettingType.REGULAR);
+        this.fileType = new SerializableSetting<>(ImageExtension.class, 20, "Image Format",
+                ImageExtension.JPG, ImageExtension.JPG,
                 null,"Format of the picture (its extensions, like image.png or image.jpg)",
-                null, null, ImageExtension.allowedValues());
+                null, null, ImageExtension.allowedValues(),
+                SerializableSetting.SettingType.REGULAR);
                 /**/
     }
 

@@ -33,9 +33,10 @@ public class TriggersManager {
 
 
     protected TriggersManager() {
-        this.nextAlarmInterval = new SerializableSetting<>(Long.class, "Interval",
+        this.nextAlarmInterval = new SerializableSetting<>(Long.class, 10, "Interval",
                 10l, 10l, "seconds", "How long to wait before the following repetition.",
-                Long.MAX_VALUE, 0l, null);
+                Long.MAX_VALUE, 0l, null,
+                SerializableSetting.SettingType.REGULAR);
     }
 
 

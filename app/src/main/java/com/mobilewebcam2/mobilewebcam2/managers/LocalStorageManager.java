@@ -34,18 +34,20 @@ public class LocalStorageManager extends StorageManager {
     protected LocalStorageManager(){
         super(StorageManager.STORAGE_LOCAL);
 
-        externalStorage = new SerializableSetting<>(Boolean.class, "Save on external storage?",
+        externalStorage = new SerializableSetting<>(Boolean.class, 110, "Save on external storage?",
                 true, true, "",
                 "Whether to use the external storage or not. Yes = save on "+
                 "the SD, No = save on the internal memory", null, null,
-                Arrays.asList(Boolean.TRUE, Boolean.FALSE));
+                Arrays.asList(Boolean.TRUE, Boolean.FALSE),
+                SerializableSetting.SettingType.REGULAR);
 
         // FIXME point this to the phone gallery or something similar
         // FIXME add regex validation in the allowedValues field
-        path = new SerializableSetting<>(String.class, "Folder Name",
+        path = new SerializableSetting<>(String.class, 120,"Folder Name",
                 "mobilewebcam2_folder", "mobilewebcam2_folder", "",
                 "Path to the folder to save the files in.",
-                null, null, null);
+                null, null, null,
+                SerializableSetting.SettingType.REGULAR);
 
     }
 

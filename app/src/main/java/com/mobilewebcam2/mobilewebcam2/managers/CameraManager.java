@@ -11,7 +11,6 @@ import android.view.SurfaceHolder;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.mobilewebcam2.mobilewebcam2.SerializableSetting;
 import com.mobilewebcam2.mobilewebcam2.exceptions.CameraNotReadyException;
 
@@ -60,26 +59,27 @@ public class CameraManager {
      * Opens the camera to try assessing its orientation, and sets up the picture callback.
      */
     protected CameraManager() {
-        this.cameraId = new SerializableSetting<>(Integer.class, "Camera ID", 0, 0, null,
+        this.cameraId = new SerializableSetting<>(Integer.class, 1, "Camera ID", 0, 0, null,
                 "ID of the camera to use. In most phones, 0 means back camera, and 1 means front "+
                 "camera. Check for your phone model if this does not hold, of if your phone has "+
-                "more than 2 cameras.", Integer.MAX_VALUE, 0, null);
+                "more than 2 cameras.", Integer.MAX_VALUE, 0, null, SerializableSetting.SettingType.REGULAR);
 
-        this.previewMargin = new SerializableSetting<>(Double.class, "Preview Margin", 10.0, 10.0,
+        this.previewMargin = new SerializableSetting<>(Double.class, 100, "Preview Margin", 10.0, 10.0,
                 "%", "Margin between the phone screen size and the preview. Does not affect the "+
                 "picture take in any way: useful only for the user to see the preview better.",
-                100.0, 0.0, null);
+                100.0, 0.0, null, SerializableSetting.SettingType.ADVANCED);
 
-        this.retryTime = new SerializableSetting<>(Long.class, "After Failure Retry Time", 0l, 0l,
+        this.retryTime = new SerializableSetting<>(Long.class, 101,"After Failure Retry Time", 0l, 0l,
                 "milliseconds", "After the camera has failed to open or to shoot "+
                 "a picture, time to wait before retrying to open the camera. Set 0 to never retry.",
-                Long.MAX_VALUE, 0l, null);
+                Long.MAX_VALUE, 0l, null, SerializableSetting.SettingType.ADVANCED);
 
-        this.afterShootingWaitingTime = new SerializableSetting<>(Integer.class,
+        this.afterShootingWaitingTime = new SerializableSetting<>(Integer.class, 102,
                 "After Shooting Waiting Time", 2000, 2000, "milliseconds",
-                "Time to wait after the camera has sot the picture. Highly device depended. "+
+                "Time to wait after the camera has shot the picture. Highly device depended. "+
                 "It should never be higher than the interval between shooting pictures. The default "+
-                "value is usually good, change this at your own risk.", Integer.MAX_VALUE, 0, null);
+                "value is usually good, change this at your own risk.", Integer.MAX_VALUE, 0, null,
+                SerializableSetting.SettingType.ADVANCED);
 
         // Set what to do once the picture is taken
         pictureCallback = new PictureCallback() {

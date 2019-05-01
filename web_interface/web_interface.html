@@ -52,7 +52,7 @@
             background-color:#fff;
         }
         .footer {
-            padding: 2rem 0 2rem 0;
+            padding: 2rem;
             color: #999;
             text-align: center;
             background-color: #eee;
@@ -78,7 +78,13 @@
         .show-collapse {
             display: none;
         }
-            
+          
+        .menu-page {
+             padding: 1em 3em;
+             
+             -webkit-transition: width 1s; /* Safari */
+             transition: width 1s;
+        }  
         
          @media (max-width: 768px) {
             /* Responsive fonts */
@@ -126,14 +132,22 @@
             .nav-item .btn {
                 font-size:
             }
+            
+            .menu-page {
+                 padding: 1em;
+             
+                 -webkit-transition: width 1s; /* Safari */
+                 transition: width 1s;
+            }  
+
         }
 
     </style>
   </head>
-  <body onload="populate_web_interface();">
+  <body onload="populate_web_interface();"> <!-- -->
   
     <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
-      <a class="navbar-brand" href="#"> <img src="favicon.png" style="padding-right:5px;"/>
+      <a class="navbar-brand" href="#" onclick="backToHome();"> <img src="favicon.png" style="padding-right:5px;"/>
         <span class="hide-collapse"> Mobile Webcam 2</span> 
         <span class="show-collapse"> MWC 2</span> 
       </a>
@@ -164,74 +178,35 @@
   
   
     
-    <main role="main" class="container">
+    <main role="main" class="container" >
     
-        <h1>Settings Panel</h1>
-        <p class="lead hide-collapse">Here you can find all the remotely configurable settings of the Mobile Webcam 2 Android app.<br/>
-        NOTE: All fields are required. If you don't know how to fill them up, just type the default value suggested as a placeholder.</p>
+        <form>
         
-        <div id="alert-success" style="display: none;" class="alert alert-success" role="alert">
-          Settings file saved successfully.
-        </div>
-        <div id="alert-error" style="display: none;" class="alert alert-danger" role="alert">
-          Could not save the settings file! Please report this bug <a href="https://github.com/ZanSara/mobilewebcam2/issues">here</a>. Thank you!
-        </div>
-        
-        <hr/>
-
-        <form id="mainform">
-        <div id="accordion">
-
-          <div class="card">
-            <div class="card-header" id="heading1">
-              <h5 class="mb-0">
-                <a class="btn btn-link" data-toggle="collapse" data-target="#collapse1" aria-expanded="false" aria-controls="collapse1">
-                  Empty Block
-                </a>
-              </h5>
+        <div id="row-div" class="row menu-page">
+            <div class="col-12">
+                <h1>Settings Panel</h1>
+                <p class="lead hide-collapse">Here you can find all the remotely configurable settings of the Mobile Webcam 2 Android app.<br/>
+                NOTE: All fields are required. If you don't know how to fill them up, just type the default value suggested as a placeholder.</p>
+                
+                <div id="alert-success" style="display: none;" class="alert alert-success" role="alert">
+                  Settings file saved successfully.
+                </div>
+                <div id="alert-error" style="display: none;" class="alert alert-danger" role="alert">
+                  Could not save the settings file! Please visit <a href="https://github.com/ZanSara/mobilewebcam2/issues">this page</a> to notify this error. Thank you!
+                </div>
             </div>
-            <div id="collapse1" class="collapse" aria-labelledby="heading1" data-parent="#accordion">
-              <div class="card-body">
-              
-                  <div class="form-group row">
-                    <label for="field1" class="col-sm-2 col-form-label">Field Name</label>
-                    <div class="col-sm-10">
-                        <div class="input-group">
-                            <input type="text" class="form-control" id="field1" aria-describedby="field1desc" placeholder="Default Field Value" value="Field Value">
-                            <div class="input-group-append">
-                              <div class="input-group-text">Field Unit</div>
-                            </div>
-                        </div>
-                        <small id="field1desc" class="form-text text-muted">Little field description</small>
-                    </div>
-                  </div>
-                  
-                  <div class="form-group row">
-                    <label for="field2" class="col-sm-2 col-form-label">Field Name</label>
-                    <div class="col-sm-10">
-                        <div class="input-group">
-                            <select class="form-control" id="field2"> 
-                            <!-- add multiple after select to have a multiple select field -->
-                              <option>1</option>
-                              <option>2</option>
-                              <option>3</option>
-                              <option>4</option>
-                              <option>5</option>
-                            </select>
-                            <div class="input-group-append">
-                              <div class="input-group-text">Field Unit</div>
-                            </div>
-                        </div>
-                        <small id="field2desc" class="form-text text-muted">Little field description</small>
-                    </div>
-                  </div>
-                  
-              </div>
-            </div>
-          </div>
-          
+            
+            <div id="menu_entries_placeholder"></div>
         </div>
         
+        <div id="menu_pages_placeholder" class="menu-page" style="display:none;">
+            <h1>This is a bug!!</h1>
+        </div>
+        
+        </form>
+       
+                
+        <!-- Toggle buttons script -->
         <script>
         $('.btn-group-toggle').click(function() {
           $(this).find('.btn').toggleClass('active');
@@ -244,8 +219,6 @@
 
         });
         </script>
-        
-        </form>
 
     </main><!-- /.container -->
     

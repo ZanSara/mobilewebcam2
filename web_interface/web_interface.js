@@ -1,25 +1,37 @@
+function navigateTo(pageName){
+    $("#row-div").hide();
+    $("#page-name-"+pageName).show();
+}
+
+function backToHome(){
+    $('.menu-page').hide();
+    $('#row-div').show();
+}
+
 
 function populate_web_interface(){
 
     data = JSON.parse(mwc2config);
-    console.log(data);
+    //console.log(data);
     
-    html_folding_card = `
-    <div class="card">
-        <div class="card-header" id="heading_{{name}}">
-          <a class="mb-0" data-toggle="collapse" data-target="#collapse_{{name}}" aria-expanded="false" aria-controls="collapse_{{name}}">
-                <h4 style="margin-bottom:0;"><span class="fa fa-{{faIconName}}" style="padding-right:5px;"aria-hidden="true"></span>    {{fullName}}</h4>
+    html_menu_entry = `
+            <div id="entry-name-{{name}}" class="menu-entry col-12 col-md-6">
+              <hr />
+              <a class="mb-0" onclick=navigateTo('{{name}}');>
+                <h4 style="margin-bottom:0.5em;">
+                    <span class="fa fa-{{faIconName}}" style="padding-right:20px;" aria-hidden="true"></span>{{fullName}}
+                </h4>
                 <small style="font-style: italic; color:#555555;">{{description}}</small>
-          </a>
-        </div>
-        <div id="collapse_{{name}}" class="collapse" aria-labelledby="heading_{{name}}" data-parent="#accordion">
-          <div class="card-body">
-          
-          {{content}}
-          
-          </div>
-        </div>
-      </div>`
+              </a>
+            </div>`
+    
+    html_menu_page = `
+    <div id="page-name-{{name}}" class="menu-page" style="display:none;">
+        <h3><span class="fa fa-{{faIconName}} hide-collapse" style="padding-right:0.5em;" aria-hidden="true"></span>{{fullName}}</h3>
+        <p style="font-style: italic; color:#555555;">{{description}}</p>
+        <hr />
+        {{content}}
+    </div>`
       
     html_form_field = `
                 <div class="form-group row">
@@ -49,20 +61,43 @@ function populate_web_interface(){
                                 <input type="radio" name="options" id="option_true" autocomplete="off">{{choice}}
                               </label>`
     
-    var final_html = "";
     
-    // First create the outer folding blocks
+    // First create the enu entries
+    var menu_final_html = "";
+    
+    // TODO Transform data into an array and then sort by position       data = data.sort(function(a, b) {return a.position - b.position});
+    
     for (var key in data) {
-      block_html = html_folding_card;
+      block_html = html_menu_entry;
       block_html = block_html.split("{{name}}").join(key);
       
       for(var subkey in data[key]){
         block_html = block_html.split("{{"+subkey+"}}").join(data[key][subkey]);
       }
+      // Add it to the html
+      menu_final_html += block_html;
+    } 
+    // Clean up for all the fields which weren't found and replace with empty string
+    menu_final_html = menu_final_html.replace(/\{\{[\s\S]*?\}\}/g, "");
+    
+    // Replace the generated HTML into the page
+    $("#menu_entries_placeholder").replaceWith( menu_final_html );
       
+      
+    // Do the same, adding a page for each entry 
+    var pages_final_html = "";
+    for (var key in data) {
+      
+      page_html = html_menu_page;
+      page_html = page_html.split("{{name}}").join(key);
+      
+      for(var subkey in data[key]){
+        page_html = page_html.split("{{"+subkey+"}}").join(data[key][subkey]);
+      }
+     
       content_html = "";
       
-      // Now add a block for each field
+      // Now add a page for each field
       for(var field in data[key]["value"]){
         
         if(!field.startsWith("@")){        
@@ -72,7 +107,7 @@ function populate_web_interface(){
             className = data[key]["value"][field]["className"];
           
             allowedValues = data[key]["value"][field]["allowedValues"];
-            console.log(field, allowedValues);
+            //console.log(field, allowedValues);
           
             if(allowedValues != undefined && allowedValues.length > 1){
                 // For multichoice fields we need an extra step: generating the choices
@@ -104,18 +139,18 @@ function populate_web_interface(){
             content_html += field_html;
         }
       }
-      block_html = block_html.split("{{content}}").join(content_html);
+      page_html = page_html.split("{{content}}").join(content_html);
       
-      final_html += block_html;
+      pages_final_html += page_html;
     }
     
     // Now clean up for all the fields which weren't found and replace with empty string
-    final_html = final_html.replace(/\{\{[\s\S]*?\}\}/g, "");
+    pages_final_html = pages_final_html.replace(/\{\{[\s\S]*?\}\}/g, "");
          
     
     
     // Replace the generated HTML into the page
-    document.getElementById("accordion").innerHTML = final_html;
+    $("#menu_pages_placeholder").replaceWith( pages_final_html );
 
 }
 
