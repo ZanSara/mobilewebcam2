@@ -40,7 +40,7 @@ public class SerializableSetting<T> {
     private T lowerBound;
     private List<T> allowedValues;
     private String faIconName;
-    private SettingType settingType;
+    private SettingCategory settingType;
 
     private SerializableSetting(Class<T> className,
                                int position,
@@ -53,7 +53,7 @@ public class SerializableSetting<T> {
                                T lowerBound,
                                List<T> allowedValues,
                                String faIconName,
-                               SettingType settingType){
+                               SettingCategory settingType){
 
         if(upperBound != null && lowerBound != null &&
                 upperBound instanceof Comparable && lowerBound instanceof Comparable &&
@@ -79,7 +79,7 @@ public class SerializableSetting<T> {
         this.faIconName = faIconName;
         if(settingType == null){
             Log.w(LOG_TAG, "'"+fullName+"' did not specify its settingType value. Setting it to Advanced.");
-            this.settingType = SettingType.ADVANCED;
+            this.settingType = SettingCategory.ADVANCED;
         } else {
             this.settingType = settingType;
         }
@@ -98,7 +98,7 @@ public class SerializableSetting<T> {
                                T upperBound,
                                T lowerBound,
                                List<T> allowedValues,
-                               SettingType settingType){
+                               SettingCategory settingType){
             this(className, position, fullName, value, defaultValue, unit, description, upperBound, lowerBound, allowedValues, null, settingType);
     }
 
@@ -107,14 +107,14 @@ public class SerializableSetting<T> {
      * FontAwesome icon. SettingType in this case defaults to Regular
      */
     public SerializableSetting(Class<T> className, int position, String fullName, T value, String description, String faIconName){
-        this(className, position, fullName, value, null, null, description, null, null, null, faIconName, SettingType.REGULAR);
+        this(className, position, fullName, value, null, null, description, null, null, null, faIconName, SettingCategory.REGULAR);
     }
 
     /**
      * Constructor for categories: does not specify any default / validation value, but requires a
      * FontAwesome icon. Can specify the setting type
      */
-    public SerializableSetting(Class<T> className, int position, String fullName, T value, String description, String faIconName, SettingType settingType){
+    public SerializableSetting(Class<T> className, int position, String fullName, T value, String description, String faIconName, SettingCategory settingType){
         this(className, position, fullName, value, null, null, description, null, null, null, faIconName, settingType);
     }
 
@@ -136,7 +136,7 @@ public class SerializableSetting<T> {
             @JsonProperty("lowerBound")T lowerBound,
             @JsonProperty("allowedValues")JsonNode allowedValues,
             @JsonProperty("faIconName") String faIconName,
-            @JsonProperty("settingType") SettingType settingType
+            @JsonProperty("settingType") SettingCategory settingType
             ) {
 
         ObjectMapper om = new ObjectMapper();
@@ -175,8 +175,13 @@ public class SerializableSetting<T> {
 
 
 
-    public enum SettingType {
-        REGULAR,
-        ADVANCED,
+    public enum SettingCategory {
+        REGULAR(""),
+        ADVANCED("Advanced");
+
+        private String name;
+        private SettingCategory(String name){
+            this.name = name;
+        }
     }
 }

@@ -3,10 +3,10 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="Settings Interface for Mobile Webcam 2">
+    <meta name="description" content="Control Panel for Mobile Webcam 2">
     
     <link rel="shortcut icon" type="image/png" href="favicon.png"/>
-    <title>Settings Interface - Mobile WebCam 2</title>
+    <title>Control Panel - Mobile WebCam 2</title>
     
     <!-- Bootstrap core CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
@@ -85,6 +85,7 @@
              -webkit-transition: width 1s; /* Safari */
              transition: width 1s;
         }  
+       
         
          @media (max-width: 768px) {
             /* Responsive fonts */
@@ -138,16 +139,23 @@
              
                  -webkit-transition: width 1s; /* Safari */
                  transition: width 1s;
-            }  
+            } 
+            
+            .advanced-button {
+                margin: auto;
+                margin-top: 1em;
+                width: 100%;
+                display: block;
+            }
 
         }
 
     </style>
   </head>
-  <body onload="populate_web_interface();"> <!-- -->
+  <body onload="populate_web_interface();">
   
     <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
-      <a class="navbar-brand" href="#" onclick="backToHome();"> <img src="favicon.png" style="padding-right:5px;"/>
+      <a class="navbar-brand" href="#" data-title="Control Panel"> <img src="favicon.png" style="padding-right:5px;"/>
         <span class="hide-collapse"> Mobile Webcam 2</span> 
         <span class="show-collapse"> MWC 2</span> 
       </a>
@@ -182,7 +190,7 @@
     
         <form>
         
-        <div id="row-div" class="row menu-page">
+        <div id="main-menu" class="row menu-page" data-title="Control Panel">
             <div class="col-12">
                 <h1>Settings Panel</h1>
                 <p class="lead hide-collapse">Here you can find all the remotely configurable settings of the Mobile Webcam 2 Android app.<br/>
@@ -210,13 +218,10 @@
         <script>
         $('.btn-group-toggle').click(function() {
           $(this).find('.btn').toggleClass('active');
-
           if ($(this).find('.btn-success').size() > 0) {
             $(this).find('.btn').toggleClass('btn-danger');
           }
-
           $(this).find('.btn').toggleClass('btn-danger');
-
         });
         </script>
 
@@ -231,230 +236,60 @@
         Powered by <a href="https://getbootstrap.com/">Bootstrap</a> and <a href="https://fontawesome.com/">Font Awesome</a>. <br />
       </p>
   </footer>
+  
+  
+  <!-- Single-Page App functionality -->
+  <script>
+  $(function () {
+  
+    var load = function (url) {
+        // Parse the URL and show only the appropriate page
+        target = url.split("#")[1];
+        if(target == undefined || target === ""){
+            // User is trying to go to the home
+            $('.menu-page').hide();
+            $('#main-menu').show();
+        } else {
+            // Otherwise load the required page
+            $('.menu-page').hide();
+            $("#main-menu").hide();
+            $("#"+target).show();
+        }
+    };
+
+    $(document).on('click', 'a', function (e) {
+        e.preventDefault();
+        
+        var $this = $(this),
+            url = $this.attr("href"),
+            title = $this.data("title")  + " - Mobile WebCam 2";
+            
+        history.pushState({
+            url: url,
+            title: title
+        }, title, url);
+
+        document.title = title;
+        load(url);
+    });
+    
+
+    $(window).on('popstate', function (e) {
+        var state = e.originalEvent.state;
+        if (state !== null) {
+            document.title = state.title;
+            load(state.url);
+        } else {
+            // User is trying to go to the home
+            $('.menu-page').hide();
+            $('#main-menu').show();
+        }
+    });
+
+});
+  </script>
     
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<!--DOCTYPE html>
-<html lang="en">
-
-<head>
-<meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="Settings Interface for Mobile Webcam 2">
-    
-    <link rel="shortcut icon" type="image/png" href="favicon.png"/>
-    <title>Settings Interface - Mobile WebCam 2</title>
-    
-    <!-- Bootstrap core CSS - ->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <!-- Toggles CDN - ->
-    <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
-    <!-- Font Awesome CDN - ->
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
-    
-    <!-- Custom CSS - ->
-    <link href="web_interface.css" rel="stylesheet">
-    
-    <!-- Reads JSON and populates the page - ->
-    <script type="text/javascript" src="mwc2_config.json"></script>
-    <script type="text/javascript" src="web_interface.js"></script>
-    
-    <!-- Bootstrap JS CDN - ->
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-    <!-- Toggle JS CDN - ->
-    <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
-    
-</head>
-
-<body onload="populate_web_interface();">
-
-  <nav class="navbar navbar-expand-md navbar-light bg-light fixed-top" style="border-bottom:1px solid rgba(0,0,0,.125);">
-      <a class="navbar-brand" href="#"> <img src="favicon.png" style="padding-right:5px;"/> Mobile Webcam 2</a>
-      <!--button class="btn btn-dark" id="menu-toggle">Menu</button- ->
-      <button class="btn btn-dark navbar-toggler" id="menu-toggle" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-  </nav>
-
-  <div class="d-flex" id="wrapper">
-
-    <!-- Sidebar - ->
-    <div class="bg-light border-right" id="sidebar-wrapper">
-      <!--div class="sidebar-heading"></div- ->
-      <div id="mwc2-menu-list" class="list-group list-group-flush">
-        <a href="#" class="list-group-item list-group-item-action bg-light">Dashboard</a>
-      </div>
-    </div>
-    <!-- /#sidebar-wrapper -->
-
-    <!-- Page Content - ->
-    <div id="page-content-wrapper">
-    <main role="main" class="container">
-      <form onsubmit="return writeConfigFile();">
-      
-      <div class="row">
-          <div class="col-md-12" >
-                <h1>Settings Panel</h1>
-                <p class="lead">Here you can find all the remotely configurable settings of the Mobile Webcam 2 Android app.<br/>
-                NOTE: All fields are required. If you don't know how to fill them up, just type the default value suggested as a placeholder.</p>
-                
-                <div id="alert-success" style="display: none;" class="alert alert-success" role="alert">
-                  Settings file saved successfully.
-                </div>
-                <div id="alert-error" style="display: none;" class="alert alert-danger" role="alert">
-                  Could not save the settings file! Please report this bug <a href="https://github.com/ZanSara/mobilewebcam2/issues">here</a>. Thank you!
-                </div>
-          </div>
-          
-          <div class="col-md-12">
-                <button type="submit" class="btn btn-lg btn-success ">
-                   <span class="fa fa-save" style="padding-right:5px;"aria-hidden="true"></span>  Save Configuration
-                </button>
-                <a href="" class="btn btn-lg btn-warning">
-                   <span class="fa fa-redo" style="padding-right:5px;"aria-hidden="true"></span>  Reset All Values
-                </a>
-                <a href="" class="btn btn-lg btn-danger">
-                   <span class="fa fa-trash-alt" style="padding-right:5px;"aria-hidden="true"></span>  Apply Default Settings
-                </a>
-          </div>
-          
-      </div>
-      <hr/>
-        
-        <div id="accordion">
-
-          <div class="card">
-            <div class="card-header" id="heading1">
-              <h5 class="mb-0">
-                <a class="btn btn-link" data-toggle="collapse" data-target="#collapse1" aria-expanded="false" aria-controls="collapse1">
-                  Empty Block
-                </a>
-              </h5>
-            </div>
-            <div id="collapse1" class="collapse" aria-labelledby="heading1" data-parent="#accordion">
-              <div class="card-body">
-              
-                  <div class="form-group row">
-                    <label for="field1" class="col-sm-2 col-form-label">Field Name</label>
-                    <div class="col-sm-10">
-                        <div class="input-group">
-                            <input type="text" class="form-control" id="field1" aria-describedby="field1desc" placeholder="Default Field Value" value="Field Value">
-                            <div class="input-group-append">
-                              <div class="input-group-text">Field Unit</div>
-                            </div>
-                        </div>
-                        <small id="field1desc" class="form-text text-muted">Little field description</small>
-                    </div>
-                  </div>
-                  
-                  <div class="form-group row">
-                    <label for="field2" class="col-sm-2 col-form-label">Field Name</label>
-                    <div class="col-sm-10">
-                        <div class="input-group">
-                            <select class="form-control" id="field2"> 
-                            <!-- add multiple after select to have a multiple select field - ->
-                              <option>1</option>
-                              <option>2</option>
-                              <option>3</option>
-                              <option>4</option>
-                              <option>5</option>
-                            </select>
-                            <div class="input-group-append">
-                              <div class="input-group-text">Field Unit</div>
-                            </div>
-                        </div>
-                        <small id="field2desc" class="form-text text-muted">Little field description</small>
-                    </div>
-                  </div>
-                  
-              </div>
-            </div>
-          </div>
-          
-        </div>
-        
-        <div class="mb-12 text-center">
-            <button type="submit" class="btn btn-lg btn-success">Save</button>
-            <a href="" class="btn btn-lg btn-danger">Reset</a>
-        </div>
-        
-        <!--script>
-        $('.btn-group-toggle').click(function() {
-          $(this).find('.btn').toggleClass('active');
-
-          if ($(this).find('.btn-success').size() > 0) {
-            $(this).find('.btn').toggleClass('btn-danger');
-          }
-
-          $(this).find('.btn').toggleClass('btn-danger');
-
-        });
-        </script- ->
-        
-        </form>
-    </main>
-    
-    </div>
-    <!-- /#page-content-wrapper - ->
-    
-  </div>
-  <!-- /#wrapper - ->
-
-<footer class="footer">
-      <p>
-        Mobile Webcam 2 - Web Interface (by <a href="https://github.com/ZanSara">ZanSara</a>).<br />
-        Get the app <a href="https://github.com/ZanSara/mobilewebcam2">here</a>.<br />
-      </p>
-      <p>
-        Powered by <a href="https://getbootstrap.com/">Bootstrap</a> and <a href="https://fontawesome.com/">Font Awesome</a>. <br />
-      </p>
-  </footer>
-  
-
-  <!-- Menu Toggle Script - ->
-  <script>
-    $("#menu-toggle").click(function(e) {
-      e.preventDefault();
-      $("#wrapper").toggleClass("toggled");
-    });
-  </script>
-
-</body>
-
-</html-->
-
-
-
-
-
-
-
-
-
-
 
 
 

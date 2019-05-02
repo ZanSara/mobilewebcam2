@@ -23,8 +23,8 @@ import java.util.List;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.EXTERNAL_PROPERTY)
 @JsonSubTypes(value = {
-        @JsonSubTypes.Type(value = LocalStorageManager.class, name = StorageManager.STORAGE_LOCAL)
-        //@JsonSubTypes.Type(value = Bar.class, name = "bar")
+        @JsonSubTypes.Type(value = LocalStorageManager.class, name = StorageManager.STORAGE_LOCAL),
+        @JsonSubTypes.Type(value = FtpStorageManager.class, name = StorageManager.STORAGE_FTP)
 })
 public abstract class StorageManager {
 
@@ -40,9 +40,9 @@ public abstract class StorageManager {
     private final SerializableSetting<String> timestampFormatString;
 
 
-    public static final String STORAGE_LOCAL = "Local Storage (Save on disk)";
-    public static final String STORAGE_FTP = "FTP Storage (Upload)";
-    public static final String STORAGE_SOCIALMEDIA = "Social Media Storage (Sharing)";
+    public static final String STORAGE_LOCAL = "Save in the gallery";
+    public static final String STORAGE_FTP = "Upload to Server";
+    public static final String STORAGE_SOCIALMEDIA = "Share on Social Media";
 
 
     protected StorageManager(String storageType) {
