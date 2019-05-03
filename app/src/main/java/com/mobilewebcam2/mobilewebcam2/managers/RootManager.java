@@ -60,14 +60,16 @@ public class RootManager {
                 "When to take pictures and when to not do it (at night, in low battery conditions, etc...)",
                 "stopwatch");
 
-        pictureStorageManager = new SerializableSetting<>( StorageManager.class, 40,
+        pictureStorageManager = new SerializableSetting<StorageManager>( StorageManager.class, 40,
                 "Storage Settings", new LocalStorageManager(),
                 "Where to store the pictures shot: on the device, on a server, etc...",
+                StorageManager.existingSubclasses(),
                 "cloud-upload-alt");
 
         logStorageManager = new SerializableSetting<>( StorageManager.class, 50,
                 "Log Settings", new LocalStorageManager(),
                 "Where to store the logs of the application: on the device, on a server, etc...",
+                StorageManager.existingSubclasses(),
                 "file-contract");
 
         generalSettingsManager = new SerializableSetting<>( SettingsManager.class, 60,

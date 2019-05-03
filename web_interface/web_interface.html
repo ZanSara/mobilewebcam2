@@ -20,7 +20,7 @@
     <script type="text/javascript" src="web_interface.js"></script>
     
     <!-- Bootstrap CDN -->
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
     <!-- Toggle CDN -->
@@ -75,17 +75,29 @@
             margin: 0 5px;
         }
         
+        .fa {
+            padding-right:0.5em;
+        }
+        
         .show-collapse {
             display: none;
+        }
+        
+        .menu-entry a {
+            color: black;
+            font-weight: normal;
+            text-decoration: none;
         }
           
         .menu-page {
              padding: 1em 3em;
-             
-             -webkit-transition: width 1s; /* Safari */
-             transition: width 1s;
-        }  
+        }
        
+        .subclass-header {
+            color: #000;
+            text-decoration: italic;
+            padding-top: 1em;
+        }
         
          @media (max-width: 768px) {
             /* Responsive fonts */
@@ -136,9 +148,6 @@
             
             .menu-page {
                  padding: 1em;
-             
-                 -webkit-transition: width 1s; /* Safari */
-                 transition: width 1s;
             } 
             
             .advanced-button {
@@ -207,25 +216,11 @@
             <div id="menu_entries_placeholder"></div>
         </div>
         
-        <div id="menu_pages_placeholder" class="menu-page" style="display:none;">
-            <h1>This is a bug!!</h1>
-        </div>
+        <div id="menu_pages_placeholder" class="menu-page" style="display:none;"></div>
         
         </form>
        
-                
-        <!-- Toggle buttons script -->
-        <script>
-        $('.btn-group-toggle').click(function() {
-          $(this).find('.btn').toggleClass('active');
-          if ($(this).find('.btn-success').size() > 0) {
-            $(this).find('.btn').toggleClass('btn-danger');
-          }
-          $(this).find('.btn').toggleClass('btn-danger');
-        });
-        </script>
-
-    </main><!-- /.container -->
+    </main>
     
     <footer class="footer">
       <p>
@@ -235,59 +230,74 @@
       <p>
         Powered by <a href="https://getbootstrap.com/">Bootstrap</a> and <a href="https://fontawesome.com/">Font Awesome</a>. <br />
       </p>
-  </footer>
+    </footer>
   
   
-  <!-- Single-Page App functionality -->
-  <script>
-  $(function () {
-  
-    var load = function (url) {
-        // Parse the URL and show only the appropriate page
-        target = url.split("#")[1];
-        if(target == undefined || target === ""){
-            // User is trying to go to the home
-            $('.menu-page').hide();
-            $('#main-menu').show();
-        } else {
-            // Otherwise load the required page
-            $('.menu-page').hide();
-            $("#main-menu").hide();
-            $("#"+target).show();
-        }
-    };
-
-    $(document).on('click', 'a', function (e) {
-        e.preventDefault();
         
-        var $this = $(this),
-            url = $this.attr("href"),
-            title = $this.data("title")  + " - Mobile WebCam 2";
+  
+    <!-- Single-Page App functionality -->
+    <script>
+    $(function () {
+      
+        var entry_animCSS = {'max-width' : 'initial','max-height' : 'initial'}
+        var exit_animCSS = {'max-width' : '0','max-height' : '0'}
+
+        var load = function (url) {
+            // Parse the URL and show only the appropriate page
+            target = url.split("#")[1];
+            if(target == undefined || target === ""){
+                // User is trying to go to the home
+                //$('.menu-page').animate(exit_animCSS,'slow'); 
+                $('.menu-page').hide();
+                
+                //$('#main-menu').animate(entry_animCSS,'slow'); 
+                $('#main-menu').show();
+            } else {
+                // Otherwise load the required page
+                //$('.menu-page').animate(exit_animCSS,'slow'); 
+                $('.menu-page').hide();
+                
+                //$('#main-menu').animate(exit_animCSS,'slow'); 
+                $("#main-menu").hide();
+                
+                //$("#"+target).animate(entry_animCSS,'slow'); 
+                $("#"+target).show();
+            }
+        };
+
+        $(document).on('click', 'a', function (e) {
+            e.preventDefault();
             
-        history.pushState({
-            url: url,
-            title: title
-        }, title, url);
+            var $this = $(this),
+                url = $this.attr("href"),
+                title = $this.data("title")  + " - Mobile WebCam 2";
+                
+            history.pushState({
+                url: url,
+                title: title
+            }, title, url);
 
-        document.title = title;
-        load(url);
+            document.title = title;
+            load(url);
+        });
+        
+
+        $(window).on('popstate', function (e) {
+            var state = e.originalEvent.state;
+            if (state !== null) {
+                document.title = state.title;
+                load(state.url);
+            } else {
+                // User is trying to go to the home
+                document.title = "Control Panel - Mobile WebCam 2";
+                
+                $('.menu-page').hide();
+                $('#main-menu').show();
+            }
+        });
+
     });
-    
-
-    $(window).on('popstate', function (e) {
-        var state = e.originalEvent.state;
-        if (state !== null) {
-            document.title = state.title;
-            load(state.url);
-        } else {
-            // User is trying to go to the home
-            $('.menu-page').hide();
-            $('#main-menu').show();
-        }
-    });
-
-});
-  </script>
+    </script>
     
 </html>
 

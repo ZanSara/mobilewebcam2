@@ -15,7 +15,7 @@ import java.util.Arrays;
 import java.util.Date;
 
 /**
- * Implementation of StorageManagerInterface that saves the image on disk
+ * Implementation of StorageManagerInterface that uploads the image on a remote server
  */
 public class FtpStorageManager extends StorageManager {
 
@@ -30,7 +30,7 @@ public class FtpStorageManager extends StorageManager {
 
 
     protected FtpStorageManager(){
-        super(StorageManager.STORAGE_LOCAL);
+        super(StorageManager.STORAGE_FTP);
 
         // FIXME point this to the phone gallery or something similar
         // FIXME add regex validation in the allowedValues field
@@ -38,14 +38,13 @@ public class FtpStorageManager extends StorageManager {
                 "127.0.0.1", "127.0.0.1", "",
                 "IP address of the FTP server where the files will be uploaded",
                 null, null, null,
-                SerializableSetting.SettingType.REGULAR);
+                SerializableSetting.SettingCategory.REGULAR);
 
         serverPort = new SerializableSetting<>(String.class, 120, "Server Port",
                 "8000", "8000", "",
                 "ID of the FTP port of the server where the files will be uploaded",
                 null, null, null,
-                SerializableSetting.SettingType.REGULAR);
-
+                SerializableSetting.SettingCategory.REGULAR);
     }
 
     @Override

@@ -1,6 +1,7 @@
 package com.mobilewebcam2.mobilewebcam2.managers;
 
 import android.graphics.Bitmap;
+import android.util.Pair;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -24,7 +25,8 @@ import java.util.List;
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.EXTERNAL_PROPERTY)
 @JsonSubTypes(value = {
         @JsonSubTypes.Type(value = LocalStorageManager.class, name = StorageManager.STORAGE_LOCAL),
-        @JsonSubTypes.Type(value = FtpStorageManager.class, name = StorageManager.STORAGE_FTP)
+        @JsonSubTypes.Type(value = FtpStorageManager.class, name = StorageManager.STORAGE_FTP),
+        @JsonSubTypes.Type(value = SocialMediaStorageManager.class, name = StorageManager.STORAGE_SOCIALMEDIA)
 })
 public abstract class StorageManager {
 
@@ -34,7 +36,9 @@ public abstract class StorageManager {
     @JsonIgnore
     private static final String LOG_TAG = "StorageManager";
 
-    private final SerializableSetting<String> storageTypeName;
+    @JsonIgnore
+    private final SerializableSetting<String> storageType;
+
     private final SerializableSetting<Boolean> addTimestamp;
     private final SerializableSetting<Boolean> timestampAtTheBeginning;
     private final SerializableSetting<String> timestampFormatString;
@@ -50,31 +54,31 @@ public abstract class StorageManager {
             throw new IllegalArgumentException(LOG_TAG+": StorageManager does not have any subclass named "+storageType);
         }
 
-        storageTypeName = new SerializableSetting<>(String.class, 10, "Storage Type",
+        this.storageType = new SerializableSetting<>(String.class, 10, "Storage Type",
                 STORAGE_LOCAL, STORAGE_LOCAL, null, "Where to store the files",
                 null, null, allowedStorageTypeValues(),
-                SerializableSetting.SettingType.REGULAR);
+                SerializableSetting.SettingCategory.REGULAR);
 
-        addTimestamp = new SerializableSetting<>(Boolean.class, 20, "Add the timestamp to the file name",
+        this.addTimestamp = new SerializableSetting<>(Boolean.class, 20, "Add timestamp",
                 Boolean.TRUE, Boolean.TRUE, null, "If true, adds the timestamp to the file name.",
                 null, null, Arrays.asList(Boolean.TRUE, Boolean.FALSE),
-                SerializableSetting.SettingType.REGULAR);
+                SerializableSetting.SettingCategory.REGULAR);
 
-        timestampAtTheBeginning = new SerializableSetting<>(Boolean.class, 22,
-                "Put the timestamp at the beginning of the file name",
+        this.timestampAtTheBeginning = new SerializableSetting<>(Boolean.class, 22,
+                "Timestamp at the beginning",
                 Boolean.TRUE, Boolean.TRUE, null,
                 "If true, adds the timestamp to the beginning of the file name. " +
                         "If false, it puts it at the end of it. IGNORED IF THE TIMESTAMP IS DISABLED",
                 null, null, Arrays.asList(Boolean.TRUE, Boolean.FALSE),
-                SerializableSetting.SettingType.REGULAR);
+                SerializableSetting.SettingCategory.REGULAR);
 
         // FIXME add regex validation in the allowedValues field
-        timestampFormatString = new SerializableSetting<>(String.class, 24,
+        this.timestampFormatString = new SerializableSetting<>(String.class, 24,
                 "Timestamp Format", "", "", null,
                 "Format string for the timestamp (i.e. YYYY/MM/DD hh:mm:ss). If empty, a " +
                         "regular UNIX timestamp is used.",
                 null, null, null,
-                SerializableSetting.SettingType.REGULAR);
+                SerializableSetting.SettingCategory.REGULAR);
     }
 
 
@@ -83,17 +87,24 @@ public abstract class StorageManager {
 
     public static List<String> allowedStorageTypeValues(){
         List<String> list = new ArrayList<>();
-        list.add(STORAGE_LOCAL);
-        list.add(STORAGE_FTP);
-        list.add(STORAGE_SOCIALMEDIA);
+        list.add( STORAGE_LOCAL );
+        list.add( STORAGE_FTP );
+        list.add( STORAGE_SOCIALMEDIA );
         return list;
     }
 
+    public static List<StorageManager> existingSubclasses(){
+        List<StorageManager> list = new ArrayList<>();
+        list.add( new LocalStorageManager() );
+        list.add( new FtpStorageManager() );
+        list.add( new SocialMediaStorageManager() );
+        return list;
+    }
 
     @Override
     public String toString() {
         String repr = "";
-        repr += storageTypeName;
+        repr += storageType;
         repr += addTimestamp;
         repr +=timestampAtTheBeginning;
         repr += timestampFormatString;

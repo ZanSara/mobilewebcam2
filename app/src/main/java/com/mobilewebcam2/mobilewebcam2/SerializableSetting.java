@@ -99,23 +99,59 @@ public class SerializableSetting<T> {
                                T lowerBound,
                                List<T> allowedValues,
                                SettingCategory settingType){
-            this(className, position, fullName, value, defaultValue, unit, description, upperBound, lowerBound, allowedValues, null, settingType);
+            this(className, position, fullName, value, defaultValue, unit, description, upperBound,
+                    lowerBound, allowedValues, null, settingType);
     }
 
     /**
      * Constructor for categories: does not specify any default / validation value, but requires a
      * FontAwesome icon. SettingType in this case defaults to Regular
      */
-    public SerializableSetting(Class<T> className, int position, String fullName, T value, String description, String faIconName){
-        this(className, position, fullName, value, null, null, description, null, null, null, faIconName, SettingCategory.REGULAR);
+    public SerializableSetting(Class<T> className, int position, String fullName, T value,
+                               String description, String faIconName){
+
+        this(className, position, fullName, value, null, null,
+                description, null, null, null,
+                faIconName, SettingCategory.REGULAR);
     }
 
     /**
      * Constructor for categories: does not specify any default / validation value, but requires a
      * FontAwesome icon. Can specify the setting type
      */
-    public SerializableSetting(Class<T> className, int position, String fullName, T value, String description, String faIconName, SettingCategory settingType){
-        this(className, position, fullName, value, null, null, description, null, null, null, faIconName, settingType);
+    public SerializableSetting(Class<T> className, int position, String fullName, T value,
+                               String description, String faIconName, SettingCategory settingType){
+
+        this(className, position, fullName, value, null, null,
+                description, null, null, null,
+                faIconName, settingType);
+    }
+
+    /**
+     * Constructor for categories with subclasses, like StorageManager: does not specify any
+     * default / validation value, but requires a FontAwesome icon. Can specify the setting type.
+     * It also requires a AllowedValues list: that should contain a list of subclasses.
+     */
+    public SerializableSetting(Class<T> className, int position, String fullName, T value,
+                               String description, List<T> existingSubclasses, String faIconName,
+                               SettingCategory settingType){
+
+        this(className, position, fullName, value, null, null,
+                description, null, null, existingSubclasses,
+                faIconName, settingType);
+    }
+
+    /**
+     * Constructor for categories with subclasses, like StorageManager: does not specify any
+     * default / validation value, but requires a FontAwesome icon. Setting Type set to Regular.
+     * It also requires a AllowedValues list: that should contain a list of subclasses.
+     */
+    public SerializableSetting(Class<T> className, int position, String fullName, T value,
+                               String description, List<T> existingSubclasses, String faIconName ){
+
+        this(className, position, fullName, value, null, null,
+                description, null, null, existingSubclasses,
+                faIconName, SettingCategory.REGULAR);
     }
 
     public T getValue() {
