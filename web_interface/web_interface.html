@@ -8,16 +8,18 @@
     <link rel="shortcut icon" type="image/png" href="favicon.png"/>
     <title>Control Panel - Mobile WebCam 2</title>
     
-    <!-- Bootstrap core CSS -->
+    <!-- Bootstrap core CSS CDN -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <!-- Toggles CDN -->
     <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
     <!-- Font Awesome CDN -->
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="web_interface.css">
     
     <!-- Reads JSON and populates the page -->
     <script type="text/javascript" src="mwc2_config.json"></script>
-    <script type="text/javascript" src="web_interface.js"></script>
+    <script type="text/javascript" src="web_interface_rendering.js"></script>
     
     <!-- Bootstrap CDN -->
     <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
@@ -26,140 +28,8 @@
     <!-- Toggle CDN -->
     <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
     
-    <style>
     
-        .bd-placeholder-img {
-            font-size: 1.125rem;
-            text-anchor: middle;
-            -webkit-user-select: none;
-            -moz-user-select: none;
-            -ms-user-select: none;
-            user-select: none;
-        }
-
-        @media (min-width: 768px) {
-            .bd-placeholder-img-lg {
-              font-size: 3.5rem;
-            }
-        }
-      
-        body {
-            /*padding-top: 5rem;*/
-            background-color: #eee;
-        }
-        main {
-            padding: 5rem 0 3rem 0;
-            background-color:#fff;
-        }
-        .footer {
-            padding: 2rem;
-            color: #999;
-            text-align: center;
-            background-color: #eee;
-            /*border-top: .05rem solid #e5e5e5;*/
-        }
-        
-        /* Toggle buttons style */
-        .btn-custom:not(:disabled):not(.disabled).active {
-            color: #fff;
-            background-color: #28a745;
-            border-color: #28a745;
-        }
-        .btn-custom:not(:disabled):not(.disabled):not(.active) {
-            color: #777;
-            background-color: #dae0e5;
-            border-color: #aaa;
-        }
-        
-        .navbar-nav li {
-            margin: 0 5px;
-        }
-        
-        .fa {
-            padding-right:0.5em;
-        }
-        
-        .show-collapse {
-            display: none;
-        }
-        
-        .menu-entry a {
-            color: black;
-            font-weight: normal;
-            text-decoration: none;
-        }
-          
-        .menu-page {
-             padding: 1em 3em;
-        }
-       
-        .subclass-header {
-            color: #000;
-            text-decoration: italic;
-            padding-top: 1em;
-        }
-        
-         @media (max-width: 768px) {
-            /* Responsive fonts */
-            html { font-size: calc(0.8em + 1vw) }
-            h1 { font-size: 2em }
-            h2 { font-size: 1.5em }
-            button { font-size: inherit }
-            input { font-size: inherit }
-            
-            .navbar {
-                padding: 10px 5px;
-            }
-            
-            .navbar-nav {
-                margin-right: 5%
-            }
-            
-            .navbar-nav li {
-                margin: -5px 1% ;
-            }
-            
-            .navbar-nav ul {
-                margin: 0 ;
-            }
-            
-            .hide-collapse {
-                display: none;
-            }
-            
-            .show-collapse {
-                display: unset;
-            }
-            
-            .mynavlink-light {
-                color: white;
-            }
-            .mynavlink-dark {
-                color: black;
-            }
-            .navbar-nav {
-                flex-direction: row;
-                mmargin-right: auto !important;
-            }
-            
-            .nav-item .btn {
-                font-size:
-            }
-            
-            .menu-page {
-                 padding: 1em;
-            } 
-            
-            .advanced-button {
-                margin: auto;
-                margin-top: 1em;
-                width: 100%;
-                display: block;
-            }
-
-        }
-
-    </style>
+    
   </head>
   <body onload="populate_web_interface();">
   
@@ -213,10 +83,10 @@
                 </div>
             </div>
             
-            <div id="menu_entries_placeholder"></div>
+            <div id="menu-entries-placeholder"></div>
         </div>
         
-        <div id="menu_pages_placeholder" class="menu-page" style="display:none;"></div>
+        <div id="menu-pages-placeholder" class="menu-page" style="display:none;"></div>
         
         </form>
        
@@ -298,6 +168,91 @@
 
     });
     </script>
+    
+    
+    <!-- Templates - For the template engine, see https://jonsuh.com/blog/javascript-templating-without-a-library/ -->
+    
+    <script id="menu-entry-template" type="text/template">
+        <div id="entry-name-{{name}}" class="menu-entry col-12 col-md-6">
+            <hr />
+            <a href="#page-name-{{name}}" class="mb-0" data-title="{{fullName}}">
+                <div>
+                    <h4 style="margin-bottom:0.5em;">
+                        <span class="fa fa-{{faIconName}}" aria-hidden="true"></span>{{fullName}}
+                    </h4>
+                    <small style="font-style: italic; color:#555555;">{{description}}</small>
+                </div>
+            </a>
+        </div>
+    </script>
+    
+    <script id="menu-subpage-template" type="text/template">
+        <div id="page-name-{{name}}" class="menu-page" style="display:none;" >
+            <h3 style="width:100%;">
+                <a href="#" class="btn btn-light float-right" style="border: 1px solid #aaa;">
+                    <span class="fa fa-arrow-left" style="padding-right:0.5em;" aria-hidden="true"></span> Back 
+                    <span class="hide-collapse"> to the Control Panel</span>
+                </a>
+                <span class="fa fa-{{faIconName}} hide-collapse" aria-hidden="true"></span>{{fullName}}
+            </h3>
+            <p style="font-style: italic; color:#555555;">{{description}}</p>   
+            <hr />
+            {{type-switch}}
+            {{page-content}}
+            {{advanced-box}}
+            {{custom-scripts}}
+        </div>
+    </script>
+    
+    <script id="advanced-settings-box-template" type="text/template">
+        <button type="button" class="btn btn-light advanced-menu advanced-button" style="border: 1px solid #aaa;" 
+                    data-toggle="collapse" data-target="#collapseAdvanced-{{name}}" aria-expanded="false" aria-controls="collapseAdvanced-{{name}}">
+            Advanced Settings
+        </button>
+        <div class="collapse advanced-menu" id="collapseAdvanced-{{name}}">
+            <div class="card card-body">
+                {{box-content}}
+            </div>
+        </div>
+    </script>
+
+    <script id="subclass-header-template" type="text/template">
+        <h5 class="subclass-header-{{name}}">"{{current-subclass}}" Settings</h5>
+        <hr />
+    </script>
+    
+    <script id="form-field-template" type="text/template">
+        <div class="form-group row {{scope}} {{subclass}}">
+            <label for="field_{{name}}" class="col-sm-3 col-form-label">{{fullName}}{{fullname-suffix}}</label>
+            <div class="col-sm-9">
+                <div class="input-group">
+                    {{widget}}
+                </div>
+                <small id="field_{{name}}_desc" class="form-text text-muted">{{description}}</small>
+            </div>
+          </div>
+    </script>
+    
+    <script id="text-widget-template" type="text/template">
+        <input type="text" class="form-control" id="field_{{name}}" aria-describedby="field_{{name}}_desc" placeholder="{{defaultValue}}" value="{{value}}">
+        <div class="input-group-append">
+            <div class="input-group-text">{{unit}}</div>
+        </div>
+    </script>
+    
+    <script id="multiple-choice-widget-template" type="text/template">
+        <div class="btn-group btn-group-toggle" data-toggle="buttons">
+            {{choices}}
+        </div>
+    </script>
+    
+    <script id="multiple-choice-entry-template" type="text/template">
+         <label class="btn btn-custom {{active}}">
+             <input type="radio" name="options" id="option_true" autocomplete="off" {{onfocus}} >{{choice}}
+         </label>
+    </script>
+    
+    
     
 </html>
 
