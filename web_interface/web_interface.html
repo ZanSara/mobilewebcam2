@@ -9,25 +9,17 @@
     <title>Control Panel - Mobile WebCam 2</title>
     
     <!-- Bootstrap core CSS CDN -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <!-- Toggles CDN -->
-    <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
-    <!-- Font Awesome CDN -->
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
-    <!-- Custom CSS -->
-    <link rel="stylesheet" href="web_interface.css">
+    <link rel="stylesheet" href="web_interface_css/bootstrap.min.css">
+    <link rel="stylesheet" href="web_interface_css/web_interface.css">
+    <link rel="stylesheet" href="web_interface_fa/css/all.min.css">
     
-    <!-- Reads JSON and populates the page -->
+    <!-- Loads the JSON with the configuration data -->
     <script type="text/javascript" src="mwc2_config.json"></script>
-    <script type="text/javascript" src="web_interface_rendering.js"></script>
     
-    <!-- Bootstrap CDN -->
-    <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-    <!-- Toggle CDN -->
-    <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
-    
+    <script type="text/javascript" src="web_interface_js/jquery-3.4.1.slim.min.js"></script>
+    <script type="text/javascript" src="web_interface_js/bootstrap.bundle.min.js"></script>
+    <script type="text/javascript" src="web_interface_js/web_interface_rendering.js"></script>
+    <script type="text/javascript" src="web_interface_js/web_interface_saving.js"></script>
     
     
   </head>
@@ -43,13 +35,13 @@
       </button -->
         <ul class="navbar-nav ml-auto" style="float:right;">
           <li class="nav-item">
-            <a onclick='return writeConfigFile();' class="mynavlink-light btn btn-success">
+            <a id="navbtn_save" href="#" onclick="return writeConfigFile();" class="mynavlink-light btn btn-success">
                <span class="fa fa-save" style="padding-right:5px;"aria-hidden="true"></span>
                <span class="hide-collapse">  Save Configuration</span>
             </a>
           </li>
           <li class="nav-item">
-            <a href="" class="mynavlink-dark btn btn-warning">
+            <a href="" onclick="if(confirm('Are you sure you want to clear all the fields?')) window.location.reload(true);" class="mynavlink-dark btn btn-warning">
                <span class="fa fa-redo" style="padding-right:5px;"aria-hidden="true"></span>
                <span class="hide-collapse">  Reset All Values</span>
             </a>
@@ -67,7 +59,7 @@
     
     <main role="main" class="container" >
     
-        <form>
+        <form id="entire-form">
         
         <div id="main-menu" class="row menu-page" data-title="Control Panel">
             <div class="col-12">
@@ -102,53 +94,57 @@
       </p>
     </footer>
   
-  
-        
-  
     <!-- Single-Page App functionality -->
     <script>
     $(function () {
-      
-        var entry_animCSS = {'max-width' : 'initial','max-height' : 'initial'}
-        var exit_animCSS = {'max-width' : '0','max-height' : '0'}
-
-        var load = function (url) {
+    
+        $(document).on('click', '#navbtn_save', function(event) {
+            var link = document.createElement('a');
+            // Add the element to the DOM
+            document.body.appendChild(link);
+            link.setAttribute("type", "hidden"); // make it hidden if needed
+            link.download = 'mwc2config_try.json';
+            link.href = 'data:text/plain;charset=utf-u,'+encodeURIComponent(mwc2config);
+            link.click();
+        });
+       
+        
+        // Actual page switcher
+        load = function (url, title) {
+            // Set the title
+            if(title === "" || title === undefined){
+                document.title = "Control Panel - Mobile WebCam 2";
+            } else {
+                document.title = title + " - Mobile WebCam 2";
+            }
+            
             // Parse the URL and show only the appropriate page
             target = url.split("#")[1];
             if(target == undefined || target === ""){
                 // User is trying to go to the home
-                //$('.menu-page').animate(exit_animCSS,'slow'); 
                 $('.menu-page').hide();
-                
-                //$('#main-menu').animate(entry_animCSS,'slow'); 
                 $('#main-menu').show();
             } else {
                 // Otherwise load the required page
-                //$('.menu-page').animate(exit_animCSS,'slow'); 
                 $('.menu-page').hide();
-                
-                //$('#main-menu').animate(exit_animCSS,'slow'); 
                 $("#main-menu").hide();
-                
-                //$("#"+target).animate(entry_animCSS,'slow'); 
                 $("#"+target).show();
             }
         };
 
-        $(document).on('click', 'a', function (e) {
+        $(document).on('click', '.menu-anchor', function (e) {
             e.preventDefault();
             
             var $this = $(this),
                 url = $this.attr("href"),
-                title = $this.data("title")  + " - Mobile WebCam 2";
+                title = $this.data("title");
                 
             history.pushState({
                 url: url,
                 title: title
             }, title, url);
 
-            document.title = title;
-            load(url);
+            load(url, title);
         });
         
 
@@ -158,11 +154,7 @@
                 document.title = state.title;
                 load(state.url);
             } else {
-                // User is trying to go to the home
-                document.title = "Control Panel - Mobile WebCam 2";
-                
-                $('.menu-page').hide();
-                $('#main-menu').show();
+                load("", "Control Panel");
             }
         });
 
@@ -175,7 +167,7 @@
     <script id="menu-entry-template" type="text/template">
         <div id="entry-name-{{name}}" class="menu-entry col-12 col-md-6">
             <hr />
-            <a href="#page-name-{{name}}" class="mb-0" data-title="{{fullName}}">
+            <a href="#page-name-{{name}}" class="menu-anchor mb-0" data-title="{{fullName}}">
                 <div>
                     <h4 style="margin-bottom:0.5em;">
                         <span class="fa fa-{{faIconName}}" aria-hidden="true"></span>{{fullName}}
@@ -222,19 +214,19 @@
     </script>
     
     <script id="form-field-template" type="text/template">
-        <div class="form-group row {{scope}} {{subclass}}">
-            <label for="field_{{name}}" class="col-sm-3 col-form-label">{{fullName}}{{fullname-suffix}}</label>
+        <div class="form-group row scope-{{scope}} linkedclass-{{subclass}}-{{scope}}">
+            <label for="{{scope}}#{{subclass}}-field-{{name}}" class="col-sm-3 col-form-label">{{fullName}}{{fullname-suffix}}</label>
             <div class="col-sm-9">
                 <div class="input-group">
                     {{widget}}
                 </div>
-                <small id="field_{{name}}_desc" class="form-text text-muted">{{description}}</small>
+                <small id="{{scope}}#{{subclass}}-field-{{name}}-desc" class="form-text text-muted">{{description}}</small>
             </div>
           </div>
     </script>
     
     <script id="text-widget-template" type="text/template">
-        <input type="text" class="form-control" id="field_{{name}}" aria-describedby="field_{{name}}_desc" placeholder="{{defaultValue}}" value="{{value}}">
+        <input type="text" class="form-control" name="{{scope}}#{{subclass}}-{{name}}" aria-describedby="{{scope}}#{{subclass}}-field-{{name}}-desc" placeholder="{{defaultValue}}" value="{{value}}">
         <div class="input-group-append">
             <div class="input-group-text">{{unit}}</div>
         </div>
@@ -248,7 +240,7 @@
     
     <script id="multiple-choice-entry-template" type="text/template">
          <label class="btn btn-custom {{active}}">
-             <input type="radio" name="options" id="option_true" autocomplete="off" {{onfocus}} >{{choice}}
+             <input type="radio" name="{{scope}}#{{subclass}}-{{name}}" value="{{choice}}" {{checked}} {{onfocus}} >{{choice}}
          </label>
     </script>
     

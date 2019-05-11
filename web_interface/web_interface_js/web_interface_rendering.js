@@ -66,7 +66,7 @@ function build_form_field(field_template, field_metadata, scope){
     form_field = form_field.split("{{widget}}").join(widget_html);
     
     // Enrich and inject metadata
-    field_metadata["scope"] = " scope-"+scope;
+    field_metadata["scope"] = scope;
     form_field = populate_template(form_field, field_metadata);
     return form_field;                    
 }
@@ -88,6 +88,7 @@ function assemble_multichoice_widget(values, active_choice, extra_metadata){
         // select the active button
         if(values[v] === active_choice) {
             choice_item = choice_item.split("{{active}}").join("active");
+            choice_item = choice_item.split("{{checked}}").join("checked='checked'");
         }
         // Insert the "choice" value
         choice_item = inject_to_template(choice_item, values[v], "choice");
@@ -118,6 +119,8 @@ function build_type_switch(subclasses_list, page_metadata){
         subclass_metadata["onfocus"] = ` onfocus="switchLinkedClass( '`+ 
                                                     page_metadata["name"] + `', '` + 
                                                     subclass_metadata["@type"] + `');"`;
+        subclass_metadata["scope"] = page_metadata["name"];
+        subclass_metadata["name"] = "@type";
         subclasses_metadata.push(subclass_metadata);
     }
     var type_switch_widget = assemble_multichoice_widget( subclasses_names, page_metadata.value["@type"], subclasses_metadata );
@@ -140,17 +143,18 @@ function build_type_switch(subclasses_list, page_metadata){
  */
 function switchLinkedClass(scope, choice){
     $(".scope-"+scope).hide();
-    $("."+escapeTypeName(choice, scope)).show();
+    $(".linkedclass-"+escapeTypeName(choice)+"-"+scope).show();
     $(".subclass-header-"+scope).text("\""+choice+"\" Settings");
 }
 
 /**
  * Navigation script related to the type switch. 
  * Creates an escaped version of the type name.
+ * NOTE: USED ALSO FOR SAVING, IN THE OTHER JS FILE
  */
-function escapeTypeName(wordToEscape, scope){
+function escapeTypeName(wordToEscape){
     if(wordToEscape !== undefined){
-        return "linkedclass-"+wordToEscape.replace(/[\W_]+/g,"").toLowerCase()+"-"+scope;
+        return wordToEscape.replace(/[\W_]+/g,"").toLowerCase();
     }
 }
 
@@ -233,20 +237,5 @@ function populate_web_interface(){
     }
     
     $("#menu-pages-placeholder").replaceWith( all_menu_pages_html );
-
-}
-
-
-
-
-
-
-function writeConfigFile(){
-
-    alert("Save the current configuration?");
     
-    // TODO Actually save the file...
-    
-    $('#alert-success').show();
-
 }
