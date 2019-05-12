@@ -1,538 +1,608 @@
-var mwc2config = `
 {
-  "cameraManager" : {
-    "className" : "com.mobilewebcam2.mobilewebcam2.managers.CameraManager",
-    "position" : 10,
-    "fullName" : "Camera Settings",
-    "value" : {
-      "afterShootingWaitingTime" : {
-        "className" : "java.lang.Integer",
-        "position" : 102,
-        "fullName" : "After Shooting Waiting Time",
-        "value" : 2000,
-        "defaultValue" : 2000,
-        "unit" : "milliseconds",
-        "description" : "Time to wait after the camera has shot the picture. Highly device depended. It should never be higher than the interval between shooting pictures. The default value is usually good, change this at your own risk.",
-        "upperBound" : 2147483647,
-        "lowerBound" : 0,
-        "settingType" : "ADVANCED"
-      },
-   "cameraId" : {
-        "className" : "java.lang.Integer",
-        "position" : 1,
-        "fullName" : "Camera ID",
-        "value" : 0,
-        "defaultValue" : 0,
-        "description" : "ID of the camera to use. In most phones, 0 means back camera, and 1 means front camera. Check for your phone model if this does not hold, of if your phone has more than 2 cameras.",
-        "upperBound" : 2147483647,
-        "lowerBound" : 0,
-        "settingType" : "REGULAR"
-      },
-      "previewMargin" : {
-        "className" : "java.lang.Double",
-        "position" : 100,
-        "fullName" : "Preview Margin",
-        "value" : 10.0,
-        "defaultValue" : 10.0,
-        "unit" : "%",
-        "description" : "Margin between the phone screen size and the preview. Does not affect the picture take in any way: useful only for the user to see the preview better.",
-        "upperBound" : 100.0,
-        "lowerBound" : 0.0,
-        "settingType" : "ADVANCED"
-      },
-      "retryTime" : {
-        "className" : "java.lang.Long",
-        "position" : 101,
-        "fullName" : "After Failure Retry Time",
-        "value" : 0,
-        "defaultValue" : 0,
-        "unit" : "milliseconds",
-        "description" : "After the camera has failed to open or to shoot a picture, time to wait before retrying to open the camera. Set 0 to never retry.",
-        "upperBound" : 9223372036854775807,
-        "lowerBound" : 0,
-        "settingType" : "ADVANCED"
-      }
+    "cameraManager": {
+        "className": "com.mobilewebcam2.mobilewebcam2.managers.CameraManager",
+        "position": 10,
+        "fullName": "Camera Settings",
+        "value": {
+            "afterShootingWaitingTime": {
+                "className": "java.lang.Integer",
+                "position": 102,
+                "fullName": "After Shooting Waiting Time",
+                "value": "2000",
+                "defaultValue": 2000,
+                "unit": "milliseconds",
+                "description": "Time to wait after the camera has shot the picture. Highly device depended. It should never be higher than the interval between shooting pictures. The default value is usually good, change this at your own risk.",
+                "upperBound": 2147483647,
+                "lowerBound": 0,
+                "settingType": "ADVANCED"
+            },
+            "cameraId": {
+                "className": "java.lang.Integer",
+                "position": 1,
+                "fullName": "Camera ID",
+                "value": "0",
+                "defaultValue": 0,
+                "description": "ID of the camera to use. In most phones, 0 means back camera, and 1 means front camera. Check for your phone model if this does not hold, of if your phone has more than 2 cameras.",
+                "upperBound": 2147483647,
+                "lowerBound": 0,
+                "settingType": "REGULAR"
+            },
+            "previewMargin": {
+                "className": "java.lang.Double",
+                "position": 100,
+                "fullName": "Preview Margin",
+                "value": "10",
+                "defaultValue": 10,
+                "unit": "%",
+                "description": "Margin between the phone screen size and the preview. Does not affect the picture take in any way: useful only for the user to see the preview better.",
+                "upperBound": 100,
+                "lowerBound": 0,
+                "settingType": "ADVANCED"
+            },
+            "retryTime": {
+                "className": "java.lang.Long",
+                "position": 101,
+                "fullName": "After Failure Retry Time",
+                "value": "0",
+                "defaultValue": 0,
+                "unit": "milliseconds",
+                "description": "After the camera has failed to open or to shoot a picture, time to wait before retrying to open the camera. Set 0 to never retry.",
+                "upperBound": 9223372036854776000,
+                "lowerBound": 0,
+                "settingType": "ADVANCED"
+            }
+        },
+        "description": "Settings of the camera, like which camera to use (front or back), zoom, flash, etc...",
+        "faIconName": "camera",
+        "settingType": "REGULAR"
     },
-    "description" : "Settings of the camera, like which camera to use (front or back), zoom, flash, etc...",
-    "faIconName" : "camera",
-    "settingType" : "REGULAR"
-  },
-  "generalSettingsManager" : {
-    "className" : "com.mobilewebcam2.mobilewebcam2.managers.SettingsManager",
-    "position" : 60,
-    "fullName" : "General Settings",
-    "value" : {
-      "configFilePath" : {
-        "className" : "java.lang.String",
-        "position" : 10,
-        "fullName" : "Settings File Path",
-        "value" : "/sdcard/mwc2_config.json",
-        "defaultValue" : "/mobilewebcam2/config.json",
-        "description" : "Where the app will download and store the latest copy of this configuration file.",
-        "settingType" : "REGULAR"
-      }
+    "generalSettingsManager": {
+        "className": "com.mobilewebcam2.mobilewebcam2.managers.SettingsManager",
+        "position": 60,
+        "fullName": "General Settings",
+        "value": {
+            "configFilePath": {
+                "className": "java.lang.String",
+                "position": 10,
+                "fullName": "Settings File Path",
+                "value": "/sdcard/mwc2_config.json",
+                "defaultValue": "/mobilewebcam2/config.json",
+                "description": "Where the app will download and store the latest copy of this configuration file.",
+                "settingType": "REGULAR"
+            }
+        },
+        "description": "Various minor configuration regarding the application overall.",
+        "faIconName": "wrench",
+        "settingType": "REGULAR"
     },
-    "description" : "Various minor configuration regarding the application overall.",
-    "faIconName" : "wrench",
-    "settingType" : "REGULAR"
-  },
-  "imageManager" : {
-    "className" : "com.mobilewebcam2.mobilewebcam2.managers.ImageManager",
-    "position" : 20,
-    "fullName" : "Image Settings",
-    "value" : {
-      "fileType" : {
-        "className" : "com.mobilewebcam2.mobilewebcam2.managers.ImageManager$ImageExtension",
-        "position" : 10,
-        "fullName" : "Image Format",
-        "value" : "JPG",
-        "defaultValue" : "JPG",
-        "description" : "Format of the picture (its extensions, like image.png or image.jpg)",
-        "allowedValues" : [ "JPG", "PNG", "GIF" ],
-        "settingType" : "REGULAR"
-      },
-      "height" : {
-        "className" : "java.lang.Integer",
-        "position" : 20,
-        "fullName" : "Image Height",
-        "value" : 480,
-        "defaultValue" : 480,
-        "unit" : "px",
-        "description" : "Height of the picture",
-        "upperBound" : 2147483647,
-        "lowerBound" : 0,
-        "settingType" : "REGULAR"
-      },
-      "width" : {
-        "className" : "java.lang.Integer",
-        "position" : 21,
-        "fullName" : "Image Width",
-        "value" : 640,
-        "defaultValue" : 640,
-        "unit" : "px",
-     "description" : "Width of the picture",
-        "upperBound" : 2147483647,
-        "lowerBound" : 0,
-        "settingType" : "REGULAR"
-      }
+    "imageManager": {
+        "className": "com.mobilewebcam2.mobilewebcam2.managers.ImageManager",
+        "position": 20,
+        "fullName": "Image Settings",
+        "value": {
+            "fileType": {
+                "className": "com.mobilewebcam2.mobilewebcam2.managers.ImageManager$ImageExtension",
+                "position": 10,
+                "fullName": "Image Format",
+                "value": "GIF",
+                "defaultValue": "JPG",
+                "description": "Format of the picture (its extensions, like image.png or image.jpg)",
+                "allowedValues": [
+                    "JPG",
+                    "PNG",
+                    "GIF"
+                ],
+                "settingType": "REGULAR"
+            },
+            "height": {
+                "className": "java.lang.Integer",
+                "position": 20,
+                "fullName": "Image Height",
+                "value": "480",
+                "defaultValue": 480,
+                "unit": "px",
+                "description": "Height of the picture",
+                "upperBound": 2147483647,
+                "lowerBound": 0,
+                "settingType": "REGULAR"
+            },
+            "width": {
+                "className": "java.lang.Integer",
+                "position": 21,
+                "fullName": "Image Width",
+                "value": "640",
+                "defaultValue": 640,
+                "unit": "px",
+                "description": "Width of the picture",
+                "upperBound": 2147483647,
+                "lowerBound": 0,
+                "settingType": "REGULAR"
+            }
+        },
+        "description": "Post-processing options, like brightness/contrast corrections, size of the picture, image format, resolution, imprints, etc...",
+        "faIconName": "image",
+        "settingType": "REGULAR"
     },
-    "description" : "Post-processing options, like brightness/contrast corrections, size of the picture, image format, resolution, imprints, etc...",
-    "faIconName" : "image",
-    "settingType" : "REGULAR"
-  },
-  "logStorageManager" : {
-    "className" : "com.mobilewebcam2.mobilewebcam2.managers.StorageManager",
-    "position" : 50,
-    "fullName" : "Log Settings",
-    "value" : {
-      "@type" : "Save in the gallery",
-      "addTimestamp" : {
-        "className" : "java.lang.Boolean",
-        "position" : 20,
-        "fullName" : "Add timestamp",
-        "value" : true,
-        "defaultValue" : true,
-        "description" : "If true, adds the timestamp to the file name.",
-        "allowedValues" : [ true, false ],
-        "settingType" : "REGULAR"
-      },
-   "timestampAtTheBeginning" : {
-        "className" : "java.lang.Boolean",
-        "position" : 22,
-        "fullName" : "Timestamp at the beginning",
-        "value" : true,
-        "defaultValue" : true,
-        "description" : "If true, adds the timestamp to the beginning of the file name. If false, it puts it at the end of it. IGNORED IF THE TIMESTAMP IS DISABLED",
-        "allowedValues" : [ true, false ],
-        "settingType" : "REGULAR"
-      },
-      "timestampFormatString" : {
-        "className" : "java.lang.String",
-        "position" : 24,
-        "fullName" : "Timestamp Format",
-        "value" : "",
-        "defaultValue" : "",
-        "description" : "Format string for the timestamp (i.e. YYYY/MM/DD hh:mm:ss). If empty, a regular UNIX timestamp is used.",
-        "settingType" : "REGULAR"
-      },
-      "externalStorage" : {
-        "className" : "java.lang.Boolean",
-        "position" : 110,
-     "fullName" : "Save on external storage?",
-        "value" : true,
-        "defaultValue" : true,
-        "unit" : "",
-        "description" : "Whether to use the external storage or not. Yes = save on the SD, No = save on the internal memory",
-        "allowedValues" : [ true, false ],
-        "settingType" : "REGULAR"
-      },
-      "path" : {
-        "className" : "java.lang.String",
-        "position" : 120,
-        "fullName" : "Folder Name",
-        "value" : "mobilewebcam2_folder",
-        "defaultValue" : "mobilewebcam2_folder",
-        "unit" : "",
-        "description" : "Path to the folder to save the files in.",
-        "settingType" : "REGULAR"
-      }
- },
-    "description" : "Where to store the logs of the application: on the device, on a server, etc...",
-    "allowedValues" : [ {
-      "@type" : "Save in the gallery",
-      "addTimestamp" : {
-        "className" : "java.lang.Boolean",
-        "position" : 20,
-        "fullName" : "Add timestamp",
-        "value" : true,
-        "defaultValue" : true,
-        "description" : "If true, adds the timestamp to the file name.",
-        "allowedValues" : [ true, false ],
-        "settingType" : "REGULAR"
-      },
-   "timestampAtTheBeginning" : {
-        "className" : "java.lang.Boolean",
-        "position" : 22,
-        "fullName" : "Timestamp at the beginning",
-        "value" : true,
-        "defaultValue" : true,
-        "description" : "If true, adds the timestamp to the beginning of the file name. If false, it puts it at the end of it. IGNORED IF THE TIMESTAMP IS DISABLED",
-        "allowedValues" : [ true, false ],
-        "settingType" : "REGULAR"
-      },
-      "timestampFormatString" : {
-        "className" : "java.lang.String",
-        "position" : 24,
-        "fullName" : "Timestamp Format",
-        "value" : "",
-        "defaultValue" : "",
-        "description" : "Format string for the timestamp (i.e. YYYY/MM/DD hh:mm:ss). If empty, a regular UNIX timestamp is used.",
-     "settingType" : "REGULAR"
-      },
-      "externalStorage" : {
-        "className" : "java.lang.Boolean",
-        "position" : 110,
-        "fullName" : "Save on external storage?",
-     "value" : true,
-        "defaultValue" : true,
-     "unit" : "",
-        "description" : "Whether to use the external storage or not. Yes = save on the SD, No = save on the internal memory",
-        "allowedValues" : [ true, false ],
-        "settingType" : "REGULAR"
-      },
-      "path" : {
-        "className" : "java.lang.String",
-        "position" : 120,
-        "fullName" : "Folder Name",
-        "value" : "mobilewebcam2_folder",
-        "defaultValue" : "mobilewebcam2_folder",
-        "unit" : "",
-        "description" : "Path to the folder to save the files in.",
-        "settingType" : "REGULAR"
-      }
-    }, {
-      "@type" : "Upload to Server",
-      "addTimestamp" : {
-        "className" : "java.lang.Boolean",
-        "position" : 20,
-        "fullName" : "Add timestamp",
-        "value" : true,
-        "defaultValue" : true,
-        "description" : "If true, adds the timestamp to the file name.",
-        "allowedValues" : [ true, false ],
-        "settingType" : "REGULAR"
-      },
-      "timestampAtTheBeginning" : {
-        "className" : "java.lang.Boolean",
-        "position" : 22,
-        "fullName" : "Timestamp at the beginning",
-        "value" : true,
-        "defaultValue" : true,
-        "description" : "If true, adds the timestamp to the beginning of the file name. If false, it puts it at the end of it. IGNORED IF THE TIMESTAMP IS DISABLED",
-        "allowedValues" : [ true, false ],
-        "settingType" : "REGULAR"
-      },
-      "timestampFormatString" : {
-        "className" : "java.lang.String",
-        "position" : 24,
-        "fullName" : "Timestamp Format",
-        "value" : "",
-        "defaultValue" : "",
-        "description" : "Format string for the timestamp (i.e. YYYY/MM/DD hh:mm:ss). If empty, a regular UNIX timestamp is used.",
-        "settingType" : "REGULAR"
-      },
-   "serverAddress" : {
-        "className" : "java.lang.String",
-        "position" : 110,
-        "fullName" : "Server Address",
-        "value" : "127.0.0.1",
-        "defaultValue" : "127.0.0.1",
-        "unit" : "",
-        "description" : "IP address of the FTP server where the files will be uploaded",
-        "settingType" : "REGULAR"
-      },
-      "serverPort" : {
-        "className" : "java.lang.String",
-        "position" : 120,
-        "fullName" : "Server Port",
-        "value" : "8000",
-        "defaultValue" : "8000",
-        "unit" : "",
-        "description" : "ID of the FTP port of the server where the files will be uploaded",
-        "settingType" : "REGULAR"
-      }
-    }, {
-      "@type" : "Share on Social Media",
-      "addTimestamp" : {
-        "className" : "java.lang.Boolean",
-     "position" : 20,
-        "fullName" : "Add timestamp",
-        "value" : true,
-        "defaultValue" : true,
-        "description" : "If true, adds the timestamp to the file name.",
-        "allowedValues" : [ true, false ],
-        "settingType" : "REGULAR"
-      },
-      "timestampAtTheBeginning" : {
-        "className" : "java.lang.Boolean",
-        "position" : 22,
-        "fullName" : "Timestamp at the beginning",
-        "value" : true,
-        "defaultValue" : true,
-        "description" : "If true, adds the timestamp to the beginning of the file name. If false, it puts it at the end of it. IGNORED IF THE TIMESTAMP IS DISABLED",
-        "allowedValues" : [ true, false ],
-        "settingType" : "REGULAR"
-      },
-      "timestampFormatString" : {
-        "className" : "java.lang.String",
-        "position" : 24,
-        "fullName" : "Timestamp Format",
-        "value" : "",
-        "defaultValue" : "",
-        "description" : "Format string for the timestamp (i.e. YYYY/MM/DD hh:mm:ss). If empty, a regular UNIX timestamp is used.",
-        "settingType" : "REGULAR"
-      }
-    } ],
-    "faIconName" : "file-contract",
-    "settingType" : "REGULAR"
-  },
-  "pictureStorageManager" : {
-    "className" : "com.mobilewebcam2.mobilewebcam2.managers.StorageManager",
-    "position" : 40,
-    "fullName" : "Storage Settings",
-    "value" : {
-      "@type" : "Save in the gallery",
-      "addTimestamp" : {
-        "className" : "java.lang.Boolean",
-        "position" : 20,
-        "fullName" : "Add timestamp",
-        "value" : true,
-        "defaultValue" : true,
-        "description" : "If true, adds the timestamp to the file name.",
-        "allowedValues" : [ true, false ],
-        "settingType" : "REGULAR"
-      },
-      "timestampAtTheBeginning" : {
-        "className" : "java.lang.Boolean",
-        "position" : 22,
-        "fullName" : "Timestamp at the beginning",
-        "value" : true,
-     "defaultValue" : true,
-        "description" : "If true, adds the timestamp to the beginning of the file name. If false, it puts it at the end of it. IGNORED IF THE TIMESTAMP IS DISABLED",
-        "allowedValues" : [ true, false ],
-        "settingType" : "REGULAR"
-      },
-      "timestampFormatString" : {
-        "className" : "java.lang.String",
-        "position" : 24,
-        "fullName" : "Timestamp Format",
-        "value" : "",
-        "defaultValue" : "",
-        "description" : "Format string for the timestamp (i.e. YYYY/MM/DD hh:mm:ss). If empty, a regular UNIX timestamp is used.",
-        "settingType" : "REGULAR"
-      },
-      "externalStorage" : {
-        "className" : "java.lang.Boolean",
-        "position" : 110,
-        "fullName" : "Save on external storage?",
-        "value" : true,
-        "defaultValue" : true,
-        "unit" : "",
-        "description" : "Whether to use the external storage or not. Yes = save on the SD, No = save on the internal memory",
-        "allowedValues" : [ true, false ],
-        "settingType" : "REGULAR"
-      },
-      "path" : {
-        "className" : "java.lang.String",
-        "position" : 120,
-        "fullName" : "Folder Name",
-        "value" : "mobilewebcam2_folder",
-        "defaultValue" : "mobilewebcam2_folder",
-        "unit" : "",
-        "description" : "Path to the folder to save the files in.",
-        "settingType" : "REGULAR"
-      }
+    "logStorageManager": {
+        "className": "com.mobilewebcam2.mobilewebcam2.managers.StorageManager",
+        "position": 50,
+        "fullName": "Log Settings",
+        "value": {
+            "@type": "Save in the gallery",
+            "addTimestamp": {
+                "className": "java.lang.Boolean",
+                "position": 20,
+                "fullName": "Add timestamp",
+                "value": "true",
+                "defaultValue": true,
+                "description": "If true, adds the timestamp to the file name.",
+                "allowedValues": [
+                    true,
+                    false
+                ],
+                "settingType": "REGULAR"
+            },
+            "timestampAtTheBeginning": {
+                "className": "java.lang.Boolean",
+                "position": 22,
+                "fullName": "Timestamp at the beginning",
+                "value": "true",
+                "defaultValue": true,
+                "description": "If true, adds the timestamp to the beginning of the file name. If false, it puts it at the end of it. IGNORED IF THE TIMESTAMP IS DISABLED",
+                "allowedValues": [
+                    true,
+                    false
+                ],
+                "settingType": "REGULAR"
+            },
+            "timestampFormatString": {
+                "className": "java.lang.String",
+                "position": 24,
+                "fullName": "Timestamp Format",
+                "value": "",
+                "defaultValue": "",
+                "description": "Format string for the timestamp (i.e. YYYY/MM/DD hh:mm:ss). If empty, a regular UNIX timestamp is used.",
+                "settingType": "REGULAR"
+            },
+            "externalStorage": {
+                "className": "java.lang.Boolean",
+                "position": 110,
+                "fullName": "Save on external storage?",
+                "value": "true",
+                "defaultValue": true,
+                "unit": "",
+                "description": "Whether to use the external storage or not. Yes = save on the SD, No = save on the internal memory",
+                "allowedValues": [
+                    true,
+                    false
+                ],
+                "settingType": "REGULAR"
+            },
+            "path": {
+                "className": "java.lang.String",
+                "position": 120,
+                "fullName": "Folder Name",
+                "value": "mobilewebcam2_folder",
+                "defaultValue": "mobilewebcam2_folder",
+                "unit": "",
+                "description": "Path to the folder to save the files in.",
+                "settingType": "REGULAR"
+            }
+        },
+        "description": "Where to store the logs of the application: on the device, on a server, etc...",
+        "allowedValues": [
+            {
+                "@type": "Save in the gallery",
+                "addTimestamp": {
+                    "className": "java.lang.Boolean",
+                    "position": 20,
+                    "fullName": "Add timestamp",
+                    "value": "true",
+                    "defaultValue": true,
+                    "description": "If true, adds the timestamp to the file name.",
+                    "allowedValues": [
+                        true,
+                        false
+                    ],
+                    "settingType": "REGULAR"
+                },
+                "timestampAtTheBeginning": {
+                    "className": "java.lang.Boolean",
+                    "position": 22,
+                    "fullName": "Timestamp at the beginning",
+                    "value": "true",
+                    "defaultValue": true,
+                    "description": "If true, adds the timestamp to the beginning of the file name. If false, it puts it at the end of it. IGNORED IF THE TIMESTAMP IS DISABLED",
+                    "allowedValues": [
+                        true,
+                        false
+                    ],
+                    "settingType": "REGULAR"
+                },
+                "timestampFormatString": {
+                    "className": "java.lang.String",
+                    "position": 24,
+                    "fullName": "Timestamp Format",
+                    "value": "",
+                    "defaultValue": "",
+                    "description": "Format string for the timestamp (i.e. YYYY/MM/DD hh:mm:ss). If empty, a regular UNIX timestamp is used.",
+                    "settingType": "REGULAR"
+                },
+                "externalStorage": {
+                    "className": "java.lang.Boolean",
+                    "position": 110,
+                    "fullName": "Save on external storage?",
+                    "value": "true",
+                    "defaultValue": true,
+                    "unit": "",
+                    "description": "Whether to use the external storage or not. Yes = save on the SD, No = save on the internal memory",
+                    "allowedValues": [
+                        true,
+                        false
+                    ],
+                    "settingType": "REGULAR"
+                },
+                "path": {
+                    "className": "java.lang.String",
+                    "position": 120,
+                    "fullName": "Folder Name",
+                    "value": "mobilewebcam2_folder",
+                    "defaultValue": "mobilewebcam2_folder",
+                    "unit": "",
+                    "description": "Path to the folder to save the files in.",
+                    "settingType": "REGULAR"
+                }
+            },
+            {
+                "@type": "Upload to Server",
+                "addTimestamp": {
+                    "className": "java.lang.Boolean",
+                    "position": 20,
+                    "fullName": "Add timestamp",
+                    "value": true,
+                    "defaultValue": true,
+                    "description": "If true, adds the timestamp to the file name.",
+                    "allowedValues": [
+                        true,
+                        false
+                    ],
+                    "settingType": "REGULAR"
+                },
+                "timestampAtTheBeginning": {
+                    "className": "java.lang.Boolean",
+                    "position": 22,
+                    "fullName": "Timestamp at the beginning",
+                    "value": true,
+                    "defaultValue": true,
+                    "description": "If true, adds the timestamp to the beginning of the file name. If false, it puts it at the end of it. IGNORED IF THE TIMESTAMP IS DISABLED",
+                    "allowedValues": [
+                        true,
+                        false
+                    ],
+                    "settingType": "REGULAR"
+                },
+                "timestampFormatString": {
+                    "className": "java.lang.String",
+                    "position": 24,
+                    "fullName": "Timestamp Format",
+                    "value": "",
+                    "defaultValue": "",
+                    "description": "Format string for the timestamp (i.e. YYYY/MM/DD hh:mm:ss). If empty, a regular UNIX timestamp is used.",
+                    "settingType": "REGULAR"
+                },
+                "serverAddress": {
+                    "className": "java.lang.String",
+                    "position": 110,
+                    "fullName": "Server Address",
+                    "value": "127.0.0.1",
+                    "defaultValue": "127.0.0.1",
+                    "unit": "",
+                    "description": "IP address of the FTP server where the files will be uploaded",
+                    "settingType": "REGULAR"
+                },
+                "serverPort": {
+                    "className": "java.lang.String",
+                    "position": 120,
+                    "fullName": "Server Port",
+                    "value": "8000",
+                    "defaultValue": "8000",
+                    "unit": "",
+                    "description": "ID of the FTP port of the server where the files will be uploaded",
+                    "settingType": "REGULAR"
+                }
+            },
+            {
+                "@type": "Share on Social Media",
+                "addTimestamp": {
+                    "className": "java.lang.Boolean",
+                    "position": 20,
+                    "fullName": "Add timestamp",
+                    "value": true,
+                    "defaultValue": true,
+                    "description": "If true, adds the timestamp to the file name.",
+                    "allowedValues": [
+                        true,
+                        false
+                    ],
+                    "settingType": "REGULAR"
+                },
+                "timestampAtTheBeginning": {
+                    "className": "java.lang.Boolean",
+                    "position": 22,
+                    "fullName": "Timestamp at the beginning",
+                    "value": true,
+                    "defaultValue": true,
+                    "description": "If true, adds the timestamp to the beginning of the file name. If false, it puts it at the end of it. IGNORED IF THE TIMESTAMP IS DISABLED",
+                    "allowedValues": [
+                        true,
+                        false
+                    ],
+                    "settingType": "REGULAR"
+                },
+                "timestampFormatString": {
+                    "className": "java.lang.String",
+                    "position": 24,
+                    "fullName": "Timestamp Format",
+                    "value": "",
+                    "defaultValue": "",
+                    "description": "Format string for the timestamp (i.e. YYYY/MM/DD hh:mm:ss). If empty, a regular UNIX timestamp is used.",
+                    "settingType": "REGULAR"
+                }
+            }
+        ],
+        "faIconName": "file-contract",
+        "settingType": "REGULAR"
     },
-    "description" : "Where to store the pictures shot: on the device, on a server, etc...",
-    "allowedValues" : [ {
-      "@type" : "Save in the gallery",
-      "addTimestamp" : {
-        "className" : "java.lang.Boolean",
-        "position" : 20,
-        "fullName" : "Add timestamp",
-        "value" : true,
-        "defaultValue" : true,
-        "description" : "If true, adds the timestamp to the file name.",
-        "allowedValues" : [ true, false ],
-        "settingType" : "REGULAR"
-      },
-      "timestampAtTheBeginning" : {
-        "className" : "java.lang.Boolean",
-        "position" : 22,
-        "fullName" : "Timestamp at the beginning",
-        "value" : true,
-        "defaultValue" : true,
-        "description" : "If true, adds the timestamp to the beginning of the file name. If false, it puts it at the end of it. IGNORED IF THE TIMESTAMP IS DISABLED",
-        "allowedValues" : [ true, false ],
-        "settingType" : "REGULAR"
-      },
-      "timestampFormatString" : {
-        "className" : "java.lang.String",
-        "position" : 24,
-        "fullName" : "Timestamp Format",
-        "value" : "",
-        "defaultValue" : "",
-        "description" : "Format string for the timestamp (i.e. YYYY/MM/DD hh:mm:ss). If empty, a regular UNIX timestamp is used.",
-        "settingType" : "REGULAR"
-      },
-      "externalStorage" : {
-        "className" : "java.lang.Boolean",
-        "position" : 110,
-     "fullName" : "Save on external storage?",
-        "value" : true,
-        "defaultValue" : true,
-        "unit" : "",
-        "description" : "Whether to use the external storage or not. Yes = save on the SD, No = save on the internal memory",
-        "allowedValues" : [ true, false ],
-        "settingType" : "REGULAR"
-      },
-      "path" : {
-        "className" : "java.lang.String",
-        "position" : 120,
-        "fullName" : "Folder Name",
-        "value" : "mobilewebcam2_folder",
-        "defaultValue" : "mobilewebcam2_folder",
-        "unit" : "",
-        "description" : "Path to the folder to save the files in.",
-        "settingType" : "REGULAR"
-      }
-    }, {
-      "@type" : "Upload to Server",
-      "addTimestamp" : {
-        "className" : "java.lang.Boolean",
-        "position" : 20,
-        "fullName" : "Add timestamp",
-        "value" : true,
-        "defaultValue" : true,
-        "description" : "If true, adds the timestamp to the file name.",
-        "allowedValues" : [ true, false ],
-        "settingType" : "REGULAR"
-      },
-      "timestampAtTheBeginning" : {
-        "className" : "java.lang.Boolean",
-        "position" : 22,
-        "fullName" : "Timestamp at the beginning",
-        "value" : true,
-        "defaultValue" : true,
-        "description" : "If true, adds the timestamp to the beginning of the file name. If false, it puts it at the end of it. IGNORED IF THE TIMESTAMP IS DISABLED",
-        "allowedValues" : [ true, false ],
-        "settingType" : "REGULAR"
-      },
-      "timestampFormatString" : {
-        "className" : "java.lang.String",
-        "position" : 24,
-        "fullName" : "Timestamp Format",
-        "value" : "",
-        "defaultValue" : "",
-        "description" : "Format string for the timestamp (i.e. YYYY/MM/DD hh:mm:ss). If empty, a regular UNIX timestamp is used.",
-        "settingType" : "REGULAR"
-      },
-      "serverAddress" : {
-        "className" : "java.lang.String",
-        "position" : 110,
-        "fullName" : "Server Address",
-        "value" : "127.0.0.1",
-        "defaultValue" : "127.0.0.1",
-        "unit" : "",
-        "description" : "IP address of the FTP server where the files will be uploaded",
-        "settingType" : "REGULAR"
-      },
-      "serverPort" : {
-        "className" : "java.lang.String",
-        "position" : 120,
-        "fullName" : "Server Port",
-        "value" : "8000",
-        "defaultValue" : "8000",
-        "unit" : "",
-        "description" : "ID of the FTP port of the server where the files will be uploaded",
-        "settingType" : "REGULAR"
-      }
-    }, {
-      "@type" : "Share on Social Media",
-      "addTimestamp" : {
-        "className" : "java.lang.Boolean",
-        "position" : 20,
-        "fullName" : "Add timestamp",
-        "value" : true,
-        "defaultValue" : true,
-        "description" : "If true, adds the timestamp to the file name.",
-        "allowedValues" : [ true, false ],
-        "settingType" : "REGULAR"
-      },
-      "timestampAtTheBeginning" : {
-        "className" : "java.lang.Boolean",
-        "position" : 22,
-        "fullName" : "Timestamp at the beginning",
-        "value" : true,
-        "defaultValue" : true,
-        "description" : "If true, adds the timestamp to the beginning of the file name. If false, it puts it at the end of it. IGNORED IF THE TIMESTAMP IS DISABLED",
-        "allowedValues" : [ true, false ],
-        "settingType" : "REGULAR"
-      },
-      "timestampFormatString" : {
-        "className" : "java.lang.String",
-     "position" : 24,
-        "fullName" : "Timestamp Format",
-        "value" : "",
-        "defaultValue" : "",
-        "description" : "Format string for the timestamp (i.e. YYYY/MM/DD hh:mm:ss). If empty, a regular UNIX timestamp is used.",
-        "settingType" : "REGULAR"
-      }
-    } ],
-    "faIconName" : "cloud-upload-alt",
-    "settingType" : "REGULAR"
-  },
-  "takePictureTriggersManager" : {
-    "className" : "com.mobilewebcam2.mobilewebcam2.managers.TriggersManager",
-    "position" : 30,
-    "fullName" : "Shooting Settings",
-    "value" : {
-      "nextAlarmInterval" : {
-        "className" : "java.lang.Long",
-        "position" : 10,
-        "fullName" : "Interval",
-        "value" : 10,
-        "defaultValue" : 10,
-        "unit" : "seconds",
-        "description" : "How long to wait before the following repetition.",
-        "upperBound" : 9223372036854775807,
-        "lowerBound" : 0,
-        "settingType" : "REGULAR"
-      }
+    "pictureStorageManager": {
+        "className": "com.mobilewebcam2.mobilewebcam2.managers.StorageManager",
+        "position": 40,
+        "fullName": "Storage Settings",
+        "value": {
+            "@type": "Save in the gallery",
+            "addTimestamp": {
+                "className": "java.lang.Boolean",
+                "position": 20,
+                "fullName": "Add timestamp",
+                "value": "true",
+                "defaultValue": true,
+                "description": "If true, adds the timestamp to the file name.",
+                "allowedValues": [
+                    true,
+                    false
+                ],
+                "settingType": "REGULAR"
+            },
+            "timestampAtTheBeginning": {
+                "className": "java.lang.Boolean",
+                "position": 22,
+                "fullName": "Timestamp at the beginning",
+                "value": "true",
+                "defaultValue": true,
+                "description": "If true, adds the timestamp to the beginning of the file name. If false, it puts it at the end of it. IGNORED IF THE TIMESTAMP IS DISABLED",
+                "allowedValues": [
+                    true,
+                    false
+                ],
+                "settingType": "REGULAR"
+            },
+            "timestampFormatString": {
+                "className": "java.lang.String",
+                "position": 24,
+                "fullName": "Timestamp Format",
+                "value": "",
+                "defaultValue": "",
+                "description": "Format string for the timestamp (i.e. YYYY/MM/DD hh:mm:ss). If empty, a regular UNIX timestamp is used.",
+                "settingType": "REGULAR"
+            },
+            "externalStorage": {
+                "className": "java.lang.Boolean",
+                "position": 110,
+                "fullName": "Save on external storage?",
+                "value": "true",
+                "defaultValue": true,
+                "unit": "",
+                "description": "Whether to use the external storage or not. Yes = save on the SD, No = save on the internal memory",
+                "allowedValues": [
+                    true,
+                    false
+                ],
+                "settingType": "REGULAR"
+            },
+            "path": {
+                "className": "java.lang.String",
+                "position": 120,
+                "fullName": "Folder Name",
+                "value": "mobilewebcam2_folder",
+                "defaultValue": "mobilewebcam2_folder",
+                "unit": "",
+                "description": "Path to the folder to save the files in.",
+                "settingType": "REGULAR"
+            }
+        },
+        "description": "Where to store the pictures shot: on the device, on a server, etc...",
+        "allowedValues": [
+            {
+                "@type": "Save in the gallery",
+                "addTimestamp": {
+                    "className": "java.lang.Boolean",
+                    "position": 20,
+                    "fullName": "Add timestamp",
+                    "value": "true",
+                    "defaultValue": true,
+                    "description": "If true, adds the timestamp to the file name.",
+                    "allowedValues": [
+                        true,
+                        false
+                    ],
+                    "settingType": "REGULAR"
+                },
+                "timestampAtTheBeginning": {
+                    "className": "java.lang.Boolean",
+                    "position": 22,
+                    "fullName": "Timestamp at the beginning",
+                    "value": "true",
+                    "defaultValue": true,
+                    "description": "If true, adds the timestamp to the beginning of the file name. If false, it puts it at the end of it. IGNORED IF THE TIMESTAMP IS DISABLED",
+                    "allowedValues": [
+                        true,
+                        false
+                    ],
+                    "settingType": "REGULAR"
+                },
+                "timestampFormatString": {
+                    "className": "java.lang.String",
+                    "position": 24,
+                    "fullName": "Timestamp Format",
+                    "value": "",
+                    "defaultValue": "",
+                    "description": "Format string for the timestamp (i.e. YYYY/MM/DD hh:mm:ss). If empty, a regular UNIX timestamp is used.",
+                    "settingType": "REGULAR"
+                },
+                "externalStorage": {
+                    "className": "java.lang.Boolean",
+                    "position": 110,
+                    "fullName": "Save on external storage?",
+                    "value": "true",
+                    "defaultValue": true,
+                    "unit": "",
+                    "description": "Whether to use the external storage or not. Yes = save on the SD, No = save on the internal memory",
+                    "allowedValues": [
+                        true,
+                        false
+                    ],
+                    "settingType": "REGULAR"
+                },
+                "path": {
+                    "className": "java.lang.String",
+                    "position": 120,
+                    "fullName": "Folder Name",
+                    "value": "mobilewebcam2_folder",
+                    "defaultValue": "mobilewebcam2_folder",
+                    "unit": "",
+                    "description": "Path to the folder to save the files in.",
+                    "settingType": "REGULAR"
+                }
+            },
+            {
+                "@type": "Upload to Server",
+                "addTimestamp": {
+                    "className": "java.lang.Boolean",
+                    "position": 20,
+                    "fullName": "Add timestamp",
+                    "value": true,
+                    "defaultValue": true,
+                    "description": "If true, adds the timestamp to the file name.",
+                    "allowedValues": [
+                        true,
+                        false
+                    ],
+                    "settingType": "REGULAR"
+                },
+                "timestampAtTheBeginning": {
+                    "className": "java.lang.Boolean",
+                    "position": 22,
+                    "fullName": "Timestamp at the beginning",
+                    "value": true,
+                    "defaultValue": true,
+                    "description": "If true, adds the timestamp to the beginning of the file name. If false, it puts it at the end of it. IGNORED IF THE TIMESTAMP IS DISABLED",
+                    "allowedValues": [
+                        true,
+                        false
+                    ],
+                    "settingType": "REGULAR"
+                },
+                "timestampFormatString": {
+                    "className": "java.lang.String",
+                    "position": 24,
+                    "fullName": "Timestamp Format",
+                    "value": "",
+                    "defaultValue": "",
+                    "description": "Format string for the timestamp (i.e. YYYY/MM/DD hh:mm:ss). If empty, a regular UNIX timestamp is used.",
+                    "settingType": "REGULAR"
+                },
+                "serverAddress": {
+                    "className": "java.lang.String",
+                    "position": 110,
+                    "fullName": "Server Address",
+                    "value": "127.0.0.1",
+                    "defaultValue": "127.0.0.1",
+                    "unit": "",
+                    "description": "IP address of the FTP server where the files will be uploaded",
+                    "settingType": "REGULAR"
+                },
+                "serverPort": {
+                    "className": "java.lang.String",
+                    "position": 120,
+                    "fullName": "Server Port",
+                    "value": "8000",
+                    "defaultValue": "8000",
+                    "unit": "",
+                    "description": "ID of the FTP port of the server where the files will be uploaded",
+                    "settingType": "REGULAR"
+                }
+            },
+            {
+                "@type": "Share on Social Media",
+                "addTimestamp": {
+                    "className": "java.lang.Boolean",
+                    "position": 20,
+                    "fullName": "Add timestamp",
+                    "value": true,
+                    "defaultValue": true,
+                    "description": "If true, adds the timestamp to the file name.",
+                    "allowedValues": [
+                        true,
+                        false
+                    ],
+                    "settingType": "REGULAR"
+                },
+                "timestampAtTheBeginning": {
+                    "className": "java.lang.Boolean",
+                    "position": 22,
+                    "fullName": "Timestamp at the beginning",
+                    "value": true,
+                    "defaultValue": true,
+                    "description": "If true, adds the timestamp to the beginning of the file name. If false, it puts it at the end of it. IGNORED IF THE TIMESTAMP IS DISABLED",
+                    "allowedValues": [
+                        true,
+                        false
+                    ],
+                    "settingType": "REGULAR"
+                },
+                "timestampFormatString": {
+                    "className": "java.lang.String",
+                    "position": 24,
+                    "fullName": "Timestamp Format",
+                    "value": "",
+                    "defaultValue": "",
+                    "description": "Format string for the timestamp (i.e. YYYY/MM/DD hh:mm:ss). If empty, a regular UNIX timestamp is used.",
+                    "settingType": "REGULAR"
+                }
+            }
+        ],
+        "faIconName": "cloud-upload-alt",
+        "settingType": "REGULAR"
     },
-    "description" : "When to take pictures and when to not do it (at night, in low battery conditions, etc...)",
-    "faIconName" : "stopwatch",
-    "settingType" : "REGULAR"
-  }
+    "takePictureTriggersManager": {
+        "className": "com.mobilewebcam2.mobilewebcam2.managers.TriggersManager",
+        "position": 30,
+        "fullName": "Shooting Settings",
+        "value": {
+            "nextAlarmInterval": {
+                "className": "java.lang.Long",
+                "position": 10,
+                "fullName": "Interval",
+                "value": "10",
+                "defaultValue": 10,
+                "unit": "seconds",
+                "description": "How long to wait before the following repetition.",
+                "upperBound": 9223372036854776000,
+                "lowerBound": 0,
+                "settingType": "REGULAR"
+            }
+        },
+        "description": "When to take pictures and when to not do it (at night, in low battery conditions, etc...)",
+        "faIconName": "stopwatch",
+        "settingType": "REGULAR"
+    }
 }
-`

@@ -8,22 +8,17 @@
     <link rel="shortcut icon" type="image/png" href="favicon.png"/>
     <title>Control Panel - Mobile WebCam 2</title>
     
-    <!-- Bootstrap core CSS CDN -->
     <link rel="stylesheet" href="web_interface_css/bootstrap.min.css">
     <link rel="stylesheet" href="web_interface_css/web_interface.css">
     <link rel="stylesheet" href="web_interface_fa/css/all.min.css">
-    
-    <!-- Loads the JSON with the configuration data -->
-    <script type="text/javascript" src="mwc2_config.json"></script>
     
     <script type="text/javascript" src="web_interface_js/jquery-3.4.1.slim.min.js"></script>
     <script type="text/javascript" src="web_interface_js/bootstrap.bundle.min.js"></script>
     <script type="text/javascript" src="web_interface_js/web_interface_rendering.js"></script>
     <script type="text/javascript" src="web_interface_js/web_interface_saving.js"></script>
     
-    
   </head>
-  <body onload="populate_web_interface();">
+  <body onload="">
   
     <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
       <a class="navbar-brand" href="#" data-title="Control Panel"> <img src="favicon.png" style="padding-right:5px;"/>
@@ -35,7 +30,7 @@
       </button -->
         <ul class="navbar-nav ml-auto" style="float:right;">
           <li class="nav-item">
-            <a id="navbtn_save" href="#" onclick="return writeConfigFile();" class="mynavlink-light btn btn-success">
+            <a id="navbtn_save" href="#" class="mynavlink-light btn btn-success">
                <span class="fa fa-save" style="padding-right:5px;"aria-hidden="true"></span>
                <span class="hide-collapse">  Save Configuration</span>
             </a>
@@ -67,6 +62,13 @@
                 <p class="lead hide-collapse">Here you can find all the remotely configurable settings of the Mobile Webcam 2 Android app.<br/>
                 NOTE: All fields are required. If you don't know how to fill them up, just type the default value suggested as a placeholder.</p>
                 
+                <hr />
+                <div class="custom-file" style="margin-top: 1em;">
+                    <input type="file" class="custom-file-input" id="configFile" accept='text/plain' onchange='openFile(event)'" style="display:none;">
+                    <p id="config-file-name" style="display:inline;">No file selected</p> 
+                    <label class="btn btn-primary" for="configFile" style="margin:1em; display:inline;">Choose a Config File</label>
+                </div>
+                
                 <div id="alert-success" style="display: none;" class="alert alert-success" role="alert">
                   Settings file saved successfully.
                 </div>
@@ -75,9 +77,10 @@
                 </div>
             </div>
             
-            <div id="menu-entries-placeholder"></div>
+            <div id="menu-entries-placeholder" class="col-12""> <hr /><i>Select a configuration file to see and edit its content</i> </div>
+                
         </div>
-        
+
         <div id="menu-pages-placeholder" class="menu-page" style="display:none;"></div>
         
         </form>
@@ -94,11 +97,74 @@
       </p>
     </footer>
   
-    <!-- Single-Page App functionality -->
+  
+
+    <!-- File Loader -->
+    <!-- Remember that: https://stackoverflow.com/questions/53759070/how-to-get-path-directory-from-filereader -->
+    <script>
+        var mwc2config = "";
+        var openFile = function(event) {
+            var input = event.target;
+            
+            var reader = new FileReader();
+            reader.onload = function(){                
+                mwc2config = reader.result;
+                document.getElementById("config-file-name").innerHTML = "Current file: <b>" + input.files[0].name +"</b>";
+                
+                // Remove all menu-entry and menu-page
+                var elements = document.getElementsByClassName('menu-entry');
+                while(elements.length > 0) {
+                    elements[0].parentNode.removeChild(elements[0]);
+                }
+                var pages = document.getElementsByClassName('menu-page');
+                var i = 0;
+                while(pages.length > i) {
+                    if(pages[i].id === "main-menu"){
+                        i = i + 1;
+                    } else {
+                        pages[i].parentNode.removeChild(pages[i]);
+                    }
+                }
+                // Puts back the placeholders in place
+                if( !document.getElementById("menu-entries-placeholder") ){
+                    var menu_entry_placeholder = document.createElement("div");
+                    menu_entry_placeholder.setAttribute("id", "menu-entries-placeholder");
+                    menu_entry_placeholder.setAttribute("class", "col-12");
+                    menu_entry_placeholder.innerHTML = "<hr /><i>Select a configuration file to see and edit its content</i> ";
+                    document.getElementById("main-menu").appendChild(menu_entry_placeholder); 
+                }
+                if( !document.getElementById("menu-pages-placeholder") ){          
+                    var menu_entry_placeholder = document.createElement("div");
+                    menu_entry_placeholder.setAttribute("id", "menu-pages-placeholder");
+                    menu_entry_placeholder.setAttribute("class", "col-12");
+                    menu_entry_placeholder.innerHTML = "";
+                    document.getElementById("entire-form").appendChild(menu_entry_placeholder); 
+                }
+                
+                populate_web_interface();
+            };
+            reader.readAsText(input.files[0]);
+        };
+    </script>
+
+    <!-- Navbar functions -->
     <script>
     $(function () {
     
         $(document).on('click', '#navbtn_save', function(event) {
+            if( confirm("Save the current configuration?\nRemember to save the file in the web_interface folder too, or you won't see your changes") ){
+                writeConfigFile();
+                var link = document.createElement('a');
+                // Add the element to the DOM
+                document.body.appendChild(link);
+                link.setAttribute("type", "hidden"); // make it hidden if needed
+                link.download = 'mwc2_config.json';
+                link.href = 'data:text/plain;charset=utf-u,'+encodeURIComponent(mwc2config);
+                link.click();
+            }
+        });
+        
+        $(document).on('click', '#navbtn_defaults', function(event) {
             var link = document.createElement('a');
             // Add the element to the DOM
             document.body.appendChild(link);
@@ -107,8 +173,14 @@
             link.href = 'data:text/plain;charset=utf-u,'+encodeURIComponent(mwc2config);
             link.click();
         });
-       
-        
+
+     });
+     </script> 
+     
+     <!-- Single-Page App functionality -->
+     <script>  
+     $(function () {
+      
         // Actual page switcher
         load = function (url, title) {
             // Set the title
@@ -157,7 +229,7 @@
                 load("", "Control Panel");
             }
         });
-
+        
     });
     </script>
     

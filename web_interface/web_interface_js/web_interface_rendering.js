@@ -165,77 +165,84 @@ function escapeTypeName(wordToEscape){
  */
 function populate_web_interface(){
 
-    // Get the HTML templates
-    var menu_entry_template = document.getElementById("menu-entry-template").innerHTML;
-    var menu_subpage_template = document.getElementById("menu-subpage-template").innerHTML; 
-    var advanced_settings_box_template = document.getElementById("advanced-settings-box-template").innerHTML;
-    var form_field_template = document.getElementById("form-field-template").innerHTML;
-    
-    // Load the settings
-    config_dict = JSON.parse(mwc2config);
-    config_list = dict_to_sorted_list(config_dict);
-    
-    // Create the menu entries and build the main menu
-    var main_menu_html = "";
-    for (var m=0; m<config_list.length; m++) {
-        main_menu_html += populate_template(menu_entry_template , config_list[m]);
-    } 
-    $("#menu-entries-placeholder").replaceWith( main_menu_html );
-      
-    
-    // Create one page for each menu entry 
-    var all_menu_pages_html = "";
-    for (var p=0; p<config_list.length; p++) {
-        var subclasses_list = config_list[p].allowedValues;
-        var menu_subpage = menu_subpage_template;
+    try{
+        // Get the HTML templates
+        var menu_entry_template = document.getElementById("menu-entry-template").innerHTML;
+        var menu_subpage_template = document.getElementById("menu-subpage-template").innerHTML; 
+        var advanced_settings_box_template = document.getElementById("advanced-settings-box-template").innerHTML;
+        var form_field_template = document.getElementById("form-field-template").innerHTML;
         
-        // List and sort the fields of all the subclasses, if any, and label them properly.
-        var fields_list = [];
-        if( subclasses_list !== undefined){
-            for (var s=0; s<subclasses_list.length; s++){
-                var subclass_fields = dict_to_sorted_list(subclasses_list[s], { "subclass": escapeTypeName(subclasses_list[s]["@type"], config_list[p]["name"]) });
-                fields_list = fields_list.concat( subclass_fields ); 
-            }
-        } else {
-            fields_list = dict_to_sorted_list(config_list[p].value); 
-        }
+        // Load the settings
+        config_dict = JSON.parse(mwc2config);
+        config_list = dict_to_sorted_list(config_dict);
         
-        // Build the page content, including the "Advanced Settings" box
-        var regular_fields = "";
-        var advanced_fields = ""
-        for(var f=0; f<fields_list.length; f++){
-            var form_field = build_form_field(form_field_template, fields_list[f], config_list[p]["name"]);
-            if(fields_list[f].settingType === "REGULAR"){
-                regular_fields += form_field;
+        // Create the menu entries and build the main menu
+        var main_menu_html = "";
+        for (var m=0; m<config_list.length; m++) {
+            main_menu_html += populate_template(menu_entry_template , config_list[m]);
+        } 
+        $("#menu-entries-placeholder").replaceWith( main_menu_html );
+          
+        
+        // Create one page for each menu entry 
+        var all_menu_pages_html = "";
+        for (var p=0; p<config_list.length; p++) {
+            var subclasses_list = config_list[p].allowedValues;
+            var menu_subpage = menu_subpage_template;
+            
+            // List and sort the fields of all the subclasses, if any, and label them properly.
+            var fields_list = [];
+            if( subclasses_list !== undefined){
+                for (var s=0; s<subclasses_list.length; s++){
+                    var subclass_fields = dict_to_sorted_list(subclasses_list[s], { "subclass": escapeTypeName(subclasses_list[s]["@type"], config_list[p]["name"]) });
+                    fields_list = fields_list.concat( subclass_fields ); 
+                }
             } else {
-                advanced_fields += form_field;
+                fields_list = dict_to_sorted_list(config_list[p].value); 
             }
-        }
-        
-        // Insert the generated HTML into the page
-        menu_subpage = inject_to_template(menu_subpage, regular_fields, "page-content");
-        if(advanced_fields !== ""){
-            var advanced_box = inject_to_template( advanced_settings_box_template, advanced_fields, "box-content");
-            menu_subpage = inject_to_template(menu_subpage, advanced_box, "advanced-box");
-        }
-        
-        // Hide the fields of all the not-relevant subclasses
-        if(subclasses_list !== undefined){
-            var script = `<script>switchLinkedClass( '`+
-                                    config_list[p]["name"] + `', '` + 
-                                    config_list[p].value["@type"] +`' );</script> `; 
-            menu_subpage = inject_to_template( menu_subpage, script, "custom-scripts");
-        }
+            
+            // Build the page content, including the "Advanced Settings" box
+            var regular_fields = "";
+            var advanced_fields = ""
+            for(var f=0; f<fields_list.length; f++){
+                var form_field = build_form_field(form_field_template, fields_list[f], config_list[p]["name"]);
+                if(fields_list[f].settingType === "REGULAR"){
+                    regular_fields += form_field;
+                } else {
+                    advanced_fields += form_field;
+                }
+            }
+            
+            // Insert the generated HTML into the page
+            menu_subpage = inject_to_template(menu_subpage, regular_fields, "page-content");
+            if(advanced_fields !== ""){
+                var advanced_box = inject_to_template( advanced_settings_box_template, advanced_fields, "box-content");
+                menu_subpage = inject_to_template(menu_subpage, advanced_box, "advanced-box");
+            }
+            
+            // Hide the fields of all the not-relevant subclasses
+            if(subclasses_list !== undefined){
+                var script = `<script>switchLinkedClass( '`+
+                                        config_list[p]["name"] + `', '` + 
+                                        config_list[p].value["@type"] +`' );</script> `; 
+                menu_subpage = inject_to_template( menu_subpage, script, "custom-scripts");
+            }
 
-        // Build the type switch widget, if needed
-        if( subclasses_list !== undefined){
-            var type_switch = build_type_switch(config_list[p].allowedValues, config_list[p]);
-            menu_subpage = inject_to_template(menu_subpage, type_switch, "type-switch");
+            // Build the type switch widget, if needed
+            if( subclasses_list !== undefined){
+                var type_switch = build_type_switch(config_list[p].allowedValues, config_list[p]);
+                menu_subpage = inject_to_template(menu_subpage, type_switch, "type-switch");
+            }
+            
+            all_menu_pages_html += populate_template(menu_subpage, config_list[p]);
         }
         
-        all_menu_pages_html += populate_template(menu_subpage, config_list[p]);
-    }
+        $("#menu-pages-placeholder").replaceWith( all_menu_pages_html );
     
-    $("#menu-pages-placeholder").replaceWith( all_menu_pages_html );
+    
+    } catch (err) {
+        console.log(err);
+        alert("An error occurred while creating the page!\nPlease make sure you selected the correct configuration file.");
+    }
     
 }
