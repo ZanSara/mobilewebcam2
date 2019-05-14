@@ -63,10 +63,15 @@
                 NOTE: All fields are required. If you don't know how to fill them up, just type the default value suggested as a placeholder.</p>
                 
                 <hr />
-                <div class="custom-file" style="margin-top: 1em;">
-                    <input type="file" class="custom-file-input" id="configFile" accept='text/plain' onchange='openFile(event)'" style="display:none;">
-                    <p id="config-file-name" style="display:inline;">No file selected</p> 
-                    <label class="btn btn-primary" for="configFile" style="margin:1em; display:inline;">Choose a Config File</label>
+                
+                <div class="row">
+                    <div class="config-file-namebox col-12 col-md-6">
+                        <p id="config-file-name" class="btn" style="margin:0;">No file selected</p> 
+                    </div>
+                    <div class="custom-file col-12 col-md-6">
+                        <input type="file" class="custom-file-input" id="configFile" accept='text/plain' onchange='openFile(event)'" style="display:none;">
+                        <label class="btn btn-primary" for="configFile">Choose a Config File</label>
+                    </div>
                 </div>
                 
                 <div id="alert-success" style="display: none;" class="alert alert-success" role="alert">
@@ -298,7 +303,9 @@
     </script>
     
     <script id="text-widget-template" type="text/template">
-        <input type="text" class="form-control" name="{{scope}}#{{subclass}}-{{name}}" aria-describedby="{{scope}}#{{subclass}}-field-{{name}}-desc" placeholder="{{defaultValue}}" value="{{value}}">
+        <input type="text" class="form-control" name="{{scope}}#{{subclass}}-{{name}}" 
+                aria-describedby="{{scope}}#{{subclass}}-field-{{name}}-desc" placeholder="{{defaultValue}}"
+                value="{{value}}">
         <div class="input-group-append">
             <div class="input-group-text">{{unit}}</div>
         </div>

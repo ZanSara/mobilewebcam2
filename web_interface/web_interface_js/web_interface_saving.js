@@ -3,7 +3,6 @@ function writeConfigFile(){
 
     values_to_save = $("#entire-form").serializeArray();
     config_dict = JSON.parse(mwc2config);
-    console.log(values_to_save, config_dict);
     
     // First of all, set the managers' fields according to the provided @type
     for(var i=0; i<values_to_save.length; i++){
@@ -32,12 +31,13 @@ function writeConfigFile(){
         var field_name = field_address.split("-")[1];
         
         if(subclass !== ""){
-            console.log(subclass, escapeTypeName(config_dict[manager].value["@type"]) );
             if(subclass === escapeTypeName(config_dict[manager].value["@type"]) ){
-                config_dict[manager].value[field_name].value = field_value;
+                var field_type = config_dict[manager].value[field_name].className;
+                config_dict[manager].value[field_name].value = convertIntoProperFormat( field_value, field_type );
             }
         } else {
-            config_dict[manager].value[field_name].value = field_value;
+            var field_type = config_dict[manager].value[field_name].className;
+            config_dict[manager].value[field_name].value = convertIntoProperFormat( field_value, field_type );
         }
     }
     
@@ -46,4 +46,25 @@ function writeConfigFile(){
     
     // Load the home page
     load("#", "Control Panel")
+}
+
+
+function convertIntoProperFormat(field_value, field_type){
+    if(field_type !== undefined){
+        var type = field_type.split(".")[field_type.split(".").length-1];
+        console.log("Type: " + type);
+        if(type === "Boolean"){
+            if(field_value.toLowerCase() === "true") {
+                return true;
+            } else {
+                return false;
+            }
+        } else if(type === "Integer" || type === "Long"){
+            return parseInt(field_value, 10);
+            
+        } else if(type === "Double"){
+            return parseFloat(field_value);
+        }
+    }
+    return field_value;
 }
