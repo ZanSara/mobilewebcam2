@@ -1,0 +1,3 @@
+[submodule "app/src/main/assets/control-panel"]
+	path = app/src/main/assets/control-panel
+	url = https://github.com/ZanSara/mobilewebcam2-web
